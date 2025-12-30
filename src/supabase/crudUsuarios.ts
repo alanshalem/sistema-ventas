@@ -2,8 +2,20 @@ import Swal from "sweetalert2";
 import { supabase } from "../index";
 import { EliminarPermisos, InsertarPermisos } from "./crudPermisos";
 import { usePermisosStore } from "../store/PermisosStore";
+import type {
+  Usuario,
+  Rol,
+  MostrarUsuariosParams,
+  InsertarAdminParams,
+  InsertarUsuarioParams,
+  InsertarCredencialesUserParams,
+  EliminarUsuarioAsignadoParams,
+  EditarUsuarioParams,
+} from "../types";
+
 const tabla = "usuarios";
-export async function MostrarUsuarios(p) {
+
+export async function MostrarUsuarios(p: MostrarUsuariosParams): Promise<(Usuario & { roles: Rol | null }) | null | undefined> {
   const { data, error } = await supabase
     .from(tabla)
     .select(`*, roles(*)`)
@@ -12,15 +24,17 @@ export async function MostrarUsuarios(p) {
   if (error) {
     return;
   }
-  return data;
+  return data as (Usuario & { roles: Rol | null }) | null;
 }
-export async function InsertarAdmin(p) {
+
+export async function InsertarAdmin(p: InsertarAdminParams): Promise<void> {
   const { error } = await supabase.from(tabla).insert(p);
   if (error) {
     throw new Error(error.message);
   }
 }
-export async function InsertarUsuarios(p) {
+
+export async function InsertarUsuarios(p: InsertarUsuarioParams): Promise<Usuario | null> {
   const { error, data } = await supabase
     .from(tabla)
     .insert(p)
@@ -29,17 +43,18 @@ export async function InsertarUsuarios(p) {
   if (error) {
     throw new Error(error.message);
   }
-  return data;
+  return data as Usuario | null;
 }
 
-export async function InsertarCredencialesUser(p) {
+export async function InsertarCredencialesUser(p: InsertarCredencialesUserParams): Promise<any> {
   const { data, error } = await supabase.rpc("crearcredencialesuser", p);
   if (error) {
     throw new Error(error.message);
   }
   return data;
 }
-export async function ObtenerIdAuthSupabase() {
+
+export async function ObtenerIdAuthSupabase(): Promise<string | undefined> {
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -49,25 +64,26 @@ export async function ObtenerIdAuthSupabase() {
     return idauth;
   }
 }
-export async function EliminarUsuarioAsignado(p) {
+
+export async function EliminarUsuarioAsignado(p: EliminarUsuarioAsignadoParams): Promise<void> {
   const { error } = await supabase.from(tabla).delete().eq("id", p.id);
   if (error) {
     throw new Error(error.message);
   }
 }
-export async function EditarUsuarios(p) {
-  //console.log("p editar usuarios",p)
+
+export async function EditarUsuarios(p: EditarUsuarioParams): Promise<void> {
   const { error } = await supabase.from(tabla).update(p).eq("id", p.id);
   await EliminarPermisos({ id_usuario: p.id });
   const selectModules = usePermisosStore.getState().selectedModules || [];
-  const id_usuario = p.id
+  const id_usuario = p.id;
   if (Array.isArray(selectModules) && selectModules.length > 0) {
-    selectModules.forEach(async (idModule) => {
-      let pp = {
+    selectModules.forEach(async (idModule: number) => {
+      const pp = {
         id_usuario: id_usuario,
         idmodulo: idModule,
       };
-      console.log("p modulos",pp)
+      console.log("p modulos", pp);
       await InsertarPermisos(pp);
     });
   } else {

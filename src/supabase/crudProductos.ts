@@ -1,7 +1,9 @@
-
 import { supabase } from "../index";
+import type { Producto, InsertarProductoParams, EditarProductoParams, MostrarProductosParams, BuscarProductoParams, IdParam, IdEmpresaParam } from "../types";
+
 const tabla = "productos";
-export async function InsertarProductos(p) {
+
+export async function InsertarProductos(p: InsertarProductoParams): Promise<any> {
   const { error, data } = await supabase.rpc("insertarproductos", p);
   if (error) {
     throw new Error(error.message);
@@ -10,16 +12,17 @@ export async function InsertarProductos(p) {
   return data;
 }
 
-export async function MostrarProductos(p) {
+export async function MostrarProductos(p: MostrarProductosParams): Promise<any> {
   const { data } = await supabase.rpc("mostrarproductos", {
     _id_empresa: p.id_empresa,
   });
   return data;
 }
-export async function BuscarProductos(p) {
+
+export async function BuscarProductos(p: BuscarProductoParams): Promise<any> {
   const { data, error } = await supabase.rpc("buscarproductos", {
     _id_empresa: p.id_empresa,
-    buscador: p.buscador,
+    buscador: p.busqueda,
   });
 
   if (error) {
@@ -27,20 +30,22 @@ export async function BuscarProductos(p) {
   }
   return data;
 }
-export async function EliminarProductos(p) {
+
+export async function EliminarProductos(p: IdParam): Promise<void> {
   const { error } = await supabase.from(tabla).delete().eq("id", p.id);
   if (error) {
     throw new Error(error.message);
   }
 }
-export async function EditarProductos(p) {
+
+export async function EditarProductos(p: EditarProductoParams): Promise<void> {
   const { error } = await supabase.rpc("editarproductos", p);
   if (error) {
     throw new Error(error.message);
   }
 }
 
-export async function MostrarUltimoProducto(p) {
+export async function MostrarUltimoProducto(p: IdEmpresaParam): Promise<Producto | null> {
   const { data } = await supabase
     .from(tabla)
     .select()
@@ -48,5 +53,5 @@ export async function MostrarUltimoProducto(p) {
     .order("id", { ascending: false })
     .maybeSingle();
 
-  return data;
+  return data as Producto | null;
 }

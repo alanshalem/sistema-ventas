@@ -1,7 +1,17 @@
 import Swal from "sweetalert2";
 import { supabase } from "../index";
+import type {
+  Venta,
+  InsertarVentaParams,
+  EliminarVentasIncompletasParams,
+  IdParam,
+  MostrarVentasXSucursalParams,
+  ConfirmarVentaParams,
+} from "../types";
+
 const tabla = "ventas";
-export async function InsertarVentas(p) {
+
+export async function InsertarVentas(p: InsertarVentaParams): Promise<Venta | null> {
   const { error, data } = await supabase
     .from(tabla)
     .insert(p)
@@ -10,11 +20,10 @@ export async function InsertarVentas(p) {
   if (error) {
     throw new Error(error.message);
   }
-  return data;
+  return data as Venta | null;
 }
 
-
-export async function EliminarVentasIncompletas(p) {
+export async function EliminarVentasIncompletas(p: EliminarVentasIncompletasParams): Promise<void> {
   const { error } = await supabase
     .from(tabla)
     .delete()
@@ -25,7 +34,8 @@ export async function EliminarVentasIncompletas(p) {
     throw new Error(error.message);
   }
 }
-export async function EliminarVenta(p) {
+
+export async function EliminarVenta(p: IdParam): Promise<void> {
   const { error } = await supabase
     .from(tabla)
     .delete()
@@ -35,7 +45,7 @@ export async function EliminarVenta(p) {
   }
 }
 
-export async function MostrarVentasXsucursal(p) {
+export async function MostrarVentasXsucursal(p: MostrarVentasXSucursalParams): Promise<Venta | null> {
   const { data } = await supabase
     .from(tabla)
     .select()
@@ -43,9 +53,10 @@ export async function MostrarVentasXsucursal(p) {
     .eq("estado", "nueva")
     .maybeSingle();
 
-  return data;
+  return data as Venta | null;
 }
-export async function ConfirmarVenta(p) {
+
+export async function ConfirmarVenta(p: ConfirmarVentaParams): Promise<Venta[] | null> {
   const { data, error } = await supabase
     .from(tabla)
     .update(p)
@@ -54,5 +65,5 @@ export async function ConfirmarVenta(p) {
   if (error) {
     throw new Error(error.message);
   }
-  return data;
+  return data as Venta[] | null;
 }
