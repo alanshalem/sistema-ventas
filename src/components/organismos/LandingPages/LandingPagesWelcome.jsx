@@ -70,10 +70,9 @@ export const LandingPagesWelcome = () => {
                 </Description>
               </Text>
             </Step>
-            
+
             <div style={{ display: "flex", gap: "10px" }}>
-            <BtnLink url={"https://codigo369.com/detallecurso/24"} color={"#fff"} bgcolor={"#ff6a00"} titulo={"inscribete aquí"} />
-              <BtnLink url={"https://t.me/ada369react"} color={"#2f2f2f"} bgcolor={"#ffffff"} titulo={"+ grupo telegram"} />
+              {/* Enlaces externos removidos */}
             </div>
           </LeftSection>
           <RightSection className="right-section">

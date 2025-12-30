@@ -20,7 +20,7 @@ export const MenuMovil = ({ setState }) => {
             <div className="imgcontent">
               <img src={v.logo} />
             </div>
-            <h2>Ada369 3.0</h2>
+            <h2>Sistema de Ventas</h2>
           </div>
           {LinksArray.map(({ icon, label, to }) => (
             <div

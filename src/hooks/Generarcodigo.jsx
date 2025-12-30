@@ -8,6 +8,6 @@ export const Generarcodigo = (data) => {
       Math.floor(Math.random() * characters.length)
     );
   }
-  const codigo = `${randomCode}${ultimoIdProducto}369`;
+  const codigo = `${randomCode}${ultimoIdProducto}`;
   return codigo;
 };
