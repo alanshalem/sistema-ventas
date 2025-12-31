@@ -6,9 +6,9 @@ import {
   InputText2,
   useAuthStore,
 } from "../../index";
-import { PageTitle } from "../atomos/PageTitle";
-import { Divider } from "../atomos/Divider";
-import { LottieAnimation } from "../atomos/LottieAnimation";
+import { PageTitle } from "../atoms/PageTitle";
+import { Divider } from "../atoms/Divider";
+import { LottieAnimation } from "../atoms/LottieAnimation";
 import { v } from "../../styles/variables";
 import { Device } from "../../styles/breakpoints";
 import animacionlottie from "../../assets/navidad.json";

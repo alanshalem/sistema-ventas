@@ -9,7 +9,7 @@ import {
   useEmpresaStore,
   useVentasStore,
 } from "../../../index";
-import { LottieAnimation } from "../../atomos/LottieAnimation";
+import { LottieAnimation } from "../../atoms/LottieAnimation";
 import animacionvacio from "../../../assets/vacioanimacion.json";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
@@ -187,7 +187,7 @@ export function AreaDetalleventaPos() {
         );
       })
     ) : (
-      <LottieAnimation animacion={animacionvacio} alto="200" ancho="200" />
+      <LottieAnimation animation={animacionvacio} height="200" width="200" />
     )}
   </AreaDetalleventa>
   );

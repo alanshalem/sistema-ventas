@@ -7,7 +7,7 @@ import {
   useCategoriasStore,
   ConvertirCapitalize,
 } from "../../../index";
-import { Icon } from "../../atomos/Icon";
+import { Icon } from "../../atoms/Icon";
 import { useForm } from "react-hook-form";
 import { CirclePicker } from "react-color";
 import { useEmpresaStore } from "../../../store/EmpresaStore";

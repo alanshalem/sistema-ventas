@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Divider } from "../../atomos/Divider";
+import { Divider } from "../../atoms/Divider";
 
 
 export const MonedaConfig = () => {

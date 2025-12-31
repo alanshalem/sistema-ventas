@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Icon } from "../atomos/Icon";
+import { Icon } from "../atoms/Icon";
 export function Btngenerarcodigo({
   funcion,
   titulo,

@@ -9,7 +9,7 @@ import {
   useProductosStore,
   useAlmacenesStore,
 } from "../../../index";
-import { SelectorContainer } from "../../atomos/SelectorContainer";
+import { SelectorContainer } from "../../atoms/SelectorContainer";
 import { useForm } from "react-hook-form";
 import { BtnClose } from "../../ui/buttons/BtnClose";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

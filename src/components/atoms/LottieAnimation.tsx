@@ -2,27 +2,27 @@ import Lottie from "react-lottie";
 import type { ReactElement } from "react";
 
 interface LottieAnimationProps {
-  alto: string;
-  ancho: string;
-  animacion: unknown;
+  animation: unknown;
+  height: string;
+  width: string;
 }
 
 export function LottieAnimation({
-  alto,
-  ancho,
-  animacion,
+  animation,
+  height,
+  width,
 }: Readonly<LottieAnimationProps>): ReactElement {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: animacion,
+    animationData: animation,
   };
 
   return (
     <Lottie
       options={defaultOptions}
-      height={`${alto}px`}
-      width={`${ancho}px`}
+      height={`${height}px`}
+      width={`${width}px`}
       isClickToPauseDisabled
     />
   );

@@ -6,7 +6,7 @@ import {
   TablaProductos,
   useProductosStore,
 } from "../../index";
-import { PageTitle } from "../atomos/PageTitle";
+import { PageTitle } from "../atoms/PageTitle";
 import { v } from "../../styles/variables";
 import { useEffect, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";

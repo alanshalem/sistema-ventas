@@ -1,9 +1,9 @@
 export { default as App } from './App';
-export * from './components/atomos/SelectorContainer';
-export * from './components/atomos/Icon';
-export * from './components/atomos/Divider';
-export * from './components/atomos/LottieAnimation';
-export * from './components/atomos/PageTitle';
+export * from './components/atoms/SelectorContainer';
+export * from './components/atoms/Icon';
+export * from './components/atoms/Divider';
+export * from './components/atoms/LottieAnimation';
+export * from './components/atoms/PageTitle';
 export * from './components/moleculas/Btn1';
 export * from './components/moleculas/Btngenerarcodigo';
 export * from './components/moleculas/ImagenContent';

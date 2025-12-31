@@ -5,7 +5,7 @@ import {
   Paginacion,
   ImagenContent,
 } from "../../../index";
-import { Icon } from "../../atomos/Icon";
+import { Icon } from "../../atoms/Icon";
 import Swal from "sweetalert2";
 import { v } from "../../../styles/variables";
 import { useState } from "react";

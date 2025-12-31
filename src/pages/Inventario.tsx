@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMovStockStore } from "../store/MovStockStore";
 import { useEmpresaStore } from "../store/EmpresaStore";
 import { useProductosStore } from "../store/ProductosStore";
-import { PageTitle } from "../components/atomos/PageTitle";
+import { PageTitle } from "../components/atoms/PageTitle";
 import { Btn1 } from "../components/moleculas/Btn1";
 import { useState } from "react";
 import { BuscadorList } from "../components/ui/lists/BuscadorList";

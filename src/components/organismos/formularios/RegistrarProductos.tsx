@@ -14,7 +14,7 @@ import {
   useAlmacenesStore,
   ConvertirMinusculas,
 } from "../../../index";
-import { SelectorContainer } from "../../atomos/SelectorContainer";
+import { SelectorContainer } from "../../atoms/SelectorContainer";
 import { useForm } from "react-hook-form";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { useMutation, useQuery } from "@tanstack/react-query";

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Divider } from "../../atomos/Divider";
+import { Divider } from "../../atoms/Divider";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { InputText } from "../formularios/InputText";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";

@@ -5,7 +5,7 @@ import {
   RegistrarCategorias,
   useCategoriasStore,
 } from "../../index";
-import { PageTitle } from "../atomos/PageTitle";
+import { PageTitle } from "../atoms/PageTitle";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
 import { useState } from "react";

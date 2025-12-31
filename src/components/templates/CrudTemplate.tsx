@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Btn1, Buscador } from "../../index";
-import { PageTitle } from "../atomos/PageTitle";
+import { PageTitle } from "../atoms/PageTitle";
 import { v } from "../../styles/variables";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";

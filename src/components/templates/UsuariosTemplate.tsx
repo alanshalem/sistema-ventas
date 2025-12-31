@@ -6,7 +6,7 @@ import {
   useCategoriasStore,
   useUsuariosStore,
 } from "../../index";
-import { PageTitle } from "../atomos/PageTitle";
+import { PageTitle } from "../atoms/PageTitle";
 import { RegistrarUsuarios } from "../organismos/formularios/RegistrarUsuarios";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
