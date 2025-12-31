@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Btn1, Buscador, Title } from "../../index";
+import { Btn1, Buscador } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { v } from "../../styles/variables";
 import { useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
@@ -34,7 +35,7 @@ export function CrudTemplate({
         />
       )}
       <section className="area1">
-        <Title>{title} </Title>
+        <PageTitle>{title} </PageTitle>
         {
           stateBtnAdd &&   <Btn1
           funcion={nuevoRegistro}

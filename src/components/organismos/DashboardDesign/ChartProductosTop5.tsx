@@ -17,8 +17,8 @@ import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
 import { useQuery } from "@tanstack/react-query";
 import { BarLoader } from "react-spinners";
 import { useDashboardStore } from "../../../store/DashboardStore";
-import { Lottieanimacion } from "../../atomos/Lottieanimacion";
-import animacionvacio from "../../../assets/vacioanimacion.json"
+import { LottieAnimation } from "../../atomos/LottieAnimation";
+import animacionvacio from "../../../assets/vacioanimacion.json";
 export const ChartProductosTop5 = () => {
   const { dataempresa } = useEmpresaStore();
   const { porcentajeCambio } = useVentasStore();
@@ -98,7 +98,7 @@ export const ChartProductosTop5 = () => {
           />
         </BarChart>
       </ResponsiveContainer>
-        </>):(<Lottieanimacion animacion={animacionvacio} alto="200" ancho="200"/>)
+        </>):(<LottieAnimation animacion={animacionvacio} alto="200" ancho="200"/>)
       }
       
     </Container>

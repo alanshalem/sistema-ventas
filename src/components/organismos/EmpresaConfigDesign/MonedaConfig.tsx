@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Divider } from "../../atomos/Divider";
 
 
 export const MonedaConfig = () => {
@@ -64,7 +65,7 @@ export const MonedaConfig = () => {
           onFocus={() => setSearch(search)}
         />
       </InputText2>
-      <Linea />
+      <Divider />
 
       {search && filteredCountries.length > 0 && (
         <Dropdown>
@@ -201,9 +202,4 @@ const Cardselect = styled.section`
       }
     }
   }
-`;
-const Linea = styled.span`
-  width: 100%;
-  border-bottom: solid 2px ${({ theme }) => theme.color2};
-  margin: 10px 0;
 `;

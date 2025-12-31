@@ -5,9 +5,9 @@ import {
   InputText,
   Btn1,
   useCategoriasStore,
-  Icono,
   ConvertirCapitalize,
 } from "../../../index";
+import { Icon } from "../../atomos/Icon";
 import { useForm } from "react-hook-form";
 import { CirclePicker } from "react-color";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
@@ -112,7 +112,7 @@ export function RegistrarCategorias({
                 <img src={fileurl}></img>
               </div>
             ) : (
-              <Icono>{<v.iconoimagenvacia />}</Icono>
+              <Icon>{<v.iconoimagenvacia />}</Icon>
             )}
 
             <Btn1

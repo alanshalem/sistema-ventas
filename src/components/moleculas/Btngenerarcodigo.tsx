@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Icono } from "../../index";
+import { Icon } from "../atomos/Icon";
 export function Btngenerarcodigo({
   funcion,
   titulo,
@@ -18,7 +18,7 @@ export function Btngenerarcodigo({
       onClick={funcion} 
     >
       <section className="content">
-        <Icono $color={color}>{icono}</Icono>
+        <Icon $color={color}>{icono}</Icon>
         {titulo && (
           <span className="btn">
             <a >

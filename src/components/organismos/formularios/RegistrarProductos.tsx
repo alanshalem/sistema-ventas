@@ -5,7 +5,6 @@ import {
   Btn1,
   ConvertirCapitalize,
   useProductosStore,
-  ContainerSelector,
   Switch1,
   Selector,
   useSucursalesStore,
@@ -15,6 +14,7 @@ import {
   useAlmacenesStore,
   ConvertirMinusculas,
 } from "../../../index";
+import { SelectorContainer } from "../../atomos/SelectorContainer";
 import { useForm } from "react-hook-form";
 import { useEmpresaStore } from "../../../store/EmpresaStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -399,7 +399,7 @@ export function RegistrarProductos({
             </section>
             <section className="seccion2">
               <label>Se vende por: </label>
-              <ContainerSelector>
+              <SelectorContainer>
                 <label>UNIDAD </label>
                 <Checkbox1
                   isChecked={isChecked1}
@@ -410,23 +410,23 @@ export function RegistrarProductos({
                   isChecked={isChecked2}
                   onChange={() => handleCheckboxChange(2)}
                 />
-              </ContainerSelector>
+              </SelectorContainer>
 
-              <ContainerSelector>
+              <SelectorContainer>
                 <label>Categoria: </label>
                 <SelectList data={datacategorias} itemSelect={categoriaItemSelect} onSelect={selectCategoria} displayField="nombre"/>
                 
-              </ContainerSelector>
-              <ContainerSelector>
+              </SelectorContainer>
+              <SelectorContainer>
                 <label>Controlar stock: </label>
                 <Switch1
                   state={stateInventarios}
                   setState={checkUseInventarios}
                 />
-              </ContainerSelector>
+              </SelectorContainer>
               {stateInventarios && (
                 <ContainerStock>
-                  <ContainerSelector>
+                  <SelectorContainer>
                     <label>Sucursal: </label>
                     <SelectList
                       data={dataSucursales}
@@ -434,9 +434,9 @@ export function RegistrarProductos({
                       onSelect={selectSucursal}
                       displayField="nombre"
                     />
-                  </ContainerSelector>
+                  </SelectorContainer>
                   <br />
-                  <ContainerSelector>
+                  <SelectorContainer>
                     <label>Almacen: </label>
                     <SelectList
                       data={dataAlmacenes}
@@ -444,7 +444,7 @@ export function RegistrarProductos({
                       onSelect={setAlmacenSelectItem}
                       displayField="nombre"
                     />
-                  </ContainerSelector>
+                  </SelectorContainer>
                   {stateEnabledStock && dataStockXAlmacenYProducto && (
                     <ContainerMensajeStock>
                       <span>

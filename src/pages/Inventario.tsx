@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMovStockStore } from "../store/MovStockStore";
 import { useEmpresaStore } from "../store/EmpresaStore";
 import { useProductosStore } from "../store/ProductosStore";
-import { Title } from "../components/atomos/Title";
+import { PageTitle } from "../components/atomos/PageTitle";
 import { Btn1 } from "../components/moleculas/Btn1";
 import { useState } from "react";
 import { BuscadorList } from "../components/ui/lists/BuscadorList";
@@ -70,7 +70,7 @@ export const Inventario = () => {
           </span>
         )}
 |
-        <Title>Inventario</Title>
+        <PageTitle>Inventario</PageTitle>
         <Btn1 funcion={nuevoRegistro} titulo="Registrar" />
       </section>
       <section className="area2">

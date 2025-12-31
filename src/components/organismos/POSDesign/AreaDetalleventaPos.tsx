@@ -5,12 +5,11 @@ import { FormatearNumeroDinero } from "../../../utils/Conversiones";
 import {
   Btn1,
   InputText2,
-  Lottieanimacion,
- 
   useDetalleVentasStore,
   useEmpresaStore,
   useVentasStore,
 } from "../../../index";
+import { LottieAnimation } from "../../atomos/LottieAnimation";
 import animacionvacio from "../../../assets/vacioanimacion.json";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
@@ -188,7 +187,7 @@ export function AreaDetalleventaPos() {
         );
       })
     ) : (
-      <Lottieanimacion animacion={animacionvacio} alto="200" ancho="200" />
+      <LottieAnimation animacion={animacionvacio} alto="200" ancho="200" />
     )}
   </AreaDetalleventa>
   );

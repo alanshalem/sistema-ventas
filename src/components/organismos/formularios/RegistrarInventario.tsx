@@ -9,6 +9,7 @@ import {
   useProductosStore,
   useAlmacenesStore,
 } from "../../../index";
+import { SelectorContainer } from "../../atomos/SelectorContainer";
 import { useForm } from "react-hook-form";
 import { BtnClose } from "../../ui/buttons/BtnClose";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -131,7 +132,7 @@ export function RegistrarInventario() {
               <strong>{dataStock?.stock ? dataStock?.stock : "-"} </strong>
             </span>
 
-            <ContainerSelector>
+            <SelectorContainer>
               <label>Sucursal:</label>
               <SelectList
                 data={dataSucursales}
@@ -139,8 +140,8 @@ export function RegistrarInventario() {
                 onSelect={selectSucursal}
                 displayField="nombre"
               />
-            </ContainerSelector>
-            <ContainerSelector>
+            </SelectorContainer>
+            <SelectorContainer>
               <label>Almacen:</label>
               <SelectList
                 data={dataAlmacenes}
@@ -148,7 +149,7 @@ export function RegistrarInventario() {
                 onSelect={setAlmacenSelectItem}
                 displayField="nombre"
               />
-            </ContainerSelector>
+            </SelectorContainer>
           </section>
           {productosItemSelect?.maneja_inventarios ? (
             <form className="formulario" onSubmit={handleSubmit(mutate)}>
@@ -285,11 +286,4 @@ const Container = styled.div`
       }
     }
   }
-`;
-
-export const ContainerSelector = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  position: relative;
 `;

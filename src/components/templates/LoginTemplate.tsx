@@ -4,11 +4,11 @@ import {
   Footer,
   Generarcodigo,
   InputText2,
-  Linea,
-  Lottieanimacion,
-  Title,
   useAuthStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
+import { Divider } from "../atomos/Divider";
+import { LottieAnimation } from "../atomos/LottieAnimation";
 import { v } from "../../styles/variables";
 import { Device } from "../../styles/breakpoints";
 import animacionlottie from "../../assets/navidad.json";
@@ -64,7 +64,7 @@ export function LoginTemplate() {
           <img src={v.logo} />
           <span>Sistema de Ventas</span>
         </ContentLogo>
-        <Title $paddingbottom="40px">Ingresar Modo</Title>
+        <PageTitle $paddingbottom="40px">Ingresar Modo</PageTitle>
         {stateModos && (
           <ContentModos>
             <CardModos
@@ -134,9 +134,9 @@ export function LoginTemplate() {
                   color="255,255,255"
                   width="100%"
                 />
-                <Linea>
+                <Divider>
                   <span>0</span>
-                </Linea>
+                </Divider>
                 <Btn1
                   border="2px"
                   funcion={loginGoogle}

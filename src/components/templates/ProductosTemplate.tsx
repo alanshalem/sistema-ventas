@@ -4,9 +4,9 @@ import {
   Buscador,
   RegistrarProductos,
   TablaProductos,
-  Title,
   useProductosStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { v } from "../../styles/variables";
 import { useEffect, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
@@ -39,7 +39,7 @@ export function ProductosTemplate() {
        
      
       <section className="area1">
-        <Title>Productos</Title>
+        <PageTitle>Productos</PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}

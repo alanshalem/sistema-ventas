@@ -20,7 +20,4 @@ body::-webkit-scrollbar-thumb {
   filter: blur(10px);
 }
 
-    
-    
-
 `;

@@ -3,9 +3,9 @@ import {
   Btn1,
   Buscador,
   RegistrarCategorias,
-  Title,
   useCategoriasStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export function CategoriasTemplate() {
         />
       )}
       <section className="area1">
-        <Title>Categorias</Title>
+        <PageTitle>Categorias</PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}

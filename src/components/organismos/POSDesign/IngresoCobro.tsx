@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Divider } from "../../atomos/Divider";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { InputText } from "../formularios/InputText";
 import { FormatearNumeroDinero } from "../../../utils/Conversiones";
@@ -293,7 +293,7 @@ export const IngresoCobro = forwardRef((props, ref) => {
             </EditButton>
             <span className="cliente">{cliproItemSelect?.nombres}</span>
           </section>
-          <Linea />
+          <Divider />
           <section className="area2">
             {dataMetodosPago?.map((item, index) => {
               return (tipocobro === "Mixto" && item.nombre !== "Mixto") ||
@@ -317,7 +317,7 @@ export const IngresoCobro = forwardRef((props, ref) => {
               ) : null;
             })}
           </section>
-          <Linea />
+          <Divider />
           <section className="area3">
             <article className="etiquetas">
               <span className="total">Total: </span>
@@ -348,7 +348,7 @@ export const IngresoCobro = forwardRef((props, ref) => {
               </span>
             </article>
           </section>
-          <Linea />
+          <Divider />
           <section className="area4">
             <Btn1
               funcion={() => mutation.mutateAsync()}
@@ -485,10 +485,6 @@ const Container = styled.div`
   }
 `;
 
-const Linea = styled.span`
-  width: 100%;
-  border-bottom: dashed 1px #d4d4d4;
-`;
 const EditButton = styled.button`
   background-color: #62c6f7;
   border: none;

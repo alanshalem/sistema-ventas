@@ -3,10 +3,10 @@ import {
   Btn1,
   Buscador,
   RegistrarCategorias,
-  Title,
   useCategoriasStore,
   useUsuariosStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { RegistrarUsuarios } from "../organismos/formularios/RegistrarUsuarios";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
@@ -41,7 +41,7 @@ export function UsuariosTemplate() {
       )}
 
       <section className="area1">
-        <Title>Usuarios</Title>
+        <PageTitle>Usuarios</PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}

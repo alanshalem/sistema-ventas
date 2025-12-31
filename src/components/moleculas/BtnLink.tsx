@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Icono } from "../../index";
+import { Icon } from "../atomos/Icon";
 export function BtnLink({
   funcion,
   titulo,
@@ -27,7 +27,7 @@ export function BtnLink({
       $height={height}
     >
       <section className="content">
-        <Icono $color={color}>{icono}</Icono>
+        <Icon $color={color}>{icono}</Icon>
         {imagen && (
           <ContentImagen>
             <img src={imagen} />

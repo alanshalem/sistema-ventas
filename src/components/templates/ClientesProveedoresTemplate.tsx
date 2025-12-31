@@ -4,10 +4,10 @@ import {
   Buscador,
   RegistrarCategorias,
   RegistrarClientesProveedores,
-  Title,
   useCategoriasStore,
   useClientesProveedoresStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
 import { useState } from "react";
@@ -40,7 +40,7 @@ export function ClientesProveedoresTemplate() {
         />
       )}
       <section className="area1">
-        <Title>{location.pathname==="/configuracion/clientes"?"Clientes":"Proveedores"}</Title>
+        <PageTitle>{location.pathname==="/configuracion/clientes"?"Clientes":"Proveedores"}</PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}

@@ -2,8 +2,10 @@ import styled from "styled-components";
 import {
   ContentAccionesTabla,
   useCategoriasStore,
-  Paginacion,ImagenContent, Icono
+  Paginacion,
+  ImagenContent,
 } from "../../../index";
+import { Icon } from "../../atomos/Icon";
 import Swal from "sweetalert2";
 import { v } from "../../../styles/variables";
 import { useState } from "react";
@@ -68,9 +70,9 @@ const queryClient = useQueryClient()
       cell: (info) => (
         <td data-title="Color" className="ContentCell">
           {
-            info.getValue()!="-"?(   <ImagenContent imagen={info.getValue()}/>):(<Icono>
+            info.getValue()!="-"?(   <ImagenContent imagen={info.getValue()}/>):(<Icon>
               {<v.iconoimagenvacia/>}
-            </Icono>)
+            </Icon>)
           }
     
         </td>

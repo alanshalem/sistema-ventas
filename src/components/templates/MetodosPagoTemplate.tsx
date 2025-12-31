@@ -3,9 +3,9 @@ import {
   Btn1,
   Buscador,
   RegistrarCategorias,
-  Title,
   useCategoriasStore,
 } from "../../index";
+import { PageTitle } from "../atomos/PageTitle";
 import { v } from "../../styles/variables";
 import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
 import { useState } from "react";
@@ -37,7 +37,7 @@ export function MetodosPagoTemplate() {
         />
       )}
       <section className="area1">
-        <Title>Métodos de pago</Title>
+        <PageTitle>Métodos de pago</PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}
