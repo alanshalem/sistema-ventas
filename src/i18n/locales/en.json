@@ -1,0 +1,72 @@
+{
+  "atoms": {
+    "title": "Title",
+    "icon": "Icon",
+    "line": "Line",
+    "container": "Container",
+    "animation": "Animation"
+  },
+  "molecules": {
+    "button": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "close": "Close"
+    },
+    "generateCodeButton": {
+      "generate": "Generate",
+      "code": "Code"
+    },
+    "linkButton": {
+      "link": "Link",
+      "openNewTab": "Open in new tab"
+    },
+    "imageContent": {
+      "image": "Image",
+      "loading": "Loading image..."
+    },
+    "liveIndicator": {
+      "realtime": "realtime",
+      "live": "Live",
+      "online": "Online"
+    },
+    "spinner": {
+      "loading": "Loading...",
+      "pleaseWait": "Please wait"
+    },
+    "secondarySpinner": {
+      "loading": "Loading",
+      "processing": "Processing..."
+    },
+    "hamburgerSwitch": {
+      "menu": "Menu",
+      "open": "Open menu",
+      "close": "Close menu"
+    },
+    "backButton": {
+      "back": "Back",
+      "return": "Return",
+      "goBack": "Go back"
+    }
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning"
+  }
+}

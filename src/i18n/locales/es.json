@@ -1,0 +1,72 @@
+{
+  "atoms": {
+    "title": "Título",
+    "icon": "Icono",
+    "line": "Línea",
+    "container": "Contenedor",
+    "animation": "Animación"
+  },
+  "molecules": {
+    "button": {
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "close": "Cerrar"
+    },
+    "generateCodeButton": {
+      "generate": "Generar",
+      "code": "Código"
+    },
+    "linkButton": {
+      "link": "Enlace",
+      "openNewTab": "Abrir en nueva pestaña"
+    },
+    "imageContent": {
+      "image": "Imagen",
+      "loading": "Cargando imagen..."
+    },
+    "liveIndicator": {
+      "realtime": "tiempo real",
+      "live": "En vivo",
+      "online": "En línea"
+    },
+    "spinner": {
+      "loading": "Cargando...",
+      "pleaseWait": "Por favor espere"
+    },
+    "secondarySpinner": {
+      "loading": "Cargando",
+      "processing": "Procesando..."
+    },
+    "hamburgerSwitch": {
+      "menu": "Menú",
+      "open": "Abrir menú",
+      "close": "Cerrar menú"
+    },
+    "backButton": {
+      "back": "Volver",
+      "return": "Regresar",
+      "goBack": "Ir atrás"
+    }
+  },
+  "common": {
+    "yes": "Sí",
+    "no": "No",
+    "ok": "OK",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia"
+  }
+}
