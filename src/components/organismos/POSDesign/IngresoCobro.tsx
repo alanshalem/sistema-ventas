@@ -1,31 +1,32 @@
-import styled from "styled-components";
-import { Divider } from "../../atoms/Divider";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { InputText } from "../formularios/InputText";
-import { FormatearNumeroDinero } from "../../../utils/Conversiones";
-import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Btn1 } from "../../moleculas/Btn1";
-import { useUsuariosStore } from "../../../store/UsuariosStore";
-import { useSucursalesStore } from "../../../store/SucursalesStore";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useVentasStore } from "../../../store/VentasStore";
-import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
-import { toast } from "sonner";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { PanelBuscador } from "./PanelBuscador";
-import { useClientesProveedoresStore } from "../../../store/ClientesProveedoresStore";
-import { useMetodosPagoStore } from "../../../store/MetodosPagoStore";
-import { useCierreCajaStore } from "../../../store/CierreCajaStore";
-import { useMovCajaStore } from "../../../store/MovCajaStore";
-import { useFormattedDate } from "../../../hooks/useFormattedDate";
-import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
-import { useSerializacionStore } from "../../../store/SerializacionStore";
-import { useImpresorasStore } from "../../../store/ImpresorasStore";
-import ticket from "../../../reports/TicketVenta";
-import { RegistrarClientesProveedores } from "../formularios/RegistrarClientesProveedores";
-import { useGlobalStore } from "../../../store/GlobalStore";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { forwardRef, useEffect, useImperativeHandle,useState } from 'react'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../hooks/useFormattedDate'
+import ticket from '../../../reports/TicketVenta'
+import { useAsignacionCajaSucursalStore } from '../../../store/AsignacionCajaSucursalStore'
+import { useCierreCajaStore } from '../../../store/CierreCajaStore'
+import { useClientesProveedoresStore } from '../../../store/ClientesProveedoresStore'
+import { useDetalleVentasStore } from '../../../store/DetalleVentasStore'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useGlobalStore } from '../../../store/GlobalStore'
+import { useImpresorasStore } from '../../../store/ImpresorasStore'
+import { useMetodosPagoStore } from '../../../store/MetodosPagoStore'
+import { useMovCajaStore } from '../../../store/MovCajaStore'
+import { useSerializacionStore } from '../../../store/SerializacionStore'
+import { useSucursalesStore } from '../../../store/SucursalesStore'
+import { useUsuariosStore } from '../../../store/UsuariosStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { FormatearNumeroDinero } from '../../../utils/Conversiones'
+import { Divider } from '../../atoms/Divider'
+import { Button } from '../../molecules/Button'
+import { InputText } from '../formularios/InputText'
+import { RegistrarClientesProveedores } from '../formularios/RegistrarClientesProveedores'
+import { PanelBuscador } from './PanelBuscador'
 export const IngresoCobro = forwardRef((props, ref) => {
-  const fechaActual = useFormattedDate();
+  const fechaActual = useFormattedDate()
   const {
     tipocobro,
     items,
@@ -33,112 +34,97 @@ export const IngresoCobro = forwardRef((props, ref) => {
     resetState,
     confirmarVenta,
     dataventaconfirmada,
-  } = useVentasStore();
-  const { total } = useDetalleVentasStore();
+  } = useVentasStore()
+  const { total } = useDetalleVentasStore()
   //Valores a calcular
-  const [stateBuscadorClientes, setStateBuscadorClientes] = useState(false);
-  const [precioVenta, setPrecioVenta] = useState(total);
-  const [valoresPago, setValoresPago] = useState({});
-  const [valorTarjeta, setValorTarjeta] = useState(
-    tipocobro === "tarjeta" ? total : 0
-  );
-  const [valorEfectivo, setValorEfectivo] = useState(
-    tipocobro === "efectivo" ? total : 0
-  );
-  const [valorCredito, setValorCredito] = useState(
-    tipocobro === "credito" ? total : 0
-  );
+  const [stateBuscadorClientes, setStateBuscadorClientes] = useState(false)
+  const [precioVenta, setPrecioVenta] = useState(total)
+  const [valoresPago, setValoresPago] = useState({})
+  const [valorTarjeta, setValorTarjeta] = useState(tipocobro === 'tarjeta' ? total : 0)
+  const [valorEfectivo, setValorEfectivo] = useState(tipocobro === 'efectivo' ? total : 0)
+  const [valorCredito, setValorCredito] = useState(tipocobro === 'credito' ? total : 0)
   //Valores a mostrar
-  const [vuelto, setVuelto] = useState(0);
-  const [restante, setRestante] = useState(0);
+  const [vuelto, setVuelto] = useState(0)
+  const [restante, setRestante] = useState(0)
   //datos de tipos de pago
-  const { dataMetodosPago } = useMetodosPagoStore();
+  const { dataMetodosPago } = useMetodosPagoStore()
   //datos de la store
-  const { datausuarios } = useUsuariosStore();
-  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore();
-  const { dataempresa } = useEmpresaStore();
-  const { idventa, insertarVentas } = useVentasStore();
-  const { datadetalleventa } = useDetalleVentasStore();
+  const { datausuarios } = useUsuariosStore()
+  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
+  const { dataempresa } = useEmpresaStore()
+  const { idventa, insertarVentas } = useVentasStore()
+  const { datadetalleventa } = useDetalleVentasStore()
   const { dataComprobantes, itemComprobanteSelect, setItemComprobanteSelect } =
-    useSerializacionStore();
+    useSerializacionStore()
   //mostrar data de impresoras
-  const { dataImpresorasPorCaja } = useImpresorasStore();
+  const { dataImpresorasPorCaja } = useImpresorasStore()
   //#region Clientes
-  const {
-    buscarCliPro,
-    setBuscador,
-    buscador,
-    selectCliPro,
-    cliproItemSelect,
-  } = useClientesProveedoresStore();
-  const queryClient = useQueryClient();
-  const { data: dataBuscadorcliente, isLoading: isloadingBuscadorCliente } =
-    useQuery({
-      queryKey: ["buscar cliente", [dataempresa?.id, "cliente", buscador]],
-      queryFn: () =>
-        buscarCliPro({
-          id_empresa: dataempresa?.id,
-          tipo: "cliente",
-          buscador: buscador,
-        }),
-      enabled: !!dataempresa,
-      refetchOnWindowFocus: false,
-    });
+  const { buscarCliPro, setBuscador, buscador, selectCliPro, cliproItemSelect } =
+    useClientesProveedoresStore()
+  const queryClient = useQueryClient()
+  const { data: dataBuscadorcliente, isLoading: isloadingBuscadorCliente } = useQuery({
+    queryKey: ['buscar cliente', [dataempresa?.id, 'cliente', buscador]],
+    queryFn: () =>
+      buscarCliPro({
+        id_empresa: dataempresa?.id,
+        tipo: 'cliente',
+        buscador: buscador,
+      }),
+    enabled: !!dataempresa,
+    refetchOnWindowFocus: false,
+  })
   //#endregion
   //Mostrar cierres de caja
-  const { dataCierreCaja } = useCierreCajaStore();
+  const { dataCierreCaja } = useCierreCajaStore()
   // Función para calcular vuelto y restante
   //Movientos de caja
-  const { insertarMovCaja } = useMovCajaStore();
+  const { insertarMovCaja } = useMovCajaStore()
   const calcularVueltoYRestante = () => {
-    const totalPagado = Object.values(valoresPago).reduce(
-      (acc, curr) => acc + curr,
-      0
-    );
-    const totalSinEfectivo = totalPagado - (valoresPago["Efectivo"] || 0);
+    const totalPagado = Object.values(valoresPago).reduce((acc, curr) => acc + curr, 0)
+    const totalSinEfectivo = totalPagado - (valoresPago['Efectivo'] || 0)
     // Si el total sin efectivo excede el precio de venta, no permitir el exceso
     if (totalSinEfectivo > precioVenta) {
-      setVuelto(0);
-      setRestante(precioVenta - totalSinEfectivo); //Restante negativo para indicar que se excede sin efectivo
+      setVuelto(0)
+      setRestante(precioVenta - totalSinEfectivo) //Restante negativo para indicar que se excede sin efectivo
     } else {
       // Permitir el exceso solo si es en efectivo
       if (totalPagado >= precioVenta) {
-        const exceso = totalPagado - precioVenta;
-        setVuelto(valoresPago["Efectivo"] ? exceso : 0);
-        setRestante(0);
+        const exceso = totalPagado - precioVenta
+        setVuelto(valoresPago['Efectivo'] ? exceso : 0)
+        setRestante(0)
       } else {
         // Si el total pagado no cubre el precio de venta, calcular el restante
-        setVuelto(0);
-        setRestante(precioVenta - totalPagado);
+        setVuelto(0)
+        setRestante(precioVenta - totalPagado)
       }
     }
-  };
+  }
   //Manejadores de cambio
   const handleChangePago = (tipo, valor) => {
     setValoresPago((prev) => ({
       ...prev,
       [tipo]: parseFloat(valor) || 0,
-    }));
-    console.log(valoresPago);
+    }))
+    console.log(valoresPago)
     //{100,50,10}
-  };
+  }
   // Exponiendo la función mutation a través de ref
   useImperativeHandle(ref, () => ({
     mutateAsync: mutation.mutateAsync,
-  }));
+  }))
   //Funcion para realizar la venta
   const mutation = useMutation({
-    mutationKey: "insertar ventas",
+    mutationKey: 'insertar ventas',
     mutationFn: ConfirmarVenta,
     onSuccess: () => {
       if (restante != 0) {
-        return;
+        return
       }
-      resetState();
-      queryClient.invalidateQueries(["mostrar detalle venta"]);
-      toast.success("🎉 venta generada correctamente!!!");
+      resetState()
+      queryClient.invalidateQueries(['mostrar detalle venta'])
+      toast.success('🎉 venta generada correctamente!!!')
     },
-  });
+  })
   async function ConfirmarVenta() {
     if (restante === 0) {
       const pventas = {
@@ -151,28 +137,26 @@ export const IngresoCobro = forwardRef((props, ref) => {
         _id_cliente: cliproItemSelect?.id || null,
         _fecha: fechaActual,
         _monto_total: total,
-      };
-      console.log("confirmarVenta", pventas);
-      const dataVentaConfirmada = await confirmarVenta(pventas);
-      const nuevosMetodosPago = [];
+      }
+      console.log('confirmarVenta', pventas)
+      const dataVentaConfirmada = await confirmarVenta(pventas)
+      const nuevosMetodosPago = []
       // Insertar en MovCaja solo los métodos de pago con monto mayor a 0
       for (const [tipo, monto] of Object.entries(valoresPago)) {
         if (monto > 0) {
-          const metodoPago = dataMetodosPago.find(
-            (item) => item.nombre === tipo
-          );
+          const metodoPago = dataMetodosPago.find((item) => item.nombre === tipo)
           const pmovcaja = {
-            tipo_movimiento: "ingreso",
+            tipo_movimiento: 'ingreso',
             monto: monto,
             id_metodo_pago: metodoPago?.id,
             descripcion: `Pago de venta con ${tipo}`,
             id_usuario: datausuarios?.id,
             id_cierre_caja: dataCierreCaja?.id,
             id_ventas: idventa,
-            vuelto: tipo === "Efectivo" ? vuelto : 0,
-          };
-          await insertarMovCaja(pmovcaja);
-          nuevosMetodosPago.push({ tipo, monto, vuelto });
+            vuelto: tipo === 'Efectivo' ? vuelto : 0,
+          }
+          await insertarMovCaja(pmovcaja)
+          nuevosMetodosPago.push({ tipo, monto, vuelto })
         }
       }
       const pPrint = {
@@ -183,74 +167,72 @@ export const IngresoCobro = forwardRef((props, ref) => {
         nombrecajero: datausuarios?.nombres,
         dataCliente: cliproItemSelect,
         metodosPago: nuevosMetodosPago,
-      };
+      }
       dataImpresorasPorCaja?.state
         ? imprimirDirectoTicket(pPrint)
-        : imprimirConVentanaEmergente(pPrint);
+        : imprimirConVentanaEmergente(pPrint)
     } else {
-      toast.warning("Falta completar el pago, el restante tiene que ser 0");
+      toast.warning('Falta completar el pago, el restante tiene que ser 0')
     }
   }
   const imprimirConVentanaEmergente = async (p) => {
-    console.log("pprint", p);
-    await ticket("print", p);
-  };
+    console.log('pprint', p)
+    await ticket('print', p)
+  }
   const imprimirDirectoTicket = async (p) => {
-    if (dataImpresorasPorCaja?.name === "-") {
+    if (dataImpresorasPorCaja?.name === '-') {
       return toast.error(
-        "Impresora no reconocida, configura tu impresora desde modulo de configuración"
-      );
+        'Impresora no reconocida, configura tu impresora desde modulo de configuración'
+      )
     }
-    const response = await ticket("b64", p);
+    const response = await ticket('b64', p)
     // Convertir el contenido base64 en un archivo Blob
-    const binaryString = atob(response.content);
-    const binaryLen = binaryString.length;
-    const bytes = new Uint8Array(binaryLen);
+    const binaryString = atob(response.content)
+    const binaryLen = binaryString.length
+    const bytes = new Uint8Array(binaryLen)
     for (let i = 0; i < binaryLen; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+      bytes[i] = binaryString.charCodeAt(i)
     }
-    const blob = new Blob([bytes], { type: "application/pdf" });
+    const blob = new Blob([bytes], { type: 'application/pdf' })
     // Crear un archivo simulando un archivo subido
-    const file = new File([blob], "GeneratedTicket.pdf", {
-      type: "application/pdf",
-    });
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("printerName", dataImpresorasPorCaja?.name);
-    const responseApi = await fetch("http://localhost:5075/api/print-ticket", {
-      method: "POST",
+    const file = new File([blob], 'GeneratedTicket.pdf', {
+      type: 'application/pdf',
+    })
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('printerName', dataImpresorasPorCaja?.name)
+    const responseApi = await fetch('http://localhost:5075/api/print-ticket', {
+      method: 'POST',
       body: formData,
-    });
+    })
     if (responseApi.ok) {
-      toast.success("El PDF se envió a imprimir correctamente.");
-
-    }else{
-      const error = await responseApi.text();
-      toast.error("Error al imprimir" + error);
+      toast.success('El PDF se envió a imprimir correctamente.')
+    } else {
+      const error = await responseApi.text()
+      toast.error('Error al imprimir' + error)
     }
-
-  };
-  const { setTipo: setTipocliente } = useClientesProveedoresStore();
+  }
+  const { setTipo: setTipocliente } = useClientesProveedoresStore()
   const { setStateClose, setAccion, stateClose, accion, setIsExploding } =
-    useGlobalStore();
+    useGlobalStore()
   function registrarNuevoCliente() {
-    const tipo = "cliente";
-    setTipocliente(tipo);
-    setAccion("Nuevo");
-    setStateClose(true);
+    const tipo = 'cliente'
+    setTipocliente(tipo)
+    setAccion('Nuevo')
+    setStateClose(true)
   }
   //useEffect para recalcular cuando los valores cambian
   useEffect(() => {
-    if (tipocobro !== "Mixto" && valoresPago[tipocobro] != total) {
+    if (tipocobro !== 'Mixto' && valoresPago[tipocobro] != total) {
       setValoresPago((prev) => ({
         ...prev,
         [tipocobro]: total,
-      }));
+      }))
     }
-  }, [tipocobro, total]);
+  }, [tipocobro, total])
   useEffect(() => {
-    calcularVueltoYRestante();
-  }, [precioVenta, tipocobro, valoresPago]);
+    calcularVueltoYRestante()
+  }, [precioVenta, tipocobro, valoresPago])
   return (
     <Container>
       {mutation.isPending ? (
@@ -262,11 +244,10 @@ export const IngresoCobro = forwardRef((props, ref) => {
             <span className="tipocobro">{tipocobro}</span>
             <section>
               <span>
-                {itemComprobanteSelect?.tipo_comprobantes?.nombre}:{" "}
+                {itemComprobanteSelect?.tipo_comprobantes?.nombre}:{' '}
                 <strong>
-                  {itemComprobanteSelect?.serie}-
-                  {itemComprobanteSelect?.correlativo}{" "}
-                </strong>{" "}
+                  {itemComprobanteSelect?.serie}-{itemComprobanteSelect?.correlativo}{' '}
+                </strong>{' '}
               </span>
             </section>
 
@@ -274,21 +255,19 @@ export const IngresoCobro = forwardRef((props, ref) => {
               {dataComprobantes?.map((item, index) => {
                 return (
                   <article className="box" key={index}>
-                    <Btn1
-                      titulo={item?.tipo_comprobantes?.nombre}
+                    <Button
+                      title={item?.tipo_comprobantes?.nombre}
                       border="0"
                       height="70px"
                       width="100%"
-                      funcion={() => setItemComprobanteSelect(item)}
+                      onClick={() => setItemComprobanteSelect(item)}
                     />
                   </article>
-                );
+                )
               })}
             </section>
             <span>cliente</span>
-            <EditButton
-              onClick={() => setStateBuscadorClientes(!stateBuscadorClientes)}
-            >
+            <EditButton onClick={() => setStateBuscadorClientes(!stateBuscadorClientes)}>
               <Icon className=" icono" icon="lets-icons:edit-fill" />
             </EditButton>
             <span className="cliente">{cliproItemSelect?.nombres}</span>
@@ -296,25 +275,21 @@ export const IngresoCobro = forwardRef((props, ref) => {
           <Divider />
           <section className="area2">
             {dataMetodosPago?.map((item, index) => {
-              return (tipocobro === "Mixto" && item.nombre !== "Mixto") ||
-                (tipocobro === item.nombre && item.nombre !== "Mixto") ? (
+              return (tipocobro === 'Mixto' && item.nombre !== 'Mixto') ||
+                (tipocobro === item.nombre && item.nombre !== 'Mixto') ? (
                 <InputText textalign="center" key={index}>
                   <input
-                    onChange={(e) =>
-                      handleChangePago(item.nombre, e.target.value)
-                    }
-                    defaultValue={tipocobro === item.nombre ? total : ""}
+                    onChange={(e) => handleChangePago(item.nombre, e.target.value)}
+                    defaultValue={tipocobro === item.nombre ? total : ''}
                     className="form__field"
                     type="number"
                     disabled={
-                      tipocobro === "Mixto" || tipocobro === "Efectivo"
-                        ? false
-                        : true
+                      tipocobro === 'Mixto' || tipocobro === 'Efectivo' ? false : true
                     }
                   />
                   <label className="form__label">{item.nombre} </label>
                 </InputText>
-              ) : null;
+              ) : null
             })}
           </section>
           <Divider />
@@ -326,35 +301,23 @@ export const IngresoCobro = forwardRef((props, ref) => {
             </article>
             <article>
               <span className="total">
-                {FormatearNumeroDinero(
-                  total,
-                  dataempresa?.currency,
-                  dataempresa?.iso
-                )}
+                {FormatearNumeroDinero(total, dataempresa?.currency, dataempresa?.iso)}
               </span>
               <span>
-                {FormatearNumeroDinero(
-                  vuelto,
-                  dataempresa?.currency,
-                  dataempresa?.iso
-                )}
+                {FormatearNumeroDinero(vuelto, dataempresa?.currency, dataempresa?.iso)}
               </span>
               <span>
-                {FormatearNumeroDinero(
-                  restante,
-                  dataempresa?.currency,
-                  dataempresa?.iso
-                )}
+                {FormatearNumeroDinero(restante, dataempresa?.currency, dataempresa?.iso)}
               </span>
             </article>
           </section>
           <Divider />
           <section className="area4">
-            <Btn1
-              funcion={() => mutation.mutateAsync()}
+            <Button
+              onClick={() => mutation.mutateAsync()}
               border="2px"
-              titulo="COBRAR (enter)"
-              bgcolor="#0aca21"
+              title="COBRAR (enter)"
+              bgColor="#0aca21"
               color="#ffffff"
               width="100%"
             />
@@ -366,9 +329,7 @@ export const IngresoCobro = forwardRef((props, ref) => {
               setBuscador={setBuscador}
               displayField="nombres"
               data={dataBuscadorcliente}
-              setStateBuscador={() =>
-                setStateBuscadorClientes(!stateBuscadorClientes)
-              }
+              setStateBuscador={() => setStateBuscadorClientes(!stateBuscadorClientes)}
             />
           )}
           {stateClose && (
@@ -381,8 +342,8 @@ export const IngresoCobro = forwardRef((props, ref) => {
         </>
       )}
     </Container>
-  );
-});
+  )
+})
 const Container = styled.div`
   position: relative;
   box-sizing: border-box;
@@ -406,7 +367,7 @@ const Container = styled.div`
   }
   &:before,
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     left: 5px;
     height: 6px;
@@ -420,7 +381,8 @@ const Container = styled.div`
         transparent 50%,
         #fbfbfb 50%,
         #fbfbfb 100%
-      ) -7px -8px / 16px 16px repeat-x;
+      ) -7px -8px /
+      16px 16px repeat-x;
   }
   &:after {
     bottom: -5px;
@@ -430,7 +392,8 @@ const Container = styled.div`
         transparent 50%,
         #fbfbfb 50%,
         #fbfbfb 100%
-      ) -7px -2px / 16px 16px repeat-x;
+      ) -7px -2px /
+      16px 16px repeat-x;
   }
   .area1 {
     display: flex;
@@ -483,7 +446,7 @@ const Container = styled.div`
       text-align: end;
     }
   }
-`;
+`
 
 const EditButton = styled.button`
   background-color: #62c6f7;
@@ -499,4 +462,4 @@ const EditButton = styled.button`
   .icono {
     font-size: 20px;
   }
-`;
+`

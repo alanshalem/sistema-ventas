@@ -1,31 +1,27 @@
-import React, { useState } from "react";
-import { v } from "../../../styles/variables";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { InputText, Btn1 } from "../../../index";
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
 
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { useGlobalStore } from "../../../store/GlobalStore";
-import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
-import { useEditarSerializacionMutation } from "../../../tanstack/SerializacionStack";
-
+import { Btn1,InputText } from '../../../index'
+import { useAsignacionCajaSucursalStore } from '../../../store/AsignacionCajaSucursalStore'
+import { useGlobalStore } from '../../../store/GlobalStore'
+import { v } from '../../../styles/variables'
+import { useEditarSerializacionMutation } from '../../../tanstack/SerializacionStack'
+import { BtnClose } from '../../ui/buttons/BtnClose'
 
 export const RegistrarSerializacion = () => {
-  const { setStateClose, itemSelect } = useGlobalStore();
-  const [cantidadNumeros, setCantidadNumeros] = useState(
-    itemSelect?.cantidad_numeros
-  );
-  const {sucursalesItemSelectAsignadas} = useAsignacionCajaSucursalStore()
-  const {mutate} = useEditarSerializacionMutation()
-  const [correlativo, setCorrelativo] = useState(itemSelect?.correlativo);
-  const [serie, setSerie] = useState(itemSelect?.serie);
+  const { setStateClose, itemSelect } = useGlobalStore()
+  const [cantidadNumeros, setCantidadNumeros] = useState(itemSelect?.cantidad_numeros)
+  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
+  const { mutate } = useEditarSerializacionMutation()
+  const [correlativo, setCorrelativo] = useState(itemSelect?.correlativo)
+  const [serie, setSerie] = useState(itemSelect?.serie)
 
   // Función para formatear el correlativo con ceros a la izquierda
   const formatearCorrelativo = (numero, longitud) => {
-    return String(numero).padStart(longitud, "0");
-  };
+    return String(numero).padStart(longitud, '0')
+  }
 
-  
   const {
     register,
     formState: { errors },
@@ -38,12 +34,12 @@ export const RegistrarSerializacion = () => {
       serie: itemSelect?.serie,
       sucursal_id: sucursalesItemSelectAsignadas?.id_sucursal,
     },
-  });
+  })
   return (
     <Container>
       <section className="sub-container">
         <div className="comprobante">
-          <BtnClose color={"#000"} funcion={() => setStateClose(false)} />
+          <BtnClose color={'#000'} funcion={() => setStateClose(false)} />
           <span className="title">Comprobante</span>
           <div className="tipo"> {itemSelect?.tipo_comprobantes?.nombre} </div>
           <div className="numero">
@@ -60,7 +56,7 @@ export const RegistrarSerializacion = () => {
                 placeholder="Cantidad de numeros"
                 type="number"
                 value={cantidadNumeros}
-                {...register("cantidad_numeros", {
+                {...register('cantidad_numeros', {
                   required: true,
                 })}
                 onChange={(e) =>
@@ -68,9 +64,7 @@ export const RegistrarSerializacion = () => {
                 }
               />
               <label className="form__label">Cantidad de numeros</label>
-              {errors.cantidad_numeros?.type === "required" && (
-                <p>Campo requerido</p>
-              )}
+              {errors.cantidad_numeros?.type === 'required' && <p>Campo requerido</p>}
             </InputText>
           </article>
           <article>
@@ -80,7 +74,7 @@ export const RegistrarSerializacion = () => {
                 placeholder="Correlativos"
                 type="number"
                 value={correlativo}
-                {...register("correlativo", {
+                {...register('correlativo', {
                   required: true,
                 })}
                 onChange={(e) =>
@@ -88,9 +82,7 @@ export const RegistrarSerializacion = () => {
                 }
               />
               <label className="form__label">Correlativo</label>
-              {errors.correlativo?.type === "required" && (
-                <p>Campo requerido</p>
-              )}
+              {errors.correlativo?.type === 'required' && <p>Campo requerido</p>}
             </InputText>
           </article>
 
@@ -101,26 +93,24 @@ export const RegistrarSerializacion = () => {
                 placeholder="Serie"
                 type="text"
                 value={serie}
-                {...register("serie", {
+                {...register('serie', {
                   required: true,
                 })}
                 onChange={(e) => setSerie(e.target.value.toUpperCase())}
               />
               <label className="form__label">Serie</label>
-              {errors.correlativo?.type === "required" && (
-                <p>Campo requerido</p>
-              )}
+              {errors.correlativo?.type === 'required' && <p>Campo requerido</p>}
             </InputText>
           </article>
 
           <div className="buttons">
-            <Btn1 titulo={"Guardar"} bgcolor={"#fff"} />
+            <Btn1 titulo={'Guardar'} bgcolor={'#fff'} />
           </div>
         </form>
       </section>
     </Container>
-  );
-};
+  )
+}
 
 /* Styled Components Anidado */
 const Container = styled.div`
@@ -233,4 +223,4 @@ const Container = styled.div`
       cursor: pointer;
     }
   }
-`;
+`

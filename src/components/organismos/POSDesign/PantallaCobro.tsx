@@ -1,44 +1,42 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { IngresoCobro } from "./IngresoCobro";
-import { VisorTicketVenta } from "./VisorTicketVenta";
-import { useVentasStore } from "../../../store/VentasStore";
-import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
-import { Switch } from "../../ui/toggles/Switch";
-import { useImpresorasStore } from "../../../store/ImpresorasStore";
-import { useEditarImpresorasMutation } from "../../../tanstack/ImpresorasStack";
+import { useDetalleVentasStore } from '../../../store/DetalleVentasStore'
+import { useImpresorasStore } from '../../../store/ImpresorasStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { useEditarImpresorasMutation } from '../../../tanstack/ImpresorasStack'
+import { Switch } from '../../ui/toggles/Switch'
+import { IngresoCobro } from './IngresoCobro'
+import { VisorTicketVenta } from './VisorTicketVenta'
 export function PantallaCobro() {
-  const [stateVerticket, setStateVerticker] = useState(false);
-  const { setStatePantallaCobro, tipocobro } = useVentasStore();
-  const ingresoCobroRef = useRef();
-  const { datadetalleventa } = useDetalleVentasStore();
-  const { statePrintDirecto, setStatePrintDirecto } = useImpresorasStore();
-  const { mutate, isPending } = useEditarImpresorasMutation();
+  const [stateVerticket, setStateVerticker] = useState(false)
+  const { setStatePantallaCobro, tipocobro } = useVentasStore()
+  const ingresoCobroRef = useRef()
+  const { datadetalleventa } = useDetalleVentasStore()
+  const { statePrintDirecto, setStatePrintDirecto } = useImpresorasStore()
+  const { mutate, isPending } = useEditarImpresorasMutation()
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault(); // Evita el comportamiento predeterminado de presionar Enter (como cerrar la vista)
+      if (event.key === 'Enter') {
+        event.preventDefault() // Evita el comportamiento predeterminado de presionar Enter (como cerrar la vista)
         if (ingresoCobroRef.current) {
-          ingresoCobroRef.current.mutateAsync();
+          ingresoCobroRef.current.mutateAsync()
         }
       }
-    };
+    }
     // Añade el event listener al document
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown)
     // Limpia el event listener al desmontar el componente
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
   return (
     <Container>
       <section className="contentingresocobro">
         {stateVerticket && (
-          <VisorTicketVenta
-            setState={() => setStateVerticker(!stateVerticket)}
-          />
+          <VisorTicketVenta setState={() => setStateVerticker(!stateVerticket)} />
         )}
 
         <article className="contentverticket">
@@ -47,8 +45,8 @@ export function PantallaCobro() {
             <Switch
               state={statePrintDirecto}
               setState={() => {
-                setStatePrintDirecto();
-                mutate();
+                setStatePrintDirecto()
+                mutate()
               }}
             />
           </ContentSwich>
@@ -73,7 +71,7 @@ export function PantallaCobro() {
         </article>
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   position: absolute;
@@ -107,9 +105,9 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 const ContentSwich = styled.section`
   display: flex;
   gap: 15px;
   margin-bottom: 10px;
-`;
+`

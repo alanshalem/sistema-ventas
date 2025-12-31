@@ -1,7 +1,4 @@
-
-import {AlmacenesTemplate} from "../components/templates/AlmacenesTemplate"
+import { AlmacenesTemplate } from '../components/templates/AlmacenesTemplate'
 export const Almacenes = () => {
-  return (
-   <AlmacenesTemplate/>
-  );
-};
+  return <AlmacenesTemplate />
+}

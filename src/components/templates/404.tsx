@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export function PageNot() {
   return (
@@ -9,8 +9,7 @@ export function PageNot() {
             <span className="home__subtitle">página en </span>
             <h1 className="home__title">Construcción</h1>
             <p className="home__description">
-              Esta página se encuentra en <br /> construcción, pequeño
-              cerdecillo.
+              Esta página se encuentra en <br /> construcción, pequeño cerdecillo.
             </p>
             <a href="/" className="home__button">
               VOLVER A HOME
@@ -23,7 +22,7 @@ export function PageNot() {
         </div>
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: 100vh;
@@ -34,7 +33,7 @@ const Container = styled.div`
   --first-color: hsl(0, 0%, 7.0588235294117645%);
   --text-color: hsl(0, 0%, 20%);
 
-  --body-font: "Space Grotesk", sans-serif;
+  --body-font: 'Space Grotesk', sans-serif;
   --biggest-font-size: 2.375rem;
   --normal-font-size: 0.938rem;
   --smaller-font-size: 0.75rem;
@@ -199,4 +198,4 @@ const Container = styled.div`
   @media screen and (min-width: 3840px) {
     zoom: 3.1;
   }
-`;
+`

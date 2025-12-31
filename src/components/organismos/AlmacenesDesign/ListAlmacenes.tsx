@@ -1,127 +1,128 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import styled from "styled-components";
-import { useSucursalesStore } from "../../../store/SucursalesStore";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { BarLoader } from "react-spinners";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Device } from "../../../styles/breakpoints";
-import { ButtonDashed } from "../../ui/buttons/ButtonDashed";
-import { useCajasStore } from "../../../store/CajasStore";
-import Swal from "sweetalert2";
-import { toast } from "sonner";
-import { useAlmacenesStore } from "../../../store/AlmacenesStore";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { BarLoader } from 'react-spinners'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+import Swal from 'sweetalert2'
+
+import { useAlmacenesStore } from '../../../store/AlmacenesStore'
+import { useCajasStore } from '../../../store/CajasStore'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useSucursalesStore } from '../../../store/SucursalesStore'
+import { Device } from '../../../styles/breakpoints'
+import { ButtonDashed } from '../../ui/buttons/ButtonDashed'
 export const ListAlmacenes = () => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const {
     mostrarCajasXSucursal,
     setStateSucursal,
     setAccion,
     selectSucursal,
     eliminarSucursal,
-  } = useSucursalesStore();
-  const { dataempresa } = useEmpresaStore();
+  } = useSucursalesStore()
+  const { dataempresa } = useEmpresaStore()
   const {
     setStateAlmacen,
     setAlmacenSelectItem,
     setAccion: setAccionAlmacen,
     eliminarAlmacen,
     mostrarAlmacenesXEmpresa,
-  } = useAlmacenesStore();
+  } = useAlmacenesStore()
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["mostrar almacenes X empresa"],
+    queryKey: ['mostrar almacenes X empresa'],
     queryFn: () => mostrarAlmacenesXEmpresa({ id_empresa: dataempresa?.id }),
     enabled: !!dataempresa,
-  });
+  })
 
   const editarSucursal = (p) => {
-    selectSucursal(p);
-    setStateSucursal(true);
-    setAccion("Editar");
-  };
+    selectSucursal(p)
+    setStateSucursal(true)
+    setAccion('Editar')
+  }
   const agregarAlmacen = (p) => {
-    setAccionAlmacen("Nuevo");
-    setStateAlmacen(true);
-    console.log(p);
-    setAlmacenSelectItem(p);
-  };
+    setAccionAlmacen('Nuevo')
+    setStateAlmacen(true)
+    console.log(p)
+    setAlmacenSelectItem(p)
+  }
   const editarAlmacen = (p) => {
-    setStateAlmacen(true);
-    setAccionAlmacen("Editar");
-    setAlmacenSelectItem(p);
-  };
+    setStateAlmacen(true)
+    setAccionAlmacen('Editar')
+    setAlmacenSelectItem(p)
+  }
   const controladorEliminarAlmacen = (id) => {
     return new Promise((resolve, reject) => {
       Swal.fire({
-        title: "¿Estás seguro(a)(e)?",
-        text: "Una vez eliminado, se eliminaran todas las ventas relacionadas",
-        icon: "warning",
+        title: '¿Estás seguro(a)(e)?',
+        text: 'Una vez eliminado, se eliminaran todas las ventas relacionadas',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await eliminarAlmacen({ id: id });
-            resolve();
+            await eliminarAlmacen({ id: id })
+            resolve()
           } catch (error) {
-            reject(error);
+            reject(error)
           }
         } else {
-          reject(new Error("Eliminación cancelada"));
+          reject(new Error('Eliminación cancelada'))
         }
-      });
-    });
-  };
+      })
+    })
+  }
   const controladorEliminarSucursal = (id) => {
     return new Promise((resolve, reject) => {
       Swal.fire({
-        title: "¿Estás seguro(a)(e)?",
-        text: "Una vez eliminado, se eliminaran todas las ventas relacionadas",
-        icon: "warning",
+        title: '¿Estás seguro(a)(e)?',
+        text: 'Una vez eliminado, se eliminaran todas las ventas relacionadas',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, eliminar",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await eliminarSucursal({ id: id });
-            resolve();
+            await eliminarSucursal({ id: id })
+            resolve()
           } catch (error) {
-            reject(error);
+            reject(error)
           }
         } else {
-          reject(new Error("Eliminación cancelada"));
+          reject(new Error('Eliminación cancelada'))
         }
-      });
-    });
-  };
+      })
+    })
+  }
   const { mutate: doDeleteSucursal } = useMutation({
-    mutationKey: ["eliminar Sucursal"],
+    mutationKey: ['eliminar Sucursal'],
     mutationFn: controladorEliminarSucursal,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      toast.success("Sucursal eliminada");
-      queryClient.invalidateQueries(["mostrar Cajas XSucursal"]);
+      toast.success('Sucursal eliminada')
+      queryClient.invalidateQueries(['mostrar Cajas XSucursal'])
     },
-  });
+  })
   const { mutate: doDeleteCaja } = useMutation({
-    mutationKey: ["eliminar almacen"],
+    mutationKey: ['eliminar almacen'],
     mutationFn: controladorEliminarAlmacen,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      toast.success("Almacen eliminado");
-      queryClient.invalidateQueries(["mostrar almacenes X empresa"]);
+      toast.success('Almacen eliminado')
+      queryClient.invalidateQueries(['mostrar almacenes X empresa'])
     },
-  });
-  if (isLoading) return <BarLoader color="#6d6d6d" />;
-  if (error) return <span>error...{error.message}</span>;
+  })
+  if (isLoading) return <BarLoader color="#6d6d6d" />
+  if (error) return <span>error...{error.message}</span>
 
   return (
     <Container>
@@ -175,19 +176,19 @@ export const ListAlmacenes = () => {
                       />
                     </Acciones>
                   </CajaItem>
-                );
+                )
               })}
             </CajaList>
             <ButtonDashed
-              title={"agregar almacen"}
+              title={'agregar almacen'}
               funcion={() => agregarAlmacen(sucursal)}
             />
           </Sucursal>
-        );
+        )
       })}
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   column-count: 1;
@@ -201,7 +202,7 @@ const Container = styled.div`
   @media ${Device.desktop} {
     column-count: 3;
   }
-`;
+`
 const Acciones = styled.section`
   position: absolute;
   right: ${(props) => props.$right};
@@ -216,7 +217,7 @@ const Acciones = styled.section`
       color: #c22929 !important;
     }
   }
-`;
+`
 const Sucursal = styled.div`
   background-color: ${({ theme }) => theme.body};
   border: 2px solid ${({ theme }) => theme.bordercolorDash};
@@ -229,14 +230,14 @@ const Sucursal = styled.div`
   break-inside: avoid;
   margin-bottom: 20px;
   position: relative;
-`;
+`
 const SucursalHeader = styled.div`
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
-`;
+`
 const SucursalTitle = styled.h3`
   font-size: 18px;
   color: ${({ theme }) => theme.text};
@@ -249,7 +250,7 @@ const SucursalTitle = styled.h3`
   word-break: break-word;
   overflow-wrap: break-word;
   white-space: normal;
-`;
+`
 
 const CajaList = styled.ul`
   list-style: none;
@@ -258,7 +259,7 @@ const CajaList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
+`
 const CajaItem = styled.li`
   display: flex;
   flex-direction: column;
@@ -268,20 +269,20 @@ const CajaItem = styled.li`
   border-radius: 8px;
   justify-content: space-between;
   position: relative;
-`;
+`
 const CajaInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
+`
 const FechaCreacion = styled.span`
   font-size: 14px;
   color: #9ca3af;
   text-align: start;
-`;
+`
 const CajaDescripcion = styled.span`
   font-size: 16px;
   color: ${({ theme }) => theme.text};
   font-weight: bold;
   text-align: center;
-`;
+`

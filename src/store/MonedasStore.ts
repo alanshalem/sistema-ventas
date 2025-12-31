@@ -1,11 +1,12 @@
-import { create } from 'zustand';
-import type { Moneda } from '../types';
+import { create } from 'zustand'
+
+import type { Moneda } from '../types'
 
 interface MonedasState {
-  search: string;
-  selectedCountry: Moneda | null;
-  setSearch: (search: string) => void;
-  setSelectedCountry: (p: Moneda | null) => void;
+  search: string
+  selectedCountry: Moneda | null
+  setSearch: (search: string) => void
+  setSelectedCountry: (p: Moneda | null) => void
 }
 
 export const useMonedasStore = create<MonedasState>((set) => ({
@@ -13,4 +14,4 @@ export const useMonedasStore = create<MonedasState>((set) => ({
   setSearch: (search) => set({ search }),
   selectedCountry: null,
   setSelectedCountry: (p) => set({ selectedCountry: p }),
-}));
+}))

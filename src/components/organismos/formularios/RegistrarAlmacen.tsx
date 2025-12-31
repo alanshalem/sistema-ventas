@@ -1,65 +1,60 @@
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
 import {
-  InputText,
   Btn1,
-  useSucursalesStore,
   ConvertirCapitalize,
-  useEmpresaStore,
+  InputText,
   useAlmacenesStore,
-} from "../../../index";
-import { useForm } from "react-hook-form";
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useCajasStore } from "../../../store/CajasStore";
+  useEmpresaStore,
+  useSucursalesStore,
+} from '../../../index'
+import { useCajasStore } from '../../../store/CajasStore'
+import { v } from '../../../styles/variables'
+import { BtnClose } from '../../ui/buttons/BtnClose'
 export function RegistrarAlmacen() {
-  const queryClient = useQueryClient();
-  const {
-    accion,
-    almacenSelectItem,
-    setStateAlmacen,
-    insertarAlmacen,
-    editarAlmacen,
-  } = useAlmacenesStore();
-  const { dataempresa } = useEmpresaStore();
+  const queryClient = useQueryClient()
+  const { accion, almacenSelectItem, setStateAlmacen, insertarAlmacen, editarAlmacen } =
+    useAlmacenesStore()
+  const { dataempresa } = useEmpresaStore()
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm()
   const insertar = async (data) => {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       const p = {
         id: almacenSelectItem?.id,
         nombre: ConvertirCapitalize(data.nombre),
-      };
-      await editarAlmacen(p);
+      }
+      await editarAlmacen(p)
     } else {
-
       const p = {
         id_sucursal: almacenSelectItem?.id,
         nombre: ConvertirCapitalize(data.nombre),
-      };
-      await insertarAlmacen(p);
+      }
+      await insertarAlmacen(p)
     }
-  };
+  }
   const { isPending, mutate: doInsertar } = useMutation({
-    mutationKey: ["insertar almacen"],
+    mutationKey: ['insertar almacen'],
     mutationFn: insertar,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      toast.success("Almacen registrado correctamente");
-      queryClient.invalidateQueries(["mostrar almacenes X empresa"]);
-      setStateAlmacen(false);
+      toast.success('Almacen registrado correctamente')
+      queryClient.invalidateQueries(['mostrar almacenes X empresa'])
+      setStateAlmacen(false)
     },
-  });
+  })
 
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
 
   return (
     <Container>
@@ -69,11 +64,7 @@ export function RegistrarAlmacen() {
         <div className="sub-contenedor">
           <div className="headers">
             <section>
-              <h1>
-                {accion == "Editar"
-                  ? "Editar almacen"
-                  : "Registrar nuevo almacen"}
-              </h1>
+              <h1>{accion == 'Editar' ? 'Editar almacen' : 'Registrar nuevo almacen'}</h1>
             </section>
 
             <section>
@@ -87,31 +78,25 @@ export function RegistrarAlmacen() {
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                    defaultValue={
-                      accion === "Editar" ? almacenSelectItem?.nombre : ""
-                    }
+                    defaultValue={accion === 'Editar' ? almacenSelectItem?.nombre : ''}
                     type="text"
                     placeholder="sucursal"
-                    {...register("nombre", {
+                    {...register('nombre', {
                       required: true,
                     })}
                   />
                   <label className="form__label">almacen</label>
-                  {errors.nombre?.type === "required" && <p>Campo requerido</p>}
+                  {errors.nombre?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
 
-              <Btn1
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
+              <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
             </section>
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -167,4 +152,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

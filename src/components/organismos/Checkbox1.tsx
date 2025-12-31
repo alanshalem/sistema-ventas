@@ -1,13 +1,11 @@
-
-import styled from "styled-components";
-export function Checkbox1({isChecked,onChange}) {
-  
+import styled from 'styled-components'
+export function Checkbox1({ isChecked, onChange }) {
   return (
     <Container>
-      <input checked={isChecked} onChange={onChange}  type="checkbox" />
+      <input checked={isChecked} onChange={onChange} type="checkbox" />
       <div className="checkmark"></div>
     </Container>
-  );
+  )
 }
 const Container = styled.label`
   --input-focus: #2d8cf0;
@@ -36,12 +34,12 @@ const Container = styled.label`
     transition: all 0.3s;
   }
 
-   input:checked ~ .checkmark {
+  input:checked ~ .checkmark {
     background-color: var(--input-focus);
   }
 
   .checkmark:after {
-    content: "";
+    content: '';
     width: 7px;
     height: 15px;
     position: absolute;
@@ -56,4 +54,4 @@ const Container = styled.label`
   input:checked ~ .checkmark:after {
     display: block;
   }
-`;
+`

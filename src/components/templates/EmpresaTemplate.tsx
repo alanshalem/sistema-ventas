@@ -1,31 +1,32 @@
-import { NavLink, Outlet } from "react-router-dom";
-import styled from "styled-components";
-import { Btn1 } from "../moleculas/Btn1";
-import { Toaster } from "sonner";
-import { useUsuariosStore } from "../../store/UsuariosStore";
-import { useAuthStore } from "../../store/AuthStore";
+import { NavLink, Outlet } from 'react-router-dom'
+import { Toaster } from 'sonner'
+import styled from 'styled-components'
+
+import { useAuthStore } from '../../store/AuthStore'
+import { useUsuariosStore } from '../../store/UsuariosStore'
+import { Button } from '../molecules/Button'
 
 export const EmpresaTemplate = () => {
-  const {cerrarSesion} = useAuthStore()
-  return(
-<Main>
-    <Toaster richColors   position="bottom-center"/>
-    <PageContainer>
-      <Content>
-        <Outlet />
-      </Content>
-      <Sidebar>
-        <SidebarSection>
-          <SidebarTitle>Empresa</SidebarTitle>
-          <SidebarItem to="empresabasicos">Básico</SidebarItem>
-          <SidebarItem to="monedaconfig">Moneda</SidebarItem>
-        </SidebarSection>
+  const { cerrarSesion } = useAuthStore()
+  return (
+    <Main>
+      <Toaster richColors position="bottom-center" />
+      <PageContainer>
+        <Content>
+          <Outlet />
+        </Content>
+        <Sidebar>
+          <SidebarSection>
+            <SidebarTitle>Empresa</SidebarTitle>
+            <SidebarItem to="empresabasicos">Básico</SidebarItem>
+            <SidebarItem to="monedaconfig">Moneda</SidebarItem>
+          </SidebarSection>
 
-        {/* <SidebarSection>
+          {/* <SidebarSection>
           <SidebarTitle >Esquemas</SidebarTitle>
           <SidebarItem to="macroprocesos">Macroprocesos</SidebarItem>
         </SidebarSection> */}
-        {/* <SidebarSection>
+          {/* <SidebarSection>
           <SidebarTitle to="ss">Soporte</SidebarTitle>
           <SidebarItem to="ss">Centro de ayuda</SidebarItem>
         </SidebarSection>
@@ -34,20 +35,17 @@ export const EmpresaTemplate = () => {
           color={({theme}) => theme.text}
           titulo="cerrar sesión"
         /> */}
-      </Sidebar>
-    </PageContainer>
-  </Main>
+        </Sidebar>
+      </PageContainer>
+    </Main>
   )
-  
-};
-
+}
 
 const Main = styled.div`
   justify-content: center;
   width: 100%;
   display: flex;
-
-`;
+`
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,7 +56,7 @@ const PageContainer = styled.div`
   @media (min-width: 768px) {
     flex-direction: row;
   }
-`;
+`
 
 const Sidebar = styled.div`
   padding: 20px;
@@ -70,7 +68,7 @@ const Sidebar = styled.div`
     width: 250px;
     order: 2;
   }
-`;
+`
 
 const SidebarItem = styled(NavLink)`
   display: flex;
@@ -96,23 +94,23 @@ const SidebarItem = styled(NavLink)`
     color: ${(props) => props.theme.color1};
     font-weight: 600;
   }
-`;
+`
 
 const Content = styled.div`
   flex: 1;
   padding: 20px;
   border-radius: 8px;
   margin: 20px;
-`;
+`
 
 const SidebarTitle = styled.h3`
   margin-bottom: 20px;
   font-size: 1.2em;
-`;
+`
 
 const SidebarSection = styled.div`
   margin-bottom: 20px;
   border-radius: 10px;
   border: 2px solid ${({ theme }) => theme.color2};
   padding: 12px;
-`;
+`

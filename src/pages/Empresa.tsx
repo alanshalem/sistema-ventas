@@ -1,5 +1,5 @@
-import { EmpresaTemplate } from "../index";
+import { EmpresaTemplate } from '../index'
 
 export function Empresa() {
-  return (<EmpresaTemplate/>);
+  return <EmpresaTemplate />
 }

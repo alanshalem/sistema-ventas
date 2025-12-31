@@ -1,33 +1,34 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Navigate,Route, Routes } from 'react-router-dom'
+
+import { BasicosConfig } from '../components/organismos/EmpresaConfigDesign/BasicosConfig'
+import { MonedaConfig } from '../components/organismos/EmpresaConfigDesign/MonedaConfig'
+import { ReportInventarios } from '../components/organismos/reports/ReportInventarios'
+import ReportStockBajoMinimo from '../components/organismos/reports/ReportStockBajoMinimo'
+import ReportVentas from '../components/organismos/reports/ReportVentas'
 import {
   Categorias,
+  ClientesProveedores,
   Configuraciones,
+  Empresa,
   Home,
+  Layout,
   Login,
+  PageNot,
+  POS,
   Productos,
   ProtectedRoute,
-  POS,
-  Layout,
-  PageNot,
-  Empresa,
-  ClientesProveedores,
-} from "../index";
-import { BasicosConfig } from "../components/organismos/EmpresaConfigDesign/BasicosConfig";
-import { MonedaConfig } from "../components/organismos/EmpresaConfigDesign/MonedaConfig";
-import { MetodosPago } from "../pages/MetodosPago";
-import { Dashboard } from "../pages/Dashboard";
-import { SucursalesCaja } from "../pages/SucursalesCaja";
-import { Impresoras } from "../pages/Impresoras";
-import { Usuarios } from "../pages/Usuarios";
-import { Almacenes } from "../pages/Almacenes";
-import { Inventario } from "../pages/Inventario";
-import { ConfiguracionTicket } from "../pages/ConfiguracionTicket";
-import { MiPerfil } from "../pages/MiPerfil";
-import { SerializacionComprobantes } from "../pages/SerializacionComprobantes";
-import { Reportes } from "../pages/Reportes";
-import { ReportInventarios } from "../components/organismos/reports/ReportInventarios";
-import ReportVentas from "../components/organismos/reports/ReportVentas";
-import ReportStockBajoMinimo from "../components/organismos/reports/ReportStockBajoMinimo";
+} from '../index'
+import { Almacenes } from '../pages/Almacenes'
+import { ConfiguracionTicket } from '../pages/ConfiguracionTicket'
+import { Dashboard } from '../pages/Dashboard'
+import { Impresoras } from '../pages/Impresoras'
+import { Inventario } from '../pages/Inventario'
+import { MetodosPago } from '../pages/MetodosPago'
+import { MiPerfil } from '../pages/MiPerfil'
+import { Reportes } from '../pages/Reportes'
+import { SerializacionComprobantes } from '../pages/SerializacionComprobantes'
+import { SucursalesCaja } from '../pages/SucursalesCaja'
+import { Usuarios } from '../pages/Usuarios'
 
 export function MyRoutes() {
   return (
@@ -61,7 +62,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-      
+
       <Route
         path="/inventario"
         element={
@@ -72,7 +73,7 @@ export function MyRoutes() {
           </Layout>
         }
       />
-       <Route
+      <Route
         path="/reportes"
         element={
           <Layout>
@@ -82,9 +83,9 @@ export function MyRoutes() {
           </Layout>
         }
       >
-        <Route path="inventario_valorado" element={<ReportInventarios/>}  />
-        <Route path="report_ventas" element={<ReportVentas/>}  />
-         <Route path="report_stock_bajo_minimo" element={<ReportStockBajoMinimo />} />
+        <Route path="inventario_valorado" element={<ReportInventarios />} />
+        <Route path="report_ventas" element={<ReportVentas />} />
+        <Route path="report_stock_bajo_minimo" element={<ReportStockBajoMinimo />} />
       </Route>
       <Route
         path="/configuracion/categorias"
@@ -242,5 +243,5 @@ export function MyRoutes() {
         }
       />
     </Routes>
-  );
+  )
 }

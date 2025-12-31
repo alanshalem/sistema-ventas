@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export function InputText2({ children }) {
   return (
     <Container>
       <div className="form__group field">{children}</div>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   position: relative;
@@ -37,7 +37,7 @@ const Container = styled.div`
     background: inherit;
     transition: border-color 0.2s;
     width: 94%;
-    
+
     &.disabled {
       color: #696969;
       background: #2d2d2d;
@@ -61,4 +61,4 @@ const Container = styled.div`
   .form__field:invalid {
     box-shadow: none;
   }
-`;
+`

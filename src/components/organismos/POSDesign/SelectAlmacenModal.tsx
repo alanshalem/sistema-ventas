@@ -1,38 +1,38 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useProductosStore } from "../../../store/ProductosStore";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import styled from 'styled-components'
 
-import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
-import { useAlmacenesStore } from "../../../store/AlmacenesStore";
-import { useVentasStore } from "../../../store/VentasStore";
-import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
-import { useClientesProveedoresStore } from "../../../store/ClientesProveedoresStore";
-import { useCierreCajaStore } from "../../../store/CierreCajaStore";
-import { useStockStore } from "../../../store/StockStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { slideBackground } from "../../../styles/keyframes";
-import { Btn1 } from "../../moleculas/Btn1";
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import {InputText2} from "../formularios/InputText2"
-import { useFormattedDate } from "../../../hooks/useFormattedDate";
-import { useUsuariosStore } from "../../../store/UsuariosStore";
+import { useFormattedDate } from '../../../hooks/useFormattedDate'
+import { useAlmacenesStore } from '../../../store/AlmacenesStore'
+import { useAsignacionCajaSucursalStore } from '../../../store/AsignacionCajaSucursalStore'
+import { useCierreCajaStore } from '../../../store/CierreCajaStore'
+import { useClientesProveedoresStore } from '../../../store/ClientesProveedoresStore'
+import { useDetalleVentasStore } from '../../../store/DetalleVentasStore'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useProductosStore } from '../../../store/ProductosStore'
+import { useStockStore } from '../../../store/StockStore'
+import { useUsuariosStore } from '../../../store/UsuariosStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { slideBackground } from '../../../styles/keyframes'
+import { Button } from '../../molecules/Button'
+import { BtnClose } from '../../ui/buttons/BtnClose'
+import { InputText2 } from '../formularios/InputText2'
 export const SelectAlmacenModal = () => {
-  const [cantidadInput, setCantidadInput] = useState(1);
+  const [cantidadInput, setCantidadInput] = useState(1)
   const fechaactual = useFormattedDate()
-  const { dataempresa } = useEmpresaStore();
-  const { productosItemSelect } = useProductosStore();
-  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore();
-  const { almacenSelectItem, setAlmacenSelectItem } = useAlmacenesStore();
-  const { insertarVentas, idventa } = useVentasStore();
-  const { insertarDetalleVentas } = useDetalleVentasStore();
-  const { cliproItemSelect } = useClientesProveedoresStore();
-  const { dataCierreCaja } = useCierreCajaStore();
-  const { setStateModal, dataStockXAlmacenesYProducto: data } = useStockStore();
-  const {datausuarios} = useUsuariosStore()
-  const queryClient = useQueryClient();
+  const { dataempresa } = useEmpresaStore()
+  const { productosItemSelect } = useProductosStore()
+  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
+  const { almacenSelectItem, setAlmacenSelectItem } = useAlmacenesStore()
+  const { insertarVentas, idventa } = useVentasStore()
+  const { insertarDetalleVentas } = useDetalleVentasStore()
+  const { cliproItemSelect } = useClientesProveedoresStore()
+  const { dataCierreCaja } = useCierreCajaStore()
+  const { setStateModal, dataStockXAlmacenesYProducto: data } = useStockStore()
+  const { datausuarios } = useUsuariosStore()
+  const queryClient = useQueryClient()
   async function insertarventas() {
     if (idventa === 0) {
       const pventas = {
@@ -41,19 +41,18 @@ export const SelectAlmacenModal = () => {
         id_sucursal: sucursalesItemSelectAsignadas?.id_sucursal,
         id_empresa: dataempresa?.id,
         id_cierre_caja: dataCierreCaja?.id,
-      };
-       console.log("pventas",pventas)
-      const result = await insertarVentas(pventas);
+      }
+      console.log('pventas', pventas)
+      const result = await insertarVentas(pventas)
       if (result?.id > 0) {
-        await insertarDVentas(result?.id);
+        await insertarDVentas(result?.id)
       }
     } else {
-      await insertarDVentas(idventa);
+      await insertarDVentas(idventa)
     }
   }
   async function insertarDVentas(idventa) {
-    const productosItemSelect =
-      useProductosStore.getState().productosItemSelect;
+    const productosItemSelect = useProductosStore.getState().productosItemSelect
     const pDetalleVentas = {
       _id_venta: idventa,
       _cantidad: parseFloat(cantidadInput) || 1,
@@ -63,30 +62,30 @@ export const SelectAlmacenModal = () => {
       _precio_compra: productosItemSelect.precio_compra,
       _id_sucursal: sucursalesItemSelectAsignadas.id_sucursal,
       _id_almacen: almacenSelectItem?.id_almacen,
-    };
-    console.log("pDetalleVentas",pDetalleVentas)
-    await insertarDetalleVentas(pDetalleVentas);
+    }
+    console.log('pDetalleVentas', pDetalleVentas)
+    await insertarDetalleVentas(pDetalleVentas)
   }
   async function Controladorinsertarventas(item) {
-    setAlmacenSelectItem(item);
-    doInsertarVentas();
+    setAlmacenSelectItem(item)
+    doInsertarVentas()
   }
   const { mutate: doInsertarVentas, isPending } = useMutation({
-    mutationKey: ["insertar ventas"],
+    mutationKey: ['insertar ventas'],
     mutationFn: insertarventas,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
-      setStateModal(false);
+      toast.error(`Error: ${error.message}`)
+      setStateModal(false)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["mostrar detalle venta"]);
-      setStateModal(false);
+      queryClient.invalidateQueries(['mostrar detalle venta'])
+      setStateModal(false)
     },
-  });
+  })
   const ValidarCantidad = (e) => {
-    const value = Math.max(0, parseFloat(e.target.value));
-    setCantidadInput(value);
-  };
+    const value = Math.max(0, parseFloat(e.target.value))
+    setCantidadInput(value)
+  }
   return (
     <Container>
       <SubContainer>
@@ -104,8 +103,8 @@ export const SelectAlmacenModal = () => {
         </HeaderContainer>
         <ContentMensaje>
           <SubTitle>
-            Se encontro <strong>stock</strong> en estos otros almacenes,
-            seleccione un almacen a usar.
+            Se encontro <strong>stock</strong> en estos otros almacenes, seleccione un
+            almacen a usar.
           </SubTitle>
         </ContentMensaje>
         <div className="contentCantidad">
@@ -126,40 +125,37 @@ export const SelectAlmacenModal = () => {
               <thead>
                 <tr>
                   <th>
-                    Almacen <span style={{ cursor: "pointer" }}>🔶</span>
+                    Almacen <span style={{ cursor: 'pointer' }}>🔶</span>
                   </th>
                   <th>
-                    Stock <span style={{ cursor: "pointer" }}>🔷</span>
+                    Stock <span style={{ cursor: 'pointer' }}>🔷</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {data?.map((item, index) => {
                   return (
-                    <tr
-                      key={index}
-                      onClick={() => Controladorinsertarventas(item)}
-                    >
+                    <tr key={index} onClick={() => Controladorinsertarventas(item)}>
                       <td>{item?.almacen.nombre} </td>
                       <td>{item?.stock} </td>
                     </tr>
-                  );
+                  )
                 })}
               </tbody>
             </table>
           </ContainerTable>
-          <Btn1
-            bgcolor={"#d7360e"}
-            color={"#fff"}
-            titulo={"Volver"}
-            funcion={() => setStateModal(false)}
+          <Button
+            bgColor={'#d7360e'}
+            color={'#fff'}
+            title={'Volver'}
+            onClick={() => setStateModal(false)}
             disabled={isPending}
           />
         </Avatar>
       </SubContainer>
     </Container>
-  );
-};
+  )
+}
 const ContainerTable = styled.div`
   position: relative;
 
@@ -210,21 +206,21 @@ const ContainerTable = styled.div`
       }
     }
   }
-`;
+`
 const SubTitle = styled.span`
   font-size: 18px;
-`;
+`
 const CommandText = styled.p`
   font-size: 14px;
   margin: 0;
-`;
+`
 
 const ContainerProducto = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
   text-align: start;
-`;
+`
 const SubContainer = styled.div`
   max-width: 400px;
   display: flex;
@@ -234,14 +230,14 @@ const SubContainer = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.bgtotal};
   position: relative;
-`;
+`
 const ContainerLabel = styled.div`
   display: flex;
   gap: 10px;
   flex-direction: column;
   text-align: end;
   font-weight: bold;
-`;
+`
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -252,18 +248,18 @@ const HeaderContainer = styled.div`
   position: relative;
   border-bottom: solid 1px ${({ theme }) => theme.bg};
   margin-bottom: 20px;
-`;
+`
 
 const SubContainerHeader = styled.div`
   display: flex;
   gap: 12px;
   font-size: 22px;
-`;
+`
 const ContentMensaje = styled.section`
   display: flex;
   gap: 15px;
   margin-bottom: 10px;
-`;
+`
 const Container = styled.div`
   background-color: rgba(18, 18, 18, 0.5);
   border-radius: 10px;
@@ -275,7 +271,7 @@ const Container = styled.div`
   z-index: 100;
   width: 100%;
   justify-content: center;
-`;
+`
 
 const Title = styled.span`
   font-size: 44px;
@@ -286,7 +282,7 @@ const Title = styled.span`
   right: 0;
   left: 0;
   text-align: center;
-`;
+`
 
 const Avatar = styled.div`
   display: flex;
@@ -314,4 +310,4 @@ const Avatar = styled.div`
 
   background-size: 60px 60px;
   animation: ${slideBackground} 10s linear infinite;
-`;
+`

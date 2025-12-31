@@ -1,13 +1,3 @@
-import styled from "styled-components";
-import {
-  Checkbox1,
-  ContentAccionesTabla,
-  Paginacion,
-  useProductosStore,
-} from "../../../index";
-import Swal from "sweetalert2";
-import { v } from "../../../styles/variables";
-import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -15,54 +5,59 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { FaArrowsAltV } from "react-icons/fa";
-export function TablaProductos({
-  data,
-  SetopenRegistro,
-  setdataSelect,
-  setAccion,
-}) {
-  if (data == null) return;
-  const [pagina, setPagina] = useState(1);
-  const [datas, setData] = useState(data);
-  const [columnFilters, setColumnFilters] = useState([]);
+} from '@tanstack/react-table'
+import { useState } from 'react'
+import { FaArrowsAltV } from 'react-icons/fa'
+import styled from 'styled-components'
+import Swal from 'sweetalert2'
 
-  const { eliminarProductos } = useProductosStore();
+import {
+  Checkbox1,
+  ContentAccionesTabla,
+  Paginacion,
+  useProductosStore,
+} from '../../../index'
+import { v } from '../../../styles/variables'
+export function TablaProductos({ data, SetopenRegistro, setdataSelect, setAccion }) {
+  if (data == null) return
+  const [pagina, setPagina] = useState(1)
+  const [datas, setData] = useState(data)
+  const [columnFilters, setColumnFilters] = useState([])
+
+  const { eliminarProductos } = useProductosStore()
   function eliminar(p) {
-    if (p.nombre === "General") {
+    if (p.nombre === 'General') {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Este registro no se permite modificar ya que es valor por defecto.",
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Este registro no se permite modificar ya que es valor por defecto.',
         footer: '<a href="">...</a>',
-      });
-      return;
+      })
+      return
     }
     Swal.fire({
-      title: "¿Estás seguro(a)(e)?",
-      text: "Una vez eliminado, ¡no podrá recuperar este registro!",
-      icon: "warning",
+      title: '¿Estás seguro(a)(e)?',
+      text: 'Una vez eliminado, ¡no podrá recuperar este registro!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await eliminarProductos({ id: p.id });
+        await eliminarProductos({ id: p.id })
       }
-    });
+    })
   }
   function editar(data) {
-  
-    SetopenRegistro(true);
-    setdataSelect(data);
-    setAccion("Editar");
+    SetopenRegistro(true)
+    setdataSelect(data)
+    setAccion('Editar')
   }
   const columns = [
     {
-      accessorKey: "nombre",
-      header: "Descripcion",
+      accessorKey: 'nombre',
+      header: 'Descripcion',
       cell: (info) => (
         <td data-title="DESCRIPCION" className="ContentCell">
           <span>{info.getValue()}</span>
@@ -70,14 +65,14 @@ export function TablaProductos({
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "p_venta",
-      header: "P. venta",
+      accessorKey: 'p_venta',
+      header: 'P. venta',
       cell: (info) => (
         <td data-title="P. venta" className="ContentCell">
           <span>{info.getValue()}</span>
@@ -85,14 +80,14 @@ export function TablaProductos({
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "p_compra",
-      header: "P. compra",
+      accessorKey: 'p_compra',
+      header: 'P. compra',
       cell: (info) => (
         <td data-title="P. compra" className="ContentCell">
           <span>{info.getValue()}</span>
@@ -100,14 +95,14 @@ export function TablaProductos({
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "sevende_por",
-      header: "Se vende por",
+      accessorKey: 'sevende_por',
+      header: 'Se vende por',
       cell: (info) => (
         <td data-title="Se vende por" className="ContentCell">
           <span>{info.getValue()}</span>
@@ -115,30 +110,30 @@ export function TablaProductos({
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "maneja_inventarios",
-      header: "Inventarios",
+      accessorKey: 'maneja_inventarios',
+      header: 'Inventarios',
       cell: (info) => (
         <td data-title="Inventarios" className="ContentCell">
-          <Checkbox1 isChecked={info.getValue()}/>
+          <Checkbox1 isChecked={info.getValue()} />
         </td>
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
 
     {
-      accessorKey: "acciones",
-      header: "",
+      accessorKey: 'acciones',
+      header: '',
       enableSorting: false,
       cell: (info) => (
         <div data-title="Acciones" className="ContentCell">
@@ -150,12 +145,12 @@ export function TablaProductos({
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
-  ];
+  ]
   const table = useReactTable({
     data,
     columns,
@@ -166,7 +161,7 @@ export function TablaProductos({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
     meta: {
       updateData: (rowIndex, columnId, value) =>
         setData((prev) =>
@@ -180,7 +175,7 @@ export function TablaProductos({
           )
         ),
     },
-  });
+  })
   return (
     <>
       <Container>
@@ -193,7 +188,7 @@ export function TablaProductos({
                     {header.column.columnDef.header}
                     {header.column.getCanSort() && (
                       <span
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         <FaArrowsAltV />
@@ -201,15 +196,15 @@ export function TablaProductos({
                     )}
                     {
                       {
-                        asc: " 🔼",
-                        desc: " 🔽",
+                        asc: ' 🔼',
+                        desc: ' 🔽',
                       }[header.column.getIsSorted()]
                     }
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
+                        header.column.getIsResizing() ? 'isResizing' : ''
                       }`}
                     />
                   </th>
@@ -238,7 +233,7 @@ export function TablaProductos({
         />
       </Container>
     </>
-  );
+  )
 }
 const Container = styled.div`
   position: relative;
@@ -340,7 +335,7 @@ const Container = styled.div`
           }
         }
       }
-      th[scope="row"] {
+      th[scope='row'] {
         @media (min-width: ${v.bplisa}) {
           border-bottom: 1px solid rgba(161, 161, 161, 0.32);
         }
@@ -356,7 +351,6 @@ const Container = styled.div`
         justify-content: space-between;
         align-items: center;
         height: 50px;
-        
 
         border-bottom: 1px solid rgba(161, 161, 161, 0.32);
         @media (min-width: ${v.bpbart}) {
@@ -375,7 +369,7 @@ const Container = styled.div`
         content: attr(data-title);
         float: left;
         font-size: 0.8em;
-        font-weight:700;
+        font-weight: 700;
         @media (min-width: ${v.bplisa}) {
           font-size: 0.9em;
         }
@@ -385,4 +379,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

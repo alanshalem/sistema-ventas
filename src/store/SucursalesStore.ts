@@ -1,40 +1,42 @@
-import { create } from "zustand";
+import { create } from 'zustand'
+
 import {
+  EditarSucursal,
+  EliminarSucursal,
+  InsertarSucursal,
+  MostrarCajasXSucursal,
   MostrarSucursales,
-  
-  MostrarCajasXSucursal,InsertarSucursal,EditarSucursal,EliminarSucursal
-} from "../index";
+} from '../index'
 
 export const useSucursalesStore = create((set) => ({
   stateSucursal: false,
   setStateSucursal: (p) => set({ stateSucursal: p }),
-  accion: "",
+  accion: '',
   setAccion: (p) => set({ accion: p }),
-  
+
   sucursalesItemSelect: [],
   selectSucursal: (p) => {
-    set({ sucursalesItemSelect: p });
+    set({ sucursalesItemSelect: p })
   },
   dataSucursales: null,
   mostrarSucursales: async (p) => {
-    const response = await MostrarSucursales(p);
-    set({ dataSucursales: response });
-    set({ sucursalesItemSelect: response[0] });
-    return response;
+    const response = await MostrarSucursales(p)
+    set({ dataSucursales: response })
+    set({ sucursalesItemSelect: response[0] })
+    return response
   },
 
   mostrarCajasXSucursal: async (p) => {
-    const response = await MostrarCajasXSucursal(p);
-    return response;
+    const response = await MostrarCajasXSucursal(p)
+    return response
   },
   insertarSucursal: async (p) => {
-    await InsertarSucursal(p);
+    await InsertarSucursal(p)
   },
   editarSucursal: async (p) => {
-    await EditarSucursal(p);
+    await EditarSucursal(p)
   },
   eliminarSucursal: async (p) => {
-    await EliminarSucursal(p);
+    await EliminarSucursal(p)
   },
-
-}));
+}))

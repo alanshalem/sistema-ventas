@@ -1,6 +1,7 @@
 # Sistema de Ventas
 
-Modern point-of-sale (POS) and sales management system built with React 19, TypeScript, and Supabase.
+Modern point-of-sale (POS) and sales management system built with React 19, TypeScript, and
+Supabase.
 
 ## 🚀 Features
 
@@ -17,6 +18,7 @@ Modern point-of-sale (POS) and sales management system built with React 19, Type
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 19.2** - Latest React with new features
 - **TypeScript 5.9** (Strict Mode) - Full type safety
 - **Vite 7.3** - Lightning-fast build tool
@@ -26,6 +28,7 @@ Modern point-of-sale (POS) and sales management system built with React 19, Type
 - **Zustand 5.0** - Lightweight state management (30 stores)
 
 ### Backend & Data
+
 - **Supabase 2.89** - Backend as a Service (BaaS)
   - PostgreSQL database
   - Real-time subscriptions
@@ -33,10 +36,12 @@ Modern point-of-sale (POS) and sales management system built with React 19, Type
   - Row Level Security (RLS)
 
 ### Data Fetching & Caching
+
 - **TanStack Query 5.90** (React Query) - Server state management
 - **TanStack Table 8.21** - Headless table library
 
 ### Additional Libraries
+
 - **React Hook Form 7.69** - Form management
 - **date-fns 4.1** / **dayjs 1.11** - Date manipulation
 - **Recharts 3.6** - Data visualization
@@ -52,12 +57,14 @@ Modern point-of-sale (POS) and sales management system built with React 19, Type
 ## 🚀 Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd sistema-ventas
    ```
 
 2. **Install dependencies with pnpm:**
+
    ```bash
    pnpm install
    ```
@@ -65,12 +72,14 @@ Modern point-of-sale (POS) and sales management system built with React 19, Type
 3. **Set up environment variables:**
 
    Create a `.env` file in the root directory:
+
    ```env
    VITE_APP_SUPABASE_URL=your_supabase_url
    VITE_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
 4. **Start the development server:**
+
    ```bash
    pnpm dev
    ```
@@ -132,6 +141,7 @@ This application uses **Supabase** as the backend. You'll need to:
 ### Required Tables
 
 The system expects the following main tables:
+
 - `productos` - Products catalog
 - `categorias` - Product categories
 - `clientes` - Customers
@@ -149,6 +159,7 @@ The system expects the following main tables:
 ## 🏗️ Building for Production
 
 1. **Build the application:**
+
    ```bash
    pnpm build
    ```
@@ -159,6 +170,7 @@ The system expects the following main tables:
    - Output to `dist/` directory
 
 2. **Preview the build:**
+
    ```bash
    pnpm preview
    ```
@@ -171,26 +183,30 @@ The system expects the following main tables:
 
 ## 🔐 Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_APP_SUPABASE_URL` | Your Supabase project URL | Yes |
-| `VITE_APP_SUPABASE_ANON_KEY` | Your Supabase anonymous key | Yes |
+| Variable                     | Description                 | Required |
+| ---------------------------- | --------------------------- | -------- |
+| `VITE_APP_SUPABASE_URL`      | Your Supabase project URL   | Yes      |
+| `VITE_APP_SUPABASE_ANON_KEY` | Your Supabase anonymous key | Yes      |
 
 ## 🎨 Architecture Highlights
 
 ### Atomic Design Pattern
+
 Components are organized following Atomic Design methodology:
+
 - **Atoms**: Basic building blocks (buttons, inputs)
 - **Molecules**: Simple combinations of atoms
 - **Organisms**: Complex, feature-specific components
 - **Templates**: Page-level layouts
 
 ### State Management
+
 - **Zustand**: 30 specialized stores for client state
 - **TanStack Query**: Server state, caching, and synchronization
 - **React Context**: Authentication context
 
 ### Type Safety
+
 - **100% TypeScript coverage** with strict mode enabled
 - Type definitions for all entities, stores, and API responses
 - Compile-time error detection
@@ -210,6 +226,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🐛 Support
 
 For support or questions:
+
 - Open an issue in the GitHub repository
 - Check [CLAUDE.md](./CLAUDE.md) for AI-assisted development guide
 

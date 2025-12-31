@@ -1,16 +1,14 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import styled from "styled-components";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import styled from 'styled-components'
 
-export const MessageComponent = ({text}) => {
+export const MessageComponent = ({ text }) => {
   return (
     <Container>
       <Icon className="icono" icon="meteocons:barometer" />
-      <span>
-        {text}
-      </span>
+      <span>{text}</span>
     </Container>
-  );
-};
+  )
+}
 const Container = styled.div`
   background-color: rgba(237, 95, 6, 0.2);
   border-radius: 10px;
@@ -21,4 +19,4 @@ const Container = styled.div`
   .icono {
     font-size: 100px;
   }
-`;
+`

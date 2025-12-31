@@ -1,60 +1,57 @@
-import styled from "styled-components";
-import { useMonedasStore } from "../../../store/MonedasStore";
-import { getAllInfoByISO } from "iso-country-currency";
-import iso from "iso-country-currency";
-import { InputText2 } from "../formularios/InputText2";
-import { FlagIcon } from "react-flag-kit";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { Divider } from "../../atoms/Divider";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { getAllInfoByISO } from 'iso-country-currency'
+import iso from 'iso-country-currency'
+import { FlagIcon } from 'react-flag-kit'
+import { toast } from 'sonner'
+import styled from 'styled-components'
 
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useMonedasStore } from '../../../store/MonedasStore'
+import { Divider } from '../../atoms/Divider'
+import { InputText2 } from '../formularios/InputText2'
 
 export const MonedaConfig = () => {
-  const { dataempresa, editarMonedaEmpresa } = useEmpresaStore();
-  const { search, setSearch, selectedCountry, setSelectedCountry } =
-    useMonedasStore();
-    const queryClient = useQueryClient();
-  const isocodigos = iso.getAllISOCodes();
+  const { dataempresa, editarMonedaEmpresa } = useEmpresaStore()
+  const { search, setSearch, selectedCountry, setSelectedCountry } = useMonedasStore()
+  const queryClient = useQueryClient()
+  const isocodigos = iso.getAllISOCodes()
   const handleSearchChange = (e) => {
-    setSearch(e.target.value.toLowerCase());
-  };
+    setSearch(e.target.value.toLowerCase())
+  }
 
   const handleSelectCountry = (country) => {
-    const countryInfo = getAllInfoByISO(country.iso);
-    setSelectedCountry({ ...country, currency: countryInfo.currency });
-    setSearch(country.name);
-  
-    mutate.mutateAsync();
-   
-  };
+    const countryInfo = getAllInfoByISO(country.iso)
+    setSelectedCountry({ ...country, currency: countryInfo.currency })
+    setSearch(country.name)
+
+    mutate.mutateAsync()
+  }
 
   const filteredCountries = isocodigos.filter((country) =>
     country.countryName.toLowerCase().includes(search)
-  );
-   const editar = async () => {
+  )
+  const editar = async () => {
     const p = {
-      id:dataempresa?.id,
+      id: dataempresa?.id,
       simbolo_moneda: selectedCountry.symbol,
       iso: selectedCountry.iso,
       pais: selectedCountry.countryName,
-      currency:selectedCountry.currency
-    };
-    await editarMonedaEmpresa(p);
-  };
+      currency: selectedCountry.currency,
+    }
+    await editarMonedaEmpresa(p)
+  }
   const mutate = useMutation({
-    mutationKey: "editar empresa moneda",
+    mutationKey: 'editar empresa moneda',
     mutationFn: editar,
     onSuccess: () => {
-      queryClient.invalidateQueries('mostrar empresa');
-      toast.success("🎉 datos guardados");
+      queryClient.invalidateQueries('mostrar empresa')
+      toast.success('🎉 datos guardados')
     },
-  });
- 
+  })
+
   return (
     <Container>
-     
       <InputText2>
         <input
           className="form__field"
@@ -71,10 +68,7 @@ export const MonedaConfig = () => {
         <Dropdown>
           <DropdownList>
             {filteredCountries.map((country, index) => (
-              <DropdownItem
-                key={index}
-                onClick={() => handleSelectCountry(country)}
-              >
+              <DropdownItem key={index} onClick={() => handleSelectCountry(country)}>
                 {country.countryName}
               </DropdownItem>
             ))}
@@ -86,7 +80,7 @@ export const MonedaConfig = () => {
         flag={
           selectedCountry
             ? `https://flagcdn.com/${selectedCountry.iso.toLowerCase()}.svg`
-            : ""
+            : ''
         }
       >
         <article className="area1">
@@ -95,18 +89,14 @@ export const MonedaConfig = () => {
         <article className="area2">
           <article className="area2_1">
             <FlagIcon
-              code={
-                selectedCountry == null ? dataempresa?.iso : selectedCountry.iso
-              }
+              code={selectedCountry == null ? dataempresa?.iso : selectedCountry.iso}
               size={60}
             />
           </article>
 
           <article className="area2_2">
             <span>
-              {selectedCountry == null
-                ? dataempresa?.pais
-                : selectedCountry.countryName}
+              {selectedCountry == null ? dataempresa?.pais : selectedCountry.countryName}
             </span>
             <span className="simbolo">
               <Icon className="icono" icon="fluent-emoji:money-with-wings" />
@@ -117,25 +107,25 @@ export const MonedaConfig = () => {
           </article>
         </article>
       </Cardselect>
-      {
-        mutate.onSuccess && <span>cambios guardados <Icon icon="emojione:pig" /></span>
-      }
+      {mutate.onSuccess && (
+        <span>
+          cambios guardados <Icon icon="emojione:pig" />
+        </span>
+      )}
     </Container>
-  );
-};
+  )
+}
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-
- 
-`;
+`
 
 const Dropdown = styled.div`
   top: -20px;
   position: relative;
-`;
+`
 
 const DropdownList = styled.ul`
   display: flex;
@@ -156,7 +146,7 @@ const DropdownList = styled.ul`
   &:focus {
     outline: none;
   }
-`;
+`
 
 const DropdownItem = styled.li`
   gap: 10px;
@@ -169,7 +159,7 @@ const DropdownItem = styled.li`
   &:hover {
     background-color: ${({ theme }) => theme.bgtotal};
   }
-`;
+`
 const Cardselect = styled.section`
   border: 2px solid ${({ theme }) => theme.color2};
   border-radius: 10px;
@@ -180,7 +170,6 @@ const Cardselect = styled.section`
   position: relative;
   overflow: hidden;
   width: 320px;
-
 
   .area2 {
     display: flex;
@@ -202,4 +191,4 @@ const Cardselect = styled.section`
       }
     }
   }
-`;
+`

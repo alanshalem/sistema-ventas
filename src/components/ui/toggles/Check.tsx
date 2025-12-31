@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 export const Check = ({ checked, onChange }) => {
   return (
@@ -7,8 +7,8 @@ export const Check = ({ checked, onChange }) => {
       <Input type="checkbox" checked={checked} onChange={onChange} />
       <Checkmark />
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.label`
   --input-focus: #0f0f0f;
@@ -18,12 +18,12 @@ const Container = styled.label`
   --main-color: #323232;
   position: relative;
   cursor: pointer;
-`;
+`
 
 const Input = styled.input`
   position: absolute;
   opacity: 0;
-`;
+`
 
 const Checkmark = styled.div`
   width: 30px;
@@ -42,7 +42,7 @@ const Checkmark = styled.div`
   }
 
   &:after {
-    content: "";
+    content: '';
     width: 7px;
     height: 15px;
     position: absolute;
@@ -57,4 +57,4 @@ const Checkmark = styled.div`
   ${Input}:checked ~ &:after {
     display: block;
   }
-`;
+`

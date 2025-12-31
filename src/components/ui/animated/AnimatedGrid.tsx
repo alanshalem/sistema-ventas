@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 export const AnimatedGrid = () => {
   return (
@@ -17,8 +17,8 @@ export const AnimatedGrid = () => {
         />
       ))}
     </GridContainer>
-  );
-};
+  )
+}
 
 // Styled Components
 const GridContainer = styled.div`
@@ -27,7 +27,7 @@ const GridContainer = styled.div`
   height: 100vh;
   z-index: -1;
   overflow: hidden;
-`;
+`
 
 const HorizontalLine = styled.div`
   position: absolute;
@@ -47,7 +47,7 @@ const HorizontalLine = styled.div`
       width: 100%; /* Termina cubriendo toda la anchura */
     }
   }
-`;
+`
 
 const VerticalLine = styled.div`
   position: absolute;
@@ -67,4 +67,4 @@ const VerticalLine = styled.div`
       height: 100%; /* Termina cubriendo toda la altura */
     }
   }
-`;
+`

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 export const GlobalStyles = createGlobalStyle`
     body{
         margin:0;
@@ -20,4 +20,4 @@ body::-webkit-scrollbar-thumb {
   filter: blur(10px);
 }
 
-`;
+`

@@ -1,54 +1,82 @@
-import styled from "styled-components";
-import { Icon } from "../atoms/Icon";
-export function Btn1({
-  funcion,
-  titulo,
-  bgcolor,
-  icono,
+import type { MouseEvent,ReactNode } from 'react'
+import styled from 'styled-components'
+
+import { Icon } from '../atoms/Icon'
+
+interface ButtonProps {
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  title?: string
+  bgColor?: string
+  icon?: ReactNode
+  url?: string
+  color?: string
+  disabled?: boolean
+  width?: string
+  border?: string
+  height?: string
+  decorator?: string
+  image?: string
+}
+
+export function Button({
+  onClick,
+  title,
+  bgColor,
+  icon,
   url,
   color,
   disabled,
   width,
   border,
   height,
-  decorador,
-  imagen,
-}) {
+  decorator,
+  image,
+}: Readonly<ButtonProps>) {
   return (
     <Container
       $width={width}
       disabled={disabled}
       $color={color}
       type="submit"
-      $bgcolor={bgcolor}
-      onClick={funcion }
+      $bgColor={bgColor}
+      onClick={onClick}
       $border={border}
-      $decorador={decorador}
+      $decorator={decorator}
       $height={height}
     >
       <section className="content">
-        <Icon $color={color}>{icono}</Icon>
-        {imagen && (
-          <ContentImagen>
-            <img src={imagen} />
-          </ContentImagen>
+        <Icon $color={color}>{icon}</Icon>
+        {image && (
+          <ImageContent>
+            <img src={image} alt="" />
+          </ImageContent>
         )}
-        {titulo && (
-          <a href={url} target="_blank">
-            <span className="btn">{titulo}</span>
+        {title && (
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            <span className="btn">{title}</span>
           </a>
         )}
       </section>
     </Container>
-  );
+  )
 }
-const Container = styled.button`
+
+interface ContainerProps {
+  $width?: string
+  $color?: string
+  $bgColor?: string
+  $border?: string
+  $height?: string
+  $decorator?: string
+}
+
+const Container = styled.button<ContainerProps>`
   font-weight: 700;
   display: flex;
   font-size: 15px;
   padding: 10px 25px;
   border-radius: 16px;
-  background-color: ${(props) => props.$bgcolor};
+  background-color: ${(props) => props.$bgColor};
   border: ${(props) => props.$border} solid rgba(50, 50, 50, 0.2);
   border-bottom: 5px solid rgba(50, 50, 50, 0.2);
   transform: translate(0, -3px);
@@ -61,13 +89,15 @@ const Container = styled.button`
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
   overflow: hidden;
+
   a {
     text-decoration: none;
     color: ${(props) => props.$color} !important;
   }
+
   &::before {
-    content: "";
-    display: ${(props) => props.$decorador};
+    content: '';
+    display: ${(props) => props.$decorator};
     width: 40px;
     height: 40px;
     background-color: rgba(251, 251, 251, 0.25);
@@ -82,23 +112,27 @@ const Container = styled.button`
     gap: 12px;
     align-items: center;
   }
+
   &:active {
     transform: translate(0, 0);
     border-bottom: ${(props) => props.$border} solid rgba(50, 50, 50, 0.2);
   }
+
   &[disabled] {
     background-color: #646464;
     cursor: no-drop;
     box-shadow: none;
   }
-`;
-const ContentImagen = styled.section`
+`
+
+const ImageContent = styled.section`
   width: 40px;
   height: 40px;
   border-radius: 10px;
   overflow: hidden;
+
   img {
     width: 100%;
     object-fit: contain;
   }
-`;
+`

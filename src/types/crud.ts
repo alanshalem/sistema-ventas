@@ -1,30 +1,30 @@
 /* CRUD Parameter Types - Complete TypeScript Definitions */
 
 import type {
-  Producto,
-  Categoria,
-  Cliente,
-  Proveedor,
-  Venta,
-  DetalleVenta,
-  Usuario,
-  Rol,
-  Permiso,
-  Modulo,
-  Empresa,
-  Sucursal,
-  Caja,
-  AsignacionCajaSucursal,
   Almacen,
-  Stock,
-  MovimientoStock,
-  MovimientoCaja,
+  AsignacionCajaSucursal,
+  Caja,
+  Categoria,
   CierreCaja,
-  MetodoPago,
-  Moneda,
-  TipoDocumento,
-  Serializacion,
+  Cliente,
+  DetalleVenta,
+  Empresa,
   Impresora,
+  MetodoPago,
+  Modulo,
+  Moneda,
+  MovimientoCaja,
+  MovimientoStock,
+  Permiso,
+  Producto,
+  Proveedor,
+  Rol,
+  Serializacion,
+  Stock,
+  Sucursal,
+  TipoDocumento,
+  Usuario,
+  Venta,
 } from './database'
 
 // ============== BASE TYPES ==============
@@ -64,7 +64,10 @@ export interface PaginationParams {
 
 // ============== PRODUCTOS ==============
 
-export interface InsertarProductoParams extends Omit<Producto, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarProductoParams extends Omit<
+  Producto,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarProductoParams extends Partial<Producto> {
   id: number
@@ -86,7 +89,10 @@ export interface ImagenProductoParams {
 
 // ============== CATEGORIAS ==============
 
-export interface InsertarCategoriaParams extends Omit<Categoria, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarCategoriaParams extends Omit<
+  Categoria,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarCategoriaParams extends Partial<Categoria> {
   id: number
@@ -98,7 +104,10 @@ export interface MostrarCategoriasParams {
 
 // ============== CLIENTES Y PROVEEDORES ==============
 
-export interface InsertarClienteParams extends Omit<Cliente, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarClienteParams extends Omit<
+  Cliente,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarClienteParams extends Partial<Cliente> {
   id: number
@@ -108,7 +117,10 @@ export interface MostrarClientesParams {
   id_empresa: number
 }
 
-export interface InsertarProveedorParams extends Omit<Proveedor, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarProveedorParams extends Omit<
+  Proveedor,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarProveedorParams extends Partial<Proveedor> {
   id: number
@@ -120,7 +132,10 @@ export interface MostrarProveedoresParams {
 
 // ============== VENTAS ==============
 
-export interface InsertarVentaParams extends Omit<Venta, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarVentaParams extends Omit<
+  Venta,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface ConfirmarVentaParams extends Partial<Venta> {
   id: number
@@ -144,7 +159,10 @@ export interface MostrarVentasParams {
 
 // ============== DETALLE VENTA ==============
 
-export interface InsertarDetalleVentaParams extends Omit<DetalleVenta, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarDetalleVentaParams extends Omit<
+  DetalleVenta,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarDetalleVentaParams extends Partial<DetalleVenta> {
   id: number
@@ -164,9 +182,15 @@ export interface MostrarUsuariosParams {
   id_auth: string
 }
 
-export interface InsertarUsuarioParams extends Omit<Usuario, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarUsuarioParams extends Omit<
+  Usuario,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
-export interface InsertarAdminParams extends Omit<Usuario, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarAdminParams extends Omit<
+  Usuario,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarUsuarioParams extends Partial<Usuario> {
   id: number
@@ -184,7 +208,10 @@ export interface EliminarUsuarioAsignadoParams {
 
 // ============== ROLES Y PERMISOS ==============
 
-export interface InsertarRolParams extends Omit<Rol, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarRolParams extends Omit<
+  Rol,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarRolParams extends Partial<Rol> {
   id: number
@@ -217,7 +244,10 @@ export interface MostrarEmpresaXIdUsuarioParams {
   id_auth: string
 }
 
-export interface InsertarEmpresaParams extends Omit<Empresa, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarEmpresaParams extends Omit<
+  Empresa,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarEmpresaParams extends Partial<Empresa> {
   id: number
@@ -234,7 +264,10 @@ export interface MostrarSucursalesParams {
   id_empresa: number
 }
 
-export interface InsertarSucursalParams extends Omit<Sucursal, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarSucursalParams extends Omit<
+  Sucursal,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarSucursalParams extends Partial<Sucursal> {
   id: number
@@ -250,7 +283,10 @@ export interface MostrarCajaXSucursalParams {
   id_sucursal: number
 }
 
-export interface InsertarCajaParams extends Omit<Caja, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarCajaParams extends Omit<
+  Caja,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarCajaParams extends Partial<Caja> {
   id: number
@@ -260,7 +296,10 @@ export interface EliminarCajaParams {
   id: number
 }
 
-export interface AsignarCajaSucursalParams extends Omit<AsignacionCajaSucursal, 'id' | 'created_at' | 'updated_at'> {}
+export interface AsignarCajaSucursalParams extends Omit<
+  AsignacionCajaSucursal,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 // ============== ALMACENES ==============
 
@@ -276,7 +315,10 @@ export interface MostrarAlmacenesXSucursalParams {
   id_sucursal: number
 }
 
-export interface InsertarAlmacenParams extends Omit<Almacen, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarAlmacenParams extends Omit<
+  Almacen,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarAlmacenParams extends Partial<Almacen> {
   id: number
@@ -294,7 +336,10 @@ export interface MostrarStockParams {
   id_producto?: number
 }
 
-export interface InsertarStockParams extends Omit<Stock, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarStockParams extends Omit<
+  Stock,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarStockParams extends Partial<Stock> {
   id: number
@@ -309,7 +354,10 @@ export interface ActualizarStockParams {
 
 // ============== MOVIMIENTOS STOCK ==============
 
-export interface InsertarMovimientoStockParams extends Omit<MovimientoStock, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarMovimientoStockParams extends Omit<
+  MovimientoStock,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface MostrarMovimientosStockParams {
   id_empresa: number
@@ -321,7 +369,10 @@ export interface MostrarMovimientosStockParams {
 
 // ============== MOVIMIENTOS CAJA ==============
 
-export interface InsertarMovimientoCajaParams extends Omit<MovimientoCaja, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarMovimientoCajaParams extends Omit<
+  MovimientoCaja,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface MostrarMovimientosCajaParams {
   id_caja: number
@@ -368,7 +419,10 @@ export interface MostrarMetodosPagoParams {
   id_empresa: number
 }
 
-export interface InsertarMetodoPagoParams extends Omit<MetodoPago, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarMetodoPagoParams extends Omit<
+  MetodoPago,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarMetodoPagoParams extends Partial<MetodoPago> {
   id: number
@@ -384,7 +438,10 @@ export interface MostrarImpresorasParams {
   id_empresa: number
 }
 
-export interface InsertarImpresoraParams extends Omit<Impresora, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarImpresoraParams extends Omit<
+  Impresora,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarImpresoraParams extends Partial<Impresora> {
   id: number
@@ -400,7 +457,10 @@ export interface MostrarMonedasParams {
   activo?: boolean
 }
 
-export interface InsertarMonedaParams extends Omit<Moneda, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarMonedaParams extends Omit<
+  Moneda,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarMonedaParams extends Partial<Moneda> {
   id: number
@@ -412,7 +472,10 @@ export interface MostrarTipoDocumentosParams {
   activo?: boolean
 }
 
-export interface InsertarTipoDocumentoParams extends Omit<TipoDocumento, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarTipoDocumentoParams extends Omit<
+  TipoDocumento,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface EditarTipoDocumentoParams extends Partial<TipoDocumento> {
   id: number
@@ -425,7 +488,10 @@ export interface MostrarSerializacionParams {
   tipo_comprobante?: string
 }
 
-export interface InsertarSerializacionParams extends Omit<Serializacion, 'id' | 'created_at' | 'updated_at'> {}
+export interface InsertarSerializacionParams extends Omit<
+  Serializacion,
+  'id' | 'created_at' | 'updated_at'
+> {}
 
 export interface ActualizarCorrelativoParams {
   id: number

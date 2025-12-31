@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 interface IconProps {
-  $color?: string;
+  $color?: string
 }
 
 export const Icon = styled.span<IconProps>`
@@ -10,4 +10,4 @@ export const Icon = styled.span<IconProps>`
   text-align: center;
   font-size: 20px;
   color: ${(props) => props.$color};
-`;
+`

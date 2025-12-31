@@ -1,20 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEmpresaStore } from "../store/EmpresaStore";
-import { useSucursalesStore } from "../store/SucursalesStore";
+import { useQuery } from '@tanstack/react-query'
+
+import { useEmpresaStore } from '../store/EmpresaStore'
+import { useSucursalesStore } from '../store/SucursalesStore'
 
 export const useMostrarSucursalesQuery = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { mostrarSucursales } =
-    useSucursalesStore();
+  const { dataempresa } = useEmpresaStore()
+  const { mostrarSucursales } = useSucursalesStore()
   return useQuery({
-    queryKey: ["mostrar sucursales", { id_empresa: dataempresa?.id }],
+    queryKey: ['mostrar sucursales', { id_empresa: dataempresa?.id }],
     queryFn: () =>
       mostrarSucursales({
         id_empresa: dataempresa?.id,
       }),
     enabled: !!dataempresa,
-  });
-};
+  })
+}
 // export const useInsertarMovStockMutation = () => {
 //   const { itemSelect, setStateClose } = useGlobalStore();
 //   const queryClient = useQueryClient();

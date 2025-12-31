@@ -1,31 +1,32 @@
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+import Swal from 'sweetalert2'
+
 import {
-  InputText,
   Btn1,
-  ConvertirCapitalize,
-  useProductosStore,
-  Switch1,
-  Selector,
-  useSucursalesStore,
-  ListaDesplegable,
-  useCategoriasStore,
   Btngenerarcodigo,
-  useAlmacenesStore,
+  ConvertirCapitalize,
   ConvertirMinusculas,
-} from "../../../index";
-import { SelectorContainer } from "../../atoms/SelectorContainer";
-import { useForm } from "react-hook-form";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Device } from "../../../styles/breakpoints";
-import { useEffect, useRef, useState } from "react";
-import { Checkbox1 } from "../Checkbox1";
-import Swal from "sweetalert2";
-import { SelectList } from "../../ui/lists/SelectList";
-import { useStockStore } from "../../../store/StockStore";
-import { toast } from "sonner";
-import { BtnClose } from "../../ui/buttons/BtnClose";
+  InputText,
+  ListaDesplegable,
+  Selector,
+  Switch1,
+  useAlmacenesStore,
+  useCategoriasStore,
+  useProductosStore,
+  useSucursalesStore,
+} from '../../../index'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useStockStore } from '../../../store/StockStore'
+import { Device } from '../../../styles/breakpoints'
+import { v } from '../../../styles/variables'
+import { SelectorContainer } from '../../atoms/SelectorContainer'
+import { BtnClose } from '../../ui/buttons/BtnClose'
+import { SelectList } from '../../ui/lists/SelectList'
+import { Checkbox1 } from '../Checkbox1'
 
 export function RegistrarProductos({
   onClose,
@@ -34,53 +35,46 @@ export function RegistrarProductos({
   setIsExploding,
   state,
 }) {
-  if (!state) return;
+  if (!state) return
   //validar checkboxs
-  const [isChecked1, setIsChecked1] = useState(true);
-  const [isChecked2, setIsChecked2] = useState(false);
-  const [sevendepor, setSevendepor] = useState("UNIDAD");
-  const [stock, setStock] = useState("");
-  const [stockMinimo, setStockMinimo] = useState("");
-  const [ubicacion, setUbicacion] = useState("");
+  const [isChecked1, setIsChecked1] = useState(true)
+  const [isChecked2, setIsChecked2] = useState(false)
+  const [sevendepor, setSevendepor] = useState('UNIDAD')
+  const [stock, setStock] = useState('')
+  const [stockMinimo, setStockMinimo] = useState('')
+  const [ubicacion, setUbicacion] = useState('')
   const handleCheckboxChange = (checkboxNumber) => {
     if (checkboxNumber === 1) {
-      setIsChecked1(true);
-      setIsChecked2(false);
-      setSevendepor("UNIDAD");
+      setIsChecked1(true)
+      setIsChecked2(false)
+      setSevendepor('UNIDAD')
     } else {
-      setIsChecked1(false);
-      setIsChecked2(true);
-      setSevendepor("GRANEL");
+      setIsChecked1(false)
+      setIsChecked2(true)
+      setSevendepor('GRANEL')
     }
-  };
+  }
   //
 
-  const {
-    insertarProductos,
-    editarProductos,
-    generarCodigo,
-    codigogenerado,
-    refetchs,
-  } = useProductosStore();
-  const { insertarStock, mostrarStockXAlmacenYProducto } = useStockStore();
-  const { dataempresa } = useEmpresaStore();
+  const { insertarProductos, editarProductos, generarCodigo, codigogenerado, refetchs } =
+    useProductosStore()
+  const { insertarStock, mostrarStockXAlmacenYProducto } = useStockStore()
+  const { dataempresa } = useEmpresaStore()
   const {
     dataalmacen,
     eliminarAlmacen,
     mostrarAlmacenesXSucursal,
     almacenSelectItem,
     setAlmacenSelectItem,
-  } = useAlmacenesStore();
-  const [stateInventarios, setStateInventarios] = useState(false);
-  const [stateEnabledStock, setStateEnabledStock] = useState(false);
+  } = useAlmacenesStore()
+  const [stateInventarios, setStateInventarios] = useState(false)
+  const [stateEnabledStock, setStateEnabledStock] = useState(false)
 
-  const [stateSucursalesLista, setStateSucursalesLista] = useState(false);
-  const [stateCategoriasLista, setStateCategoriasLista] = useState(false);
-  const inputcodigointerno = useRef();
-  const { dataSucursales, selectSucursal, sucursalesItemSelect } =
-    useSucursalesStore();
-  const { datacategorias, selectCategoria, categoriaItemSelect } =
-    useCategoriasStore();
+  const [stateSucursalesLista, setStateSucursalesLista] = useState(false)
+  const [stateCategoriasLista, setStateCategoriasLista] = useState(false)
+  const inputcodigointerno = useRef()
+  const { dataSucursales, selectSucursal, sucursalesItemSelect } = useSucursalesStore()
+  const { datacategorias, selectCategoria, categoriaItemSelect } = useCategoriasStore()
   const {
     data: dataStockXAlmacenYProducto,
     error,
@@ -88,7 +82,7 @@ export function RegistrarProductos({
     refetch,
   } = useQuery({
     queryKey: [
-      "mostrar stock almacen y producto",
+      'mostrar stock almacen y producto',
       { id_producto: dataSelect?.id, id_almacen: almacenSelectItem?.id },
     ],
     queryFn: () =>
@@ -96,46 +90,46 @@ export function RegistrarProductos({
         id_almacen: almacenSelectItem?.id,
         id_producto: dataSelect?.id,
       }),
-  });
+  })
   const {
     data: dataAlmacenes,
     error: errorAlmacenes,
     isLoading: isLoadingAlmacenes,
   } = useQuery({
     queryKey: [
-      "mostrar almacenes x sucursal",
+      'mostrar almacenes x sucursal',
       { id_producto: dataSelect.id, id_sucursal: sucursalesItemSelect.id },
     ],
     queryFn: () =>
       mostrarAlmacenesXSucursal({
         id_sucursal: sucursalesItemSelect.id,
       }),
-  });
+  })
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm()
   const { isPending, mutate: doInsertar } = useMutation({
     mutationFn: insertar,
-    mutationKey: "insertar productos",
+    mutationKey: 'insertar productos',
     onError: (error) => toast.error(`Errror: ${error.message}`),
     onSuccess: () => {
-      toast.success("Producto guardado correctamente");
-      cerrarFormulario();
+      toast.success('Producto guardado correctamente')
+      cerrarFormulario()
     },
-  });
+  })
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
   const cerrarFormulario = () => {
-    onClose();
-    setIsExploding(true);
-  };
+    onClose()
+    setIsExploding(true)
+  }
   async function insertar(data) {
-    validarVacios(data);
-    if (accion === "Editar") {
+    validarVacios(data)
+    if (accion === 'Editar') {
       const p = {
         _id: dataSelect.id,
         _nombre: ConvertirMinusculas(data.nombre),
@@ -147,9 +141,9 @@ export function RegistrarProductos({
         _id_empresa: dataempresa.id,
         _sevende_por: sevendepor,
         _maneja_inventarios: stateInventarios,
-      };
-      console.log(p);
-      await editarProductos(p);
+      }
+      console.log(p)
+      await editarProductos(p)
       if (stateInventarios) {
         if (!dataStockXAlmacenYProducto) {
           const pStock = {
@@ -158,8 +152,8 @@ export function RegistrarProductos({
             stock: parseFloat(data.stock),
             stock_minimo: parseFloat(data.stock_minimo),
             ubicacion: data.ubicacion,
-          };
-          await insertarStock(pStock);
+          }
+          await insertarStock(pStock)
         }
       }
     } else {
@@ -174,9 +168,9 @@ export function RegistrarProductos({
         _sevende_por: sevendepor,
         _maneja_inventarios: stateInventarios,
         _maneja_multiprecios: false,
-      };
+      }
 
-      const id_producto_nuevo = await insertarProductos(p);
+      const id_producto_nuevo = await insertarProductos(p)
       if (stateInventarios) {
         const pStock = {
           id_almacen: almacenSelectItem?.id,
@@ -184,111 +178,111 @@ export function RegistrarProductos({
           stock: parseFloat(data.stock),
           stock_minimo: parseFloat(data.stock_minimo),
           ubicacion: data.ubicacion,
-        };
+        }
 
-        await insertarStock(pStock);
+        await insertarStock(pStock)
       }
     }
   }
 
   //#region validar check inventarios
   function checkUseInventarios() {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       if (dataalmacen) {
         if (stateInventarios) {
           Swal.fire({
-            title: "¿Estás seguro(a)?",
-            text: "Si desactiva esta opción se eliminara el stock!",
-            icon: "warning",
+            title: '¿Estás seguro(a)?',
+            text: 'Si desactiva esta opción se eliminara el stock!',
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Si, eliminar",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar',
           }).then(async (result) => {
             if (result.isConfirmed) {
-              setStateInventarios(false);
-              await eliminarAlmacen({ id: dataalmacen.id });
+              setStateInventarios(false)
+              await eliminarAlmacen({ id: dataalmacen.id })
             }
-          });
+          })
         } else {
-          setStateInventarios(true);
+          setStateInventarios(true)
         }
       } else {
-        setStateInventarios(!stateInventarios);
+        setStateInventarios(!stateInventarios)
       }
     } else {
-      setStateInventarios(!stateInventarios);
+      setStateInventarios(!stateInventarios)
     }
   }
   //#endregion
   //#region validar vacios
   function validarVacios(data) {
     if (!randomCodeinterno) {
-      generarCodigoInterno();
+      generarCodigoInterno()
     }
     if (!randomCodebarras) {
-      generarCodigoBarras();
+      generarCodigoBarras()
     }
-    if (data.precio_venta.trim() === "") {
-      data.precio_venta = 0;
+    if (data.precio_venta.trim() === '') {
+      data.precio_venta = 0
     }
-    if (data.precio_compra.trim() === "") {
-      data.precio_compra = 0;
+    if (data.precio_compra.trim() === '') {
+      data.precio_compra = 0
     }
     if (stateInventarios) {
       if (!dataalmacen) {
-        if (data.stock.trim() === "") {
-          data.stock = 0;
+        if (data.stock.trim() === '') {
+          data.stock = 0
         }
-        if (data.stock_minimo.trim() === "") {
-          data.stock_minimo = 0;
+        if (data.stock_minimo.trim() === '') {
+          data.stock_minimo = 0
         }
       }
     }
   }
   //#endregion
   //#region generar codigo automatico
-  const [randomCodeinterno, setRandomCodeinterno] = useState("");
-  const [randomCodebarras, setRandomCodebarras] = useState("");
+  const [randomCodeinterno, setRandomCodeinterno] = useState('')
+  const [randomCodebarras, setRandomCodebarras] = useState('')
   function generarCodigoBarras() {
-    generarCodigo();
-    setRandomCodebarras(codigogenerado);
+    generarCodigo()
+    setRandomCodebarras(codigogenerado)
   }
   function generarCodigoInterno() {
-    generarCodigo();
-    setRandomCodeinterno(codigogenerado);
+    generarCodigo()
+    setRandomCodeinterno(codigogenerado)
   }
   const handleChangeinterno = (event) => {
-    setRandomCodeinterno(event.target.value);
-  };
+    setRandomCodeinterno(event.target.value)
+  }
   const handleChangebarras = (event) => {
-    setRandomCodebarras(event.target.value);
-  };
+    setRandomCodebarras(event.target.value)
+  }
   //#endregion
 
   //#region validar_accion
 
   useEffect(() => {
-    if (accion != "Editar") {
-      generarCodigoInterno();
+    if (accion != 'Editar') {
+      generarCodigoInterno()
     } else {
       selectCategoria({
-        id:dataSelect.id_categoria,
-        nombre:dataSelect.categoria
+        id: dataSelect.id_categoria,
+        nombre: dataSelect.categoria,
       })
-      setRandomCodeinterno(dataSelect.codigo_interno);
-      setRandomCodebarras(dataSelect.codigo_barras);
-      dataSelect.sevende_por === "UNIDAD"
+      setRandomCodeinterno(dataSelect.codigo_interno)
+      setRandomCodebarras(dataSelect.codigo_barras)
+      dataSelect.sevende_por === 'UNIDAD'
         ? handleCheckboxChange(1)
-        : handleCheckboxChange(0);
+        : handleCheckboxChange(0)
       dataSelect.maneja_inventarios
         ? setStateInventarios(true)
-        : setStateInventarios(false);
+        : setStateInventarios(false)
       dataSelect.maneja_inventarios
         ? setStateEnabledStock(true)
-        : setStateEnabledStock(false);
+        : setStateEnabledStock(false)
     }
-  }, []);
+  }, [])
   //#endregion validar_accion
 
   return (
@@ -300,17 +294,15 @@ export function RegistrarProductos({
           <div className="headers">
             <section>
               <h1>
-                {accion == "Editar"
-                  ? "Editar productos"
-                  : "REGISTRAR NUEVO PRODUCTO"}
+                {accion == 'Editar' ? 'Editar productos' : 'REGISTRAR NUEVO PRODUCTO'}
               </h1>
             </section>
 
             <section>
               <BtnClose
                 funcion={() => {
-                  refetchs();
-                  onClose();
+                  refetchs()
+                  onClose()
                 }}
               />
             </section>
@@ -325,12 +317,12 @@ export function RegistrarProductos({
                     defaultValue={dataSelect.nombre}
                     type="text"
                     placeholder="nombre"
-                    {...register("nombre", {
+                    {...register('nombre', {
                       required: true,
                     })}
                   />
                   <label className="form__label">nombre</label>
-                  {errors.nombre?.type === "required" && <p>Campo requerido</p>}
+                  {errors.nombre?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
@@ -341,7 +333,7 @@ export function RegistrarProductos({
                     defaultValue={dataSelect.precio_venta}
                     type="number"
                     placeholder="precio venta"
-                    {...register("precio_venta")}
+                    {...register('precio_venta')}
                   />
                   <label className="form__label">precio venta</label>
                 </InputText>
@@ -354,7 +346,7 @@ export function RegistrarProductos({
                     defaultValue={dataSelect.precio_compra}
                     type="number"
                     placeholder="precio compra"
-                    {...register("precio_compra")}
+                    {...register('precio_compra')}
                   />
                   <label className="form__label">precio compra</label>
                 </InputText>
@@ -371,10 +363,7 @@ export function RegistrarProductos({
                   <label className="form__label">codigo de barras</label>
                 </InputText>
                 <ContainerBtngenerar>
-                  <Btngenerarcodigo
-                    titulo="Generar"
-                    funcion={generarCodigoBarras}
-                  />
+                  <Btngenerarcodigo titulo="Generar" funcion={generarCodigoBarras} />
                 </ContainerBtngenerar>
               </article>
               <article className="contentPadregenerar">
@@ -390,10 +379,7 @@ export function RegistrarProductos({
                   <label className="form__label">codigo interno</label>
                 </InputText>
                 <ContainerBtngenerar>
-                  <Btngenerarcodigo
-                    titulo="Generar"
-                    funcion={generarCodigoInterno}
-                  />
+                  <Btngenerarcodigo titulo="Generar" funcion={generarCodigoInterno} />
                 </ContainerBtngenerar>
               </article>
             </section>
@@ -414,15 +400,16 @@ export function RegistrarProductos({
 
               <SelectorContainer>
                 <label>Categoria: </label>
-                <SelectList data={datacategorias} itemSelect={categoriaItemSelect} onSelect={selectCategoria} displayField="nombre"/>
-                
+                <SelectList
+                  data={datacategorias}
+                  itemSelect={categoriaItemSelect}
+                  onSelect={selectCategoria}
+                  displayField="nombre"
+                />
               </SelectorContainer>
               <SelectorContainer>
                 <label>Controlar stock: </label>
-                <Switch1
-                  state={stateInventarios}
-                  setState={checkUseInventarios}
-                />
+                <Switch1 state={stateInventarios} setState={checkUseInventarios} />
               </SelectorContainer>
               {stateInventarios && (
                 <ContainerStock>
@@ -447,9 +434,7 @@ export function RegistrarProductos({
                   </SelectorContainer>
                   {stateEnabledStock && dataStockXAlmacenYProducto && (
                     <ContainerMensajeStock>
-                      <span>
-                        💀 para editar el stock vaya al módulo de kardex
-                      </span>
+                      <span>💀 para editar el stock vaya al módulo de kardex</span>
                     </ContainerMensajeStock>
                   )}
 
@@ -459,7 +444,7 @@ export function RegistrarProductos({
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
                         value={
-                          accion === "Editar"
+                          accion === 'Editar'
                             ? dataStockXAlmacenYProducto
                               ? dataStockXAlmacenYProducto?.stock
                               : stock
@@ -468,7 +453,7 @@ export function RegistrarProductos({
                         step="0.01"
                         type="number"
                         placeholder="stock"
-                        {...register("stock")}
+                        {...register('stock')}
                         onChange={(e) => setStock(e.target.value)}
                       />
                       <label className="form__label">stock</label>
@@ -480,7 +465,7 @@ export function RegistrarProductos({
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
                         value={
-                          accion === "Editar"
+                          accion === 'Editar'
                             ? dataStockXAlmacenYProducto
                               ? dataStockXAlmacenYProducto?.stock_minimo
                               : stockMinimo
@@ -489,7 +474,7 @@ export function RegistrarProductos({
                         step="0.01"
                         type="number"
                         placeholder="stock minimo"
-                        {...register("stock_minimo")}
+                        {...register('stock_minimo')}
                         onChange={(e) => setStockMinimo(e.target.value)}
                       />
                       <label className="form__label">stock minimo</label>
@@ -501,7 +486,7 @@ export function RegistrarProductos({
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
                         value={
-                          accion === "Editar"
+                          accion === 'Editar'
                             ? dataStockXAlmacenYProducto
                               ? dataStockXAlmacenYProducto?.ubicacion
                               : ubicacion
@@ -509,7 +494,7 @@ export function RegistrarProductos({
                         }
                         type="text"
                         placeholder="ubicacion"
-                        {...register("ubicacion")}
+                        {...register('ubicacion')}
                         onChange={(e) => setUbicacion(e.target.value)}
                       />
                       <label className="form__label">Ubicacion</label>
@@ -519,16 +504,12 @@ export function RegistrarProductos({
               )}
             </section>
 
-            <Btn1
-              icono={<v.iconoguardar />}
-              titulo="Guardar"
-              bgcolor="#F9D70B"
-            />
+            <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -586,7 +567,7 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 const ContainerStock = styled.div`
   border: 1px solid rgba(240, 104, 46, 0.9);
   display: flex;
@@ -594,12 +575,12 @@ const ContainerStock = styled.div`
   padding: 12px;
   flex-direction: column;
   background-color: rgba(240, 127, 46, 0.05);
-`;
+`
 const ContainerBtngenerar = styled.div`
   position: absolute;
   right: 0;
   top: 10%;
-`;
+`
 const ContainerMensajeStock = styled.div`
   text-align: center;
   color: #f9184c;
@@ -608,4 +589,4 @@ const ContainerMensajeStock = styled.div`
   padding: 5px;
   margin: 10px;
   font-weight: 600;
-`;
+`

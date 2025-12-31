@@ -1,18 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
+import { CirclePicker } from 'react-color'
+import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
+
 import {
-  InputText,
   Btn1,
-  useCategoriasStore,
-  Icono,
   ConvertirCapitalize,
+  Icono,
+  InputText,
+  useCategoriasStore,
   useClientesProveedoresStore,
-} from "../../../index";
-import { useForm } from "react-hook-form";
-import { CirclePicker } from "react-color";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useMutation } from "@tanstack/react-query";
+} from '../../../index'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { v } from '../../../styles/variables'
 
 export function RegistrarClientesProveedores({
   onClose,
@@ -20,8 +21,8 @@ export function RegistrarClientesProveedores({
   accion,
   setIsExploding,
 }) {
-  const { insertarCliPro, editarCliPro, tipo } = useClientesProveedoresStore();
-  const { dataempresa } = useEmpresaStore();
+  const { insertarCliPro, editarCliPro, tipo } = useClientesProveedoresStore()
+  const { dataempresa } = useEmpresaStore()
 
   const {
     register,
@@ -29,29 +30,29 @@ export function RegistrarClientesProveedores({
     handleSubmit,
   } = useForm({
     defaultValues: {
-      nombres: dataSelect?.nombres || "",
-      direccion: dataSelect?.direccion || "",
-      telefono: dataSelect?.telefono || "",
-      email: dataSelect?.email || "",
-      identificador_nacional: dataSelect?.identificador_nacional || "",
-      identificador_fiscal: dataSelect?.identificador_fiscal || "",
+      nombres: dataSelect?.nombres || '',
+      direccion: dataSelect?.direccion || '',
+      telefono: dataSelect?.telefono || '',
+      email: dataSelect?.email || '',
+      identificador_nacional: dataSelect?.identificador_nacional || '',
+      identificador_fiscal: dataSelect?.identificador_fiscal || '',
     },
-  });
+  })
   const { isPending, mutate: doInsertar } = useMutation({
     mutationFn: insertar,
-    mutationKey: "insertar clientes proveedores mutation",
-    onError: (err) => console.log("El error", err.message),
+    mutationKey: 'insertar clientes proveedores mutation',
+    onError: (err) => console.log('El error', err.message),
     onSuccess: () => cerrarFormulario(),
-  });
+  })
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
   const cerrarFormulario = () => {
-    onClose();
-    setIsExploding(true);
-  };
+    onClose()
+    setIsExploding(true)
+  }
   async function insertar(data) {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       const p = {
         _id: dataSelect.id,
         _nombres: ConvertirCapitalize(data.nombres),
@@ -62,8 +63,8 @@ export function RegistrarClientesProveedores({
         _identificador_nacional: data.identificador_nacional,
         _identificador_fiscal: data.identificador_fiscal,
         _tipo: tipo,
-      };
-      await editarCliPro(p);
+      }
+      await editarCliPro(p)
     } else {
       const p = {
         _nombres: ConvertirCapitalize(data.nombres),
@@ -74,16 +75,16 @@ export function RegistrarClientesProveedores({
         _identificador_nacional: data.identificador_nacional,
         _identificador_fiscal: data.identificador_fiscal,
         _tipo: tipo,
-      };
+      }
 
-      await insertarCliPro(p);
+      await insertarCliPro(p)
     }
   }
 
   useEffect(() => {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
     }
-  }, []);
+  }, [])
   return (
     <Container>
       {isPending ? (
@@ -92,11 +93,7 @@ export function RegistrarClientesProveedores({
         <div className="sub-contenedor">
           <div className="headers">
             <section>
-              <h1>
-                {accion == "Editar"
-                  ? "Editar " + tipo
-                  : "Registrar nuevo " + tipo}
-              </h1>
+              <h1>{accion == 'Editar' ? 'Editar ' + tipo : 'Registrar nuevo ' + tipo}</h1>
             </section>
 
             <section>
@@ -110,81 +107,70 @@ export function RegistrarClientesProveedores({
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-               
                     type="text"
                     placeholder="nombres"
-                    {...register("nombres", {
+                    {...register('nombres', {
                       required: true,
                     })}
                   />
                   <label className="form__label">nombres</label>
-                  {errors.nombres?.type === "required" && (
-                    <p>Campo requerido</p>
-                  )}
+                  {errors.nombres?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                   
                     type="text"
                     placeholder="direccion"
-                    {...register("direccion", {
+                    {...register('direccion', {
                       required: true,
                     })}
                   />
                   <label className="form__label">direccion</label>
-                  {errors.direccion?.type === "required" && (
-                    <p>Campo requerido</p>
-                  )}
+                  {errors.direccion?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                   
                     type="text"
                     placeholder="telefono"
-                    {...register("telefono", {
+                    {...register('telefono', {
                       required: true,
                     })}
                   />
                   <label className="form__label">telefono</label>
-                  {errors.telefono?.type === "required" && (
-                    <p>Campo requerido</p>
-                  )}
+                  {errors.telefono?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                  
                     type="text"
                     placeholder="email"
-                    {...register("email", {
+                    {...register('email', {
                       required: true,
                     })}
                   />
                   <label className="form__label">email</label>
-                  {errors.email?.type === "required" && <p>Campo requerido</p>}
+                  {errors.email?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                    
                     type="text"
                     placeholder="identificador_nacional"
-                    {...register("identificador_nacional", {
+                    {...register('identificador_nacional', {
                       required: true,
                     })}
                   />
                   <label className="form__label">identificador nacional</label>
-                  {errors.identificador_nacional?.type === "required" && (
+                  {errors.identificador_nacional?.type === 'required' && (
                     <p>Campo requerido</p>
                   )}
                 </InputText>
@@ -193,30 +179,25 @@ export function RegistrarClientesProveedores({
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                   
                     type="text"
                     placeholder="identificador_fiscal"
-                    {...register("identificador_fiscal", {
+                    {...register('identificador_fiscal', {
                       required: true,
                     })}
                   />
                   <label className="form__label">identificador fiscal</label>
-                  {errors.identificador_fiscal?.type === "required" && (
+                  {errors.identificador_fiscal?.type === 'required' && (
                     <p>Campo requerido</p>
                   )}
                 </InputText>
               </article>
-              <Btn1
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
+              <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
             </section>
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -270,7 +251,7 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 
 const ContentTitle = styled.div`
   display: flex;
@@ -289,7 +270,7 @@ const ContentTitle = styled.div`
     width: 40px;
     font-size: 28px;
   }
-`;
+`
 const PictureContainer = styled.div`
   display: flex;
   align-items: center;
@@ -312,4 +293,4 @@ const PictureContainer = styled.div`
   input {
     display: none;
   }
-`;
+`

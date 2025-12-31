@@ -1,66 +1,65 @@
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
 import {
-  InputText,
   Btn1,
-  useSucursalesStore,
   ConvertirCapitalize,
+  InputText,
   useEmpresaStore,
-} from "../../../index";
-import { useForm } from "react-hook-form";
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+  useSucursalesStore,
+} from '../../../index'
+import { v } from '../../../styles/variables'
+import { BtnClose } from '../../ui/buttons/BtnClose'
 export function RegistrarSucursal() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
   const {
     accion,
     sucursalesItemSelect,
     setStateSucursal,
     insertarSucursal,
     editarSucursal,
-  } = useSucursalesStore();
-  const { dataempresa } = useEmpresaStore();
+  } = useSucursalesStore()
+  const { dataempresa } = useEmpresaStore()
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm()
   const insertar = async (data) => {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       const p = {
-        id:sucursalesItemSelect?.id,
+        id: sucursalesItemSelect?.id,
         nombre: ConvertirCapitalize(data.nombre),
         direccion_fiscal: data.direccion_fiscal,
-       
-      };
+      }
       await editarSucursal(p)
-
     } else {
       const p = {
         nombre: ConvertirCapitalize(data.nombre),
         direccion_fiscal: data.direccion_fiscal,
         id_empresa: dataempresa?.id,
-      };
-      await insertarSucursal(p);
+      }
+      await insertarSucursal(p)
     }
-  };
+  }
   const { isPending, mutate: doInsertar } = useMutation({
-    mutationKey: ["insertar sucursal"],
+    mutationKey: ['insertar sucursal'],
     mutationFn: insertar,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      toast.success("Sucursal registrada correctamente");
-      queryClient.invalidateQueries(["mostrar Cajas XSucursal"]);
-      setStateSucursal(false);
+      toast.success('Sucursal registrada correctamente')
+      queryClient.invalidateQueries(['mostrar Cajas XSucursal'])
+      setStateSucursal(false)
     },
-  });
+  })
 
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
 
   return (
     <Container>
@@ -71,9 +70,7 @@ export function RegistrarSucursal() {
           <div className="headers">
             <section>
               <h1>
-                {accion == "Editar"
-                  ? "Editar sucursal"
-                  : "Registrar nueva sucursal"}
+                {accion == 'Editar' ? 'Editar sucursal' : 'Registrar nueva sucursal'}
               </h1>
             </section>
 
@@ -91,12 +88,12 @@ export function RegistrarSucursal() {
                     defaultValue={sucursalesItemSelect?.nombre}
                     type="text"
                     placeholder="sucursal"
-                    {...register("nombre", {
+                    {...register('nombre', {
                       required: true,
                     })}
                   />
                   <label className="form__label">sucursal</label>
-                  {errors.nombre?.type === "required" && <p>Campo requerido</p>}
+                  {errors.nombre?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
               <article>
@@ -104,30 +101,23 @@ export function RegistrarSucursal() {
                   <input
                     className="form__field"
                     defaultValue={
-                      accion === "Editar"
-                        ? sucursalesItemSelect?.direccion_fiscal
-                        : ""
+                      accion === 'Editar' ? sucursalesItemSelect?.direccion_fiscal : ''
                     }
                     type="text"
                     placeholder="direccion fiscal"
-                    {...register("direccion_fiscal")}
+                    {...register('direccion_fiscal')}
                   />
                   <label className="form__label">direccion fiscal</label>
-                  
                 </InputText>
               </article>
 
-              <Btn1
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
+              <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
             </section>
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -183,4 +173,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

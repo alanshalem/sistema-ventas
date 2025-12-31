@@ -1,15 +1,4 @@
-import styled from "styled-components";
-import {
-  ContentAccionesTabla,
-  useCategoriasStore,
-  Paginacion,
-  ImagenContent,
-  Icono,
-  useUsuariosStore,
-} from "../../../index";
-import Swal from "sweetalert2";
-import { v } from "../../../styles/variables";
-import { useState } from "react";
+import { useQueryClient } from '@tanstack/react-query'
 import {
   flexRender,
   getCoreRowModel,
@@ -17,131 +6,138 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { FaArrowsAltV } from "react-icons/fa";
-import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
-import { useQueryClient } from "@tanstack/react-query";
-export function TablaInventarios({
-  data,
-  SetopenRegistro,
-  setdataSelect,
-  setAccion,
-}) {
-  if (data == null) return;
-  const [pagina, setPagina] = useState(1);
-  const [datas, setData] = useState(data);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const queryClient = useQueryClient();
-  const { eliminarUsuarioAsignado } = useUsuariosStore();
+} from '@tanstack/react-table'
+import { useState } from 'react'
+import { FaArrowsAltV } from 'react-icons/fa'
+import styled from 'styled-components'
+import Swal from 'sweetalert2'
+
+import {
+  ContentAccionesTabla,
+  Icono,
+  ImagenContent,
+  Paginacion,
+  useCategoriasStore,
+  useUsuariosStore,
+} from '../../../index'
+import { useAsignacionCajaSucursalStore } from '../../../store/AsignacionCajaSucursalStore'
+import { v } from '../../../styles/variables'
+export function TablaInventarios({ data, SetopenRegistro, setdataSelect, setAccion }) {
+  if (data == null) return
+  const [pagina, setPagina] = useState(1)
+  const [datas, setData] = useState(data)
+  const [columnFilters, setColumnFilters] = useState([])
+  const queryClient = useQueryClient()
+  const { eliminarUsuarioAsignado } = useUsuariosStore()
   function eliminar(p) {
     Swal.fire({
-      title: "¿Estás seguro(a)(e)?",
-      text: "Una vez eliminado, ¡no podrá recuperar este registro!",
-      icon: "warning",
+      title: '¿Estás seguro(a)(e)?',
+      text: 'Una vez eliminado, ¡no podrá recuperar este registro!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, eliminar",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await eliminarUsuarioAsignado({ id: p.id_usuario });
-        queryClient.invalidateQueries(["mostrar usuarios asignados"]);
+        await eliminarUsuarioAsignado({ id: p.id_usuario })
+        queryClient.invalidateQueries(['mostrar usuarios asignados'])
       }
-    });
+    })
   }
   function editar(data) {
-    if (data.nombre === "General") {
+    if (data.nombre === 'General') {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Este registro no se permite modificar ya que es valor por defecto.",
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Este registro no se permite modificar ya que es valor por defecto.',
         footer: '<a href="">...</a>',
-      });
-      return;
+      })
+      return
     }
-    SetopenRegistro(true);
-    setdataSelect(data);
-    setAccion("Editar");
+    SetopenRegistro(true)
+    setdataSelect(data)
+    setAccion('Editar')
   }
   const columns = [
     {
-      accessorKey: "fecha",
-      header: "Fecha",
+      accessorKey: 'fecha',
+      header: 'Fecha',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "almacen.sucursales.nombre",
-      header: "Sucursal",
+      accessorKey: 'almacen.sucursales.nombre',
+      header: 'Sucursal',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "almacen.nombre",
-      header: "Almacen",
+      accessorKey: 'almacen.nombre',
+      header: 'Almacen',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "detalle",
-      header: "Movimiento",
+      accessorKey: 'detalle',
+      header: 'Movimiento',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "origen",
-      header: "Origen",
+      accessorKey: 'origen',
+      header: 'Origen',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "tipo_movimiento",
-      header: "Tipo",
+      accessorKey: 'tipo_movimiento',
+      header: 'Tipo',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "cantidad",
-      header: "Cantidad",
+      accessorKey: 'cantidad',
+      header: 'Cantidad',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
-  ];
+  ]
   const table = useReactTable({
     data,
     columns,
@@ -152,7 +148,7 @@ export function TablaInventarios({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
     meta: {
       updateData: (rowIndex, columnId, value) =>
         setData((prev) =>
@@ -166,7 +162,7 @@ export function TablaInventarios({
           )
         ),
     },
-  });
+  })
   return (
     <>
       <Container>
@@ -179,7 +175,7 @@ export function TablaInventarios({
                     {header.column.columnDef.header}
                     {header.column.getCanSort() && (
                       <span
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         <FaArrowsAltV />
@@ -187,15 +183,15 @@ export function TablaInventarios({
                     )}
                     {
                       {
-                        asc: " 🔼",
-                        desc: " 🔽",
+                        asc: ' 🔼',
+                        desc: ' 🔽',
                       }[header.column.getIsSorted()]
                     }
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
+                        header.column.getIsResizing() ? 'isResizing' : ''
                       }`}
                     />
                   </th>
@@ -224,7 +220,7 @@ export function TablaInventarios({
         />
       </Container>
     </>
-  );
+  )
 }
 const Container = styled.div`
   position: relative;
@@ -326,7 +322,7 @@ const Container = styled.div`
           }
         }
       }
-      th[scope="row"] {
+      th[scope='row'] {
         @media (min-width: ${v.bplisa}) {
           border-bottom: 1px solid rgba(161, 161, 161, 0.32);
         }
@@ -369,7 +365,7 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 const Colorcontent = styled.div`
   justify-content: center;
   min-height: ${(props) => props.$alto};
@@ -378,4 +374,4 @@ const Colorcontent = styled.div`
   background-color: ${(props) => props.color};
   border-radius: 50%;
   text-align: center;
-`;
+`

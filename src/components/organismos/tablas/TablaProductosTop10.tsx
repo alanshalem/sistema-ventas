@@ -1,14 +1,3 @@
-import styled from "styled-components";
-import {
-  ContentAccionesTabla,
-  useCategoriasStore,
-  Paginacion,
-  ImagenContent,
-  Icono,
-} from "../../../index";
-import Swal from "sweetalert2";
-import { v } from "../../../styles/variables";
-import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -16,74 +5,78 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { FaArrowsAltV } from "react-icons/fa";
-export function TablaProductosTop10({
-  data,
-  SetopenRegistro,
-  setdataSelect,
-  setAccion,
-}) {
-  if (data == null) return;
-  const [pagina, setPagina] = useState(1);
-  const [datas, setData] = useState(data);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [pagination, setPagination] = useState({
-    pageIndex: 0, 
-    pageSize: 5,  
-  });
+} from '@tanstack/react-table'
+import { useState } from 'react'
+import { FaArrowsAltV } from 'react-icons/fa'
+import styled from 'styled-components'
+import Swal from 'sweetalert2'
 
+import {
+  ContentAccionesTabla,
+  Icono,
+  ImagenContent,
+  Paginacion,
+  useCategoriasStore,
+} from '../../../index'
+import { v } from '../../../styles/variables'
+export function TablaProductosTop10({ data, SetopenRegistro, setdataSelect, setAccion }) {
+  if (data == null) return
+  const [pagina, setPagina] = useState(1)
+  const [datas, setData] = useState(data)
+  const [columnFilters, setColumnFilters] = useState([])
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  })
 
   const columns = [
     {
-      accessorKey: "nombre_producto",
-      header: "Producto",
+      accessorKey: 'nombre_producto',
+      header: 'Producto',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "total_vendido",
-      header: "Total",
+      accessorKey: 'total_vendido',
+      header: 'Total',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "porcentaje",
-      header: "%",
+      accessorKey: 'porcentaje',
+      header: '%',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
-   
-   
-  ];
+  ]
   const table = useReactTable({
     data,
     columns,
     state: {
       columnFilters,
-      pagination
+      pagination,
     },
-    onPaginationChange:setPagination,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
     meta: {
       updateData: (rowIndex, columnId, value) =>
         setData((prev) =>
@@ -97,7 +90,7 @@ export function TablaProductosTop10({
           )
         ),
     },
-  });
+  })
   return (
     <>
       <Container>
@@ -110,7 +103,7 @@ export function TablaProductosTop10({
                     {header.column.columnDef.header}
                     {header.column.getCanSort() && (
                       <span
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         <FaArrowsAltV />
@@ -118,15 +111,15 @@ export function TablaProductosTop10({
                     )}
                     {
                       {
-                        asc: " 🔼",
-                        desc: " 🔽",
+                        asc: ' 🔼',
+                        desc: ' 🔽',
                       }[header.column.getIsSorted()]
                     }
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
+                        header.column.getIsResizing() ? 'isResizing' : ''
                       }`}
                     />
                   </th>
@@ -155,7 +148,7 @@ export function TablaProductosTop10({
         />
       </Container>
     </>
-  );
+  )
 }
 const Container = styled.div`
   position: relative;
@@ -187,8 +180,8 @@ const Container = styled.div`
         }
       }
     }
-    tbody{
-      tr{
+    tbody {
+      tr {
         display: table-row;
         margin-bottom: 0;
         &:nth-of-type(even) {
@@ -205,9 +198,8 @@ const Container = styled.div`
         }
       }
     }
-   
   }
-`;
+`
 const Colorcontent = styled.div`
   justify-content: center;
   min-height: ${(props) => props.$alto};
@@ -216,4 +208,4 @@ const Colorcontent = styled.div`
   background-color: ${(props) => props.color};
   border-radius: 50%;
   text-align: center;
-`;
+`

@@ -1,26 +1,28 @@
-import { Spinner1 } from "../components/moleculas/Spinner1";
-import { CrudTemplate } from "../components/templates/CrudTemplate";
-import { useEditarSerializacionDefaultMutation, useMostrarSerializacionesQuery } from "../tanstack/SerializacionStack";
-
-import { useGlobalStore } from "../store/GlobalStore";
-import { TablaSerializaciones } from "../components/organismos/tablas/TablaSerializaciones";
-import { RegistrarSerializacion } from "../components/organismos/formularios/RegistrarSerializacion";
+import { Spinner } from '../components/molecules/Spinner'
+import { RegistrarSerializacion } from '../components/organismos/formularios/RegistrarSerializacion'
+import { TablaSerializaciones } from '../components/organismos/tablas/TablaSerializaciones'
+import { CrudTemplate } from '../components/templates/CrudTemplate'
+import { useGlobalStore } from '../store/GlobalStore'
+import {
+  useEditarSerializacionDefaultMutation,
+  useMostrarSerializacionesQuery,
+} from '../tanstack/SerializacionStack'
 export const SerializacionComprobantes = () => {
-  const { data, isLoading, error } = useMostrarSerializacionesQuery();
- const {mutate,isPending} = useEditarSerializacionDefaultMutation()
+  const { data, isLoading, error } = useMostrarSerializacionesQuery()
+  const { mutate, isPending } = useEditarSerializacionDefaultMutation()
 
   if (isLoading) {
-    return <Spinner1 />;
+    return <Spinner />
   }
   if (error) {
-    return <span>error...{error.message} </span>;
+    return <span>error...{error.message} </span>
   }
   return (
     <CrudTemplate
-      data={data} FormularioRegistro={RegistrarSerializacion}
+      data={data}
+      FormularioRegistro={RegistrarSerializacion}
       title="Comprobantes"
-      Tabla={<TablaSerializaciones data={data}/>}
-     
+      Tabla={<TablaSerializaciones data={data} />}
     />
-  );
-};
+  )
+}

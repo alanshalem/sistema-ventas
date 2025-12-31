@@ -1,8 +1,9 @@
-import styled from "styled-components";
-import { useMovStockStore } from "../../../store/MovStockStore";
+import styled from 'styled-components'
+
+import { useMovStockStore } from '../../../store/MovStockStore'
 
 export const RadioChecks = () => {
-  const { setTipo, tipo } = useMovStockStore();
+  const { setTipo, tipo } = useMovStockStore()
 
   return (
     <Container>
@@ -12,8 +13,8 @@ export const RadioChecks = () => {
             type="radio"
             name="radio"
             value="ingreso"
-            checked={tipo === "ingreso"}
-            onChange={() => setTipo("ingreso")}
+            checked={tipo === 'ingreso'}
+            onChange={() => setTipo('ingreso')}
           />
           <span className="name">Ingreso</span>
         </label>
@@ -23,15 +24,15 @@ export const RadioChecks = () => {
             type="radio"
             name="radio"
             value="salida"
-            checked={tipo === "salida"}
-            onChange={() => setTipo("salida")}
+            checked={tipo === 'salida'}
+            onChange={() => setTipo('salida')}
           />
           <span className="name">Salida</span>
         </label>
       </div>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   .radio-inputs {
@@ -68,4 +69,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

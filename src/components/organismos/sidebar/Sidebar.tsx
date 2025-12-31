@@ -1,29 +1,24 @@
-import styled from "styled-components";
-import {
-  LinksArray,
-  SecondarylinksArray,
-  ToggleTema,
-  useAuthStore,
-} from "../../../index";
-import { v } from "../../../styles/variables";
-import { NavLink } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { Icon } from '@iconify/react'
+import { useQueryClient } from '@tanstack/react-query'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
 
+import { LinksArray, SecondarylinksArray, ToggleTema, useAuthStore } from '../../../index'
+import { v } from '../../../styles/variables'
 
 export function Sidebar({ state, setState }) {
-  const {cerrarSesion} = useAuthStore()
+  const { cerrarSesion } = useAuthStore()
   const queryClient = useQueryClient()
-//  const salir =()=>{
-//   cerrarSesion()
-//   queryClient.clear();
-//  }
+  //  const salir =()=>{
+  //   cerrarSesion()
+  //   queryClient.clear();
+  //  }
   return (
     <Main $isopen={state.toString()}>
       <span className="Sidebarbutton" onClick={() => setState(!state)}>
         {<v.iconoflechaderecha />}
       </span>
-      <Container $isopen={state.toString()} className={state ? "active" : ""}>
+      <Container $isopen={state.toString()} className={state ? 'active' : ''}>
         <div className="Logocontent">
           <div className="imgcontent">
             <img src={v.logo} />
@@ -31,61 +26,49 @@ export function Sidebar({ state, setState }) {
           <h2>Sistema de Ventas</h2>
         </div>
         {LinksArray.map(({ icon, label, to }) => (
-          <div
-            className={state ? "LinkContainer active" : "LinkContainer"}
-            key={label}
-          >
+          <div className={state ? 'LinkContainer active' : 'LinkContainer'} key={label}>
             <NavLink
               to={to}
               className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
             >
-              <section className={state ? "content open" : "content"}>
+              <section className={state ? 'content open' : 'content'}>
                 <Icon className="Linkicon" icon={icon} />
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  {label}
-                </span>
+                <span className={state ? 'label_ver' : 'label_oculto'}>{label}</span>
               </section>
             </NavLink>
           </div>
         ))}
         <Divider />
         {SecondarylinksArray.map(({ icon, label, to, color }) => (
-          <div
-            className={state ? "LinkContainer active" : "LinkContainer"}
-            key={label}
-          >
+          <div className={state ? 'LinkContainer active' : 'LinkContainer'} key={label}>
             <NavLink
               to={to}
               className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
             >
-              <section className={state ? "content open" : "content"}>
+              <section className={state ? 'content open' : 'content'}>
                 <Icon color={color} className="Linkicon" icon={icon} />
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  {label}
-                </span>
+                <span className={state ? 'label_ver' : 'label_oculto'}>{label}</span>
               </section>
             </NavLink>
           </div>
         ))}
-        <div className={state ? "LinkContainer active" : "LinkContainer"}>
-          <div className="Links" onClick={cerrarSesion} >
-            <section className={state ? "content open" : "content"}>
+        <div className={state ? 'LinkContainer active' : 'LinkContainer'}>
+          <div className="Links" onClick={cerrarSesion}>
+            <section className={state ? 'content open' : 'content'}>
               <Icon
                 color="#CE82FF"
                 className="Linkicon"
                 icon="heroicons:ellipsis-horizontal-circle-solid"
               />
-              <span  className={state ? "label_ver" : "label_oculto"}>SALIR</span>
+              <span className={state ? 'label_ver' : 'label_oculto'}>SALIR</span>
             </section>
           </div>
-         
-         
         </div>
 
         <ToggleTema />
       </Container>
     </Main>
-  );
+  )
 }
 const Container = styled.div`
   background: ${({ theme }) => theme.bgtotal};
@@ -99,7 +82,7 @@ const Container = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   border-right: 1px solid ${({ theme }) => theme.color2};
-  
+
   &::-webkit-scrollbar {
     width: 6px;
     border-radius: 10px;
@@ -124,8 +107,7 @@ const Container = styled.div`
       width: 30px;
       cursor: pointer;
       transition: 0.3s ease;
-      transform: ${({ $isopen }) =>
-          $isopen === "true" ? `scale(0.7)` : `scale(1.5)`}
+      transform: ${({ $isopen }) => ($isopen === 'true' ? `scale(0.7)` : `scale(1.5)`)}
         rotate(${({ theme }) => theme.logorotate});
       img {
         width: 100%;
@@ -134,13 +116,13 @@ const Container = styled.div`
     }
     h2 {
       color: #f88533;
-      display: ${({ $isopen }) => ($isopen === "true" ? `block` : `none`)};
+      display: ${({ $isopen }) => ($isopen === 'true' ? `block` : `none`)};
     }
   }
   .LinkContainer {
     margin: 9px 0;
-    margin-right:10px;
-    margin-left:8px;
+    margin-right: 10px;
+    margin-left: 8px;
     transition: all 0.3s ease-in-out;
     position: relative;
     text-transform: uppercase;
@@ -164,7 +146,7 @@ const Container = styled.div`
       .Linkicon {
         display: flex;
         font-size: 33px;
-filter:grayscale(100%);
+        filter: grayscale(100%);
         svg {
           font-size: 25px;
         }
@@ -197,12 +179,12 @@ filter:grayscale(100%);
       border: 2px solid ${(props) => props.theme.bg5};
       color: ${(props) => props.theme.color1};
       font-weight: 600;
-      .Linkicon{
+      .Linkicon {
         filter: grayscale(0%);
       }
     }
   }
-`;
+`
 const Main = styled.div`
   .Sidebarbutton {
     position: fixed;
@@ -212,7 +194,8 @@ const Main = styled.div`
     height: 32px;
     border-radius: 50%;
     background: ${(props) => props.theme.bgtgderecha};
-    box-shadow: 0 0 4px ${(props) => props.theme.bg3},
+    box-shadow:
+      0 0 4px ${(props) => props.theme.bg3},
       0 0 7px ${(props) => props.theme.bg};
     display: flex;
     align-items: center;
@@ -221,13 +204,13 @@ const Main = styled.div`
     transition: all 0.2s;
     z-index: 3;
     transform: ${({ $isopen }) =>
-      $isopen === "true" ? `translateX(173px) rotate(3.142rad)` : `initial`};
+      $isopen === 'true' ? `translateX(173px) rotate(3.142rad)` : `initial`};
     color: ${(props) => props.theme.text};
   }
-`;
+`
 const Divider = styled.div`
   height: 1px;
   width: 100%;
   background: ${(props) => props.theme.bg4};
   margin: ${() => v.lgSpacing} 0;
-`;
+`

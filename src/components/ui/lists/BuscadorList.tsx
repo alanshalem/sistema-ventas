@@ -1,35 +1,35 @@
-import styled from "styled-components";
-import { useState } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useState } from 'react'
+import styled from 'styled-components'
 export function BuscadorList({
   setBuscador,
   data,
   onSelect,
-  displayField = "nombre",
+  displayField = 'nombre',
   itemSelect,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [isOpen, setIsOpen] = useState(false)
+  const [inputValue, setInputValue] = useState('')
   const [selected, setSelected] = useState(
-    itemSelect?.[displayField] || "Selecciona una opcion"
-  );
+    itemSelect?.[displayField] || 'Selecciona una opcion'
+  )
 
   function buscar(e) {
-    const value = e.target.value;
-    setInputValue(value);
-    setBuscador(value);
-    setIsOpen(!!value); 
+    const value = e.target.value
+    setInputValue(value)
+    setBuscador(value)
+    setIsOpen(!!value)
   }
   const handleSelect = (item) => {
-    setSelected(item);
-    setIsOpen(false);
-    onSelect(item);
-  };
+    setSelected(item)
+    setIsOpen(false)
+    onSelect(item)
+  }
 
   return (
     <Container>
       <section className="content">
-      <Icon icon="ic:outline-search" width="25" height="25" />
+        <Icon icon="ic:outline-search" width="25" height="25" />
         <input
           placeholder="...buscar"
           value={inputValue}
@@ -48,13 +48,13 @@ export function BuscadorList({
                   {item === selected && <CheckMark>✔</CheckMark>}
                   {item?.[displayField]}
                 </DropdownItem>
-              );
+              )
             })}
           </DropdownList>
         )}
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   border-radius: 10px;
@@ -82,7 +82,7 @@ const Container = styled.div`
       color: ${(props) => props.theme.text};
     }
   }
-`;
+`
 const DropdownList = styled.div`
   position: absolute;
   top: 100%;
@@ -99,7 +99,7 @@ const DropdownList = styled.div`
   min-width: 200px; /* Ancho mínimo */
   width: max-content; /* Ancho según el contenido */
   max-width: 300px; /* Ancho máximo */
-`;
+`
 
 const DropdownItem = styled.div`
   padding: 10px 15px;
@@ -109,15 +109,15 @@ const DropdownItem = styled.div`
   gap: 8px;
   cursor: pointer;
   background-color: ${({ isSelected }) =>
-    isSelected ? (theme) => theme.bg : "transparent"};
+    isSelected ? (theme) => theme.bg : 'transparent'};
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: ${({ theme }) => theme.bg};
   }
-`;
+`
 
 const CheckMark = styled.span`
   color: ${({ theme }) => theme.text};
   font-size: 14px;
-`;
+`

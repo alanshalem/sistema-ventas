@@ -1,8 +1,8 @@
 {
   "semi": false,
-  "trailingComma": "none",
+  "trailingComma": "es5",
   "singleQuote": true,
-  "printWidth": 80,
+  "printWidth": 90,
   "tabWidth": 2,
   "useTabs": false,
   "bracketSpacing": true,
@@ -10,7 +10,7 @@
   "arrowParens": "always",
   "endOfLine": "lf",
   "quoteProps": "as-needed",
-  "jsxSingleQuote": true,
+  "jsxSingleQuote": false,
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "css",
   "embeddedLanguageFormatting": "auto",
@@ -20,6 +20,12 @@
       "options": {
         "singleQuote": false,
         "trailingComma": "es5"
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "options": {
+        "printWidth": 90
       }
     },
     {

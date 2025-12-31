@@ -1,18 +1,17 @@
-import styled from "styled-components";
-import { Btn1 } from "../components/moleculas/Btn1";
-import { ImageSelector } from "../hooks/useImageSelector";
-import { useEmpresaStore } from "../store/EmpresaStore";
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form'
+import { Toaster } from 'sonner'
+import styled from 'styled-components'
 
-import { Toaster } from "sonner";
-
-import { useGlobalStore } from "../store/GlobalStore";
-import { useUpdateEmpresaTicketMutation } from "../tanstack/EmpresaStack";
-import { SpinnerSecundario } from "../components/moleculas/SpinnerSecundario";
+import { Button } from '../components/molecules/Button'
+import { SecondarySpinner } from '../components/molecules/SecondarySpinner'
+import { ImageSelector } from '../hooks/useImageSelector'
+import { useEmpresaStore } from '../store/EmpresaStore'
+import { useGlobalStore } from '../store/GlobalStore'
+import { useUpdateEmpresaTicketMutation } from '../tanstack/EmpresaStack'
 
 export const ConfiguracionTicket = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { fileUrl } = useGlobalStore();
+  const { dataempresa } = useEmpresaStore()
+  const { fileUrl } = useGlobalStore()
   const {
     register,
     formState: { errors },
@@ -25,27 +24,25 @@ export const ConfiguracionTicket = () => {
       nombre_moneda: dataempresa?.nombre_moneda,
       pie_pagina_ticket: dataempresa?.pie_pagina_ticket,
     },
-  });
-  const { mutate, isPending } = useUpdateEmpresaTicketMutation();
+  })
+  const { mutate, isPending } = useUpdateEmpresaTicketMutation()
 
   return (
     <Container>
       <Toaster position="top-right" />
       {isPending ? (
-        <SpinnerSecundario texto={"guardando..."} />
+        <SecondarySpinner text={'guardando...'} />
       ) : (
         <div className="left-section">
           <Contentguia>
             <span className="title">TICKET</span>
-            <span className="format-title">
-              puedes modificar detalles de tu ticket
-            </span>
-            {/* <Btn1 bgcolor={"#fad43c"} titulo={"Guardar"} /> */}
+            <span className="format-title">puedes modificar detalles de tu ticket</span>
+            {/* <Button bgColor={"#fad43c"} title={"Guardar"} /> */}
           </Contentguia>
 
           <ImageSelector fileUrl={fileUrl || dataempresa?.logo} />
           <form className="receipt-content" onSubmit={handleSubmit(mutate)}>
-            <Btn1 bgcolor={"#fad43c"} titulo={"Guardar"} />
+            <Button bgColor={'#fad43c'} title={'Guardar'} />
             <br></br>
 
             <div className="company-info">
@@ -53,8 +50,8 @@ export const ConfiguracionTicket = () => {
                 <input
                   type="text"
                   placeholder="Ingrese el nombre de la empresa"
-                  {...register("nombre", {
-                    required: "Campo requerido",
+                  {...register('nombre', {
+                    required: 'Campo requerido',
                   })}
                 />
                 {errors.nombre && <p>{errors.nombre.message}</p>}
@@ -69,8 +66,8 @@ export const ConfiguracionTicket = () => {
                 <input
                   type="text"
                   placeholder="Ingrese el RUC"
-                  {...register("id_fiscal", {
-                    required: "Campo requerido",
+                  {...register('id_fiscal', {
+                    required: 'Campo requerido',
                   })}
                 />
                 {errors.id_fiscal && <p>{errors.id_fiscal.message}</p>}
@@ -85,13 +82,11 @@ export const ConfiguracionTicket = () => {
                 <input
                   type="text"
                   placeholder="Ingrese la dirección fiscal"
-                  {...register("direccion_fiscal", {
-                    required: "Campo requerido",
+                  {...register('direccion_fiscal', {
+                    required: 'Campo requerido',
                   })}
                 />
-                {errors.direccion_fiscal && (
-                  <p>{errors.direccion_fiscal.message}</p>
-                )}
+                {errors.direccion_fiscal && <p>{errors.direccion_fiscal.message}</p>}
                 <div className="tech-label">
                   <span>Dirección</span>
                   <span className="tech-type">(input)</span>
@@ -222,8 +217,8 @@ export const ConfiguracionTicket = () => {
                 <input
                   type="text"
                   placeholder="Ingrese nombre moneda"
-                  {...register("nombre_moneda", {
-                    required: "Campo requerido",
+                  {...register('nombre_moneda', {
+                    required: 'Campo requerido',
                   })}
                 />
                 {errors.nombre_moneda && <p>{errors.nombre_moneda.message}</p>}
@@ -269,13 +264,11 @@ export const ConfiguracionTicket = () => {
                 <input
                   type="text"
                   placeholder="Ingrese un pie de pagina"
-                  {...register("pie_pagina_ticket", {
-                    required: "Campo requerido",
+                  {...register('pie_pagina_ticket', {
+                    required: 'Campo requerido',
                   })}
                 />
-                {errors.pie_pagina_ticket && (
-                  <p>{errors.pie_pagina_ticket.message}</p>
-                )}
+                {errors.pie_pagina_ticket && <p>{errors.pie_pagina_ticket.message}</p>}
                 <div className="tech-label">
                   <span>Agradecimiento</span>
                   <span className="tech-type">(input)</span>
@@ -303,8 +296,8 @@ export const ConfiguracionTicket = () => {
         </div>
       )}
     </Container>
-  );
-};
+  )
+}
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -340,8 +333,8 @@ const Container = styled.div`
   .left-section {
     width: 400px;
     margin: 10px;
-    margin-top:20px;
-    margin-bottom:20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     background-color: #ffffff;
     padding: 20px;
     display: flex;
@@ -351,7 +344,7 @@ const Container = styled.div`
     position: relative;
     &::before,
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       left: 0;
       right: 0;
@@ -794,7 +787,7 @@ const Container = styled.div`
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
-    font-family: "Courier New", monospace;
+    font-family: 'Courier New', monospace;
     font-size: 12px;
     opacity: 0;
     transition: all 0.3s ease;
@@ -898,7 +891,7 @@ const Container = styled.div`
       font-size: 16px !important;
     }
   }
-`;
+`
 const Contentguia = styled.div`
   display: flex;
   flex-direction: column;
@@ -917,4 +910,4 @@ const Contentguia = styled.div`
     color: #878787;
     margin-bottom: 10px;
   }
-`;
+`

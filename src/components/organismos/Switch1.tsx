@@ -1,5 +1,5 @@
-import styled from "styled-components";
-export function Switch1({state,setState}) {
+import styled from 'styled-components'
+export function Switch1({ state, setState }) {
   return (
     <Container>
       <label className="switch">
@@ -8,7 +8,7 @@ export function Switch1({state,setState}) {
         <span className="card-side"></span>
       </label>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   .switch {
@@ -52,7 +52,7 @@ const Container = styled.div`
   .slider:before {
     box-sizing: border-box;
     position: absolute;
-    content: "";
+    content: '';
     height: 20px;
     width: 20px;
     border: 2px solid var(--main-color);
@@ -71,4 +71,4 @@ const Container = styled.div`
   .toggle:checked + .slider:before {
     transform: translateX(30px);
   }
-`;
+`

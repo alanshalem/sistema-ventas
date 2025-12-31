@@ -1,70 +1,71 @@
-import styled from "styled-components";
-import { Device } from "../../../styles/breakpoints";
-import { Btn1 } from "../../moleculas/Btn1";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import styled from 'styled-components'
 
-import { useCierreCajaStore } from "../../../store/CierreCajaStore";
-import { useVentasStore } from "../../../store/VentasStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useCierreCajaStore } from '../../../store/CierreCajaStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { Device } from '../../../styles/breakpoints'
+import { Button } from '../../molecules/Button'
 export function FooterPos() {
-  const { eliminarVenta,idventa } = useVentasStore();
+  const { eliminarVenta, idventa } = useVentasStore()
   const { setStateIngresoSalida, setTipoRegistro, setStateCierraCaja } =
-  useCierreCajaStore();
+    useCierreCajaStore()
   const queryClient = useQueryClient()
-  const {mutate:mutateEliminarVenta,isPending} = useMutation({
-    mutationKey:["eliminar venta"],
-    mutationFn: ()=>{
-      if(idventa>0){
-       return eliminarVenta({id:idventa})
-      }else{
-        return Promise.reject(new Error("Sin registro de venta para eliminar"))
+  const { mutate: mutateEliminarVenta, isPending } = useMutation({
+    mutationKey: ['eliminar venta'],
+    mutationFn: () => {
+      if (idventa > 0) {
+        return eliminarVenta({ id: idventa })
+      } else {
+        return Promise.reject(new Error('Sin registro de venta para eliminar'))
       }
     },
-    onError:(error)=>{
+    onError: (error) => {
       toast.error(`Error: ${error.message}`)
     },
-    onSuccess:()=>{
-      toast.success("Venta eliminada")
-      queryClient.invalidateQueries(["mostrar detalle venta"])
-    }
+    onSuccess: () => {
+      toast.success('Venta eliminada')
+      queryClient.invalidateQueries(['mostrar detalle venta'])
+    },
   })
   return (
     <Footer>
       <article className="content">
-        <Btn1 disabled={isPending}
-          bgcolor="#f44141"
+        <Button
+          disabled={isPending}
+          bgColor="#f44141"
           color="#fff"
-          funcion={mutateEliminarVenta}
-          icono={<Icon icon="fluent-emoji-flat:skull" />}
-          titulo="Eliminar venta"
+          onClick={mutateEliminarVenta}
+          icon={<Icon icon="fluent-emoji-flat:skull" />}
+          title="Eliminar venta"
         />
-        <Btn1
-          bgcolor="#fff"
+        <Button
+          bgColor="#fff"
           color="#2d2d2d"
-          funcion={()=>setStateCierraCaja(true)}
-          icono={<Icon icon="emojione:card-file-box" />}
-          titulo="Cerrar caja"
+          onClick={() => setStateCierraCaja(true)}
+          icon={<Icon icon="emojione:card-file-box" />}
+          title="Cerrar caja"
         />
-        <Btn1
-          bgcolor="#fff"
+        <Button
+          bgColor="#fff"
           color="#2d2d2d"
-          funcion={()=>{
+          onClick={() => {
             setStateIngresoSalida(true)
-        setTipoRegistro("ingreso")
-          } }
-          icono={<Icon icon="fluent-emoji:dollar-banknote" />}
-          titulo="Ingresar dinero"
+            setTipoRegistro('ingreso')
+          }}
+          icon={<Icon icon="fluent-emoji:dollar-banknote" />}
+          title="Ingresar dinero"
         />
-        <Btn1
-           bgcolor="#fff"
+        <Button
+          bgColor="#fff"
           color="#2d2d2d"
-          funcion={()=>{
+          onClick={() => {
             setStateIngresoSalida(true)
-        setTipoRegistro("salida")
-          } }
-          icono={<Icon icon="noto-v1:money-bag" />}
-          titulo="Retirar dinero"
+            setTipoRegistro('salida')
+          }}
+          icon={<Icon icon="noto-v1:money-bag" />}
+          title="Retirar dinero"
         />
         {/* <Btn1
           bgcolor="#fff"
@@ -74,7 +75,7 @@ export function FooterPos() {
         /> */}
       </article>
     </Footer>
-  );
+  )
 }
 const Footer = styled.section`
   grid-area: footer;
@@ -89,4 +90,4 @@ const Footer = styled.section`
     align-items: center;
     gap: 8px;
   }
-`;
+`

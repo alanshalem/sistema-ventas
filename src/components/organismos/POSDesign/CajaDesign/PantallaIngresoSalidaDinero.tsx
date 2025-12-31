@@ -1,110 +1,107 @@
-import styled from "styled-components";
-import { useCierreCajaStore } from "../../../../store/CierreCajaStore";
-import { VolverBtn } from "../../../moleculas/VolverBtn";
-import { InputText2 } from "../../formularios/InputText2";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useEffect, useState } from "react";
-import { Btn1 } from "../../../moleculas/Btn1";
-import { useCajasStore } from "../../../../store/CajasStore";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { useMovCajaStore } from "../../../../store/MovCajaStore";
-import { useMetodosPagoStore } from "../../../../store/MetodosPagoStore";
-import { useUsuariosStore } from "../../../../store/UsuariosStore";
-import { useFormattedDate } from "../../../../hooks/useFormattedDate";
+import 'react-datepicker/dist/react-datepicker.css'
+
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import DatePicker from 'react-datepicker'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../../hooks/useFormattedDate'
+import { useCajasStore } from '../../../../store/CajasStore'
+import { useCierreCajaStore } from '../../../../store/CierreCajaStore'
+import { useMetodosPagoStore } from '../../../../store/MetodosPagoStore'
+import { useMovCajaStore } from '../../../../store/MovCajaStore'
+import { useUsuariosStore } from '../../../../store/UsuariosStore'
+import { BackButton } from '../../../molecules/BackButton'
+import { Button } from '../../../molecules/Button'
+import { InputText2 } from '../../formularios/InputText2'
 export function PantallaIngresoSalidaDinero() {
   const fechaActual = useFormattedDate()
-  const { tipoRegistro, setStateIngresoSalida } =
-    useCierreCajaStore();
-  const { insertarMovCaja } = useMovCajaStore();
-  const [startDate, setStartDate] = useState(new Date());
-  const [selectedMetodo, setSelectedMetodo] = useState(null);
-  const { dataCaja } = useCajasStore();
-  const { dataMetodosPago } = useMetodosPagoStore();
-  const {datausuarios} = useUsuariosStore()
-  const {dataCierreCaja} = useCierreCajaStore()
+  const { tipoRegistro, setStateIngresoSalida } = useCierreCajaStore()
+  const { insertarMovCaja } = useMovCajaStore()
+  const [startDate, setStartDate] = useState(new Date())
+  const [selectedMetodo, setSelectedMetodo] = useState(null)
+  const { dataCaja } = useCajasStore()
+  const { dataMetodosPago } = useMetodosPagoStore()
+  const { datausuarios } = useUsuariosStore()
+  const { dataCierreCaja } = useCierreCajaStore()
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm();
+  } = useForm()
 
   const insertar = async (data) => {
-   
     const pmovcaja = {
-      fecha_movimiento:fechaActual,
+      fecha_movimiento: fechaActual,
       tipo_movimiento: tipoRegistro,
       monto: parseFloat(data.monto),
       id_metodo_pago: selectedMetodo?.id,
-      descripcion: `${tipoRegistro==="ingreso"?"Ingreso":"Salida"} de dinero con ${selectedMetodo?.nombre} ${data.motivo?`- detalle: ${data.motivo}`:""}`,
+      descripcion: `${tipoRegistro === 'ingreso' ? 'Ingreso' : 'Salida'} de dinero con ${selectedMetodo?.nombre} ${data.motivo ? `- detalle: ${data.motivo}` : ''}`,
       id_usuario: datausuarios?.id,
       id_cierre_caja: dataCierreCaja?.id,
-    };
+    }
 
-    await insertarMovCaja(pmovcaja);
-  };
+    await insertarMovCaja(pmovcaja)
+  }
   const {
     isPending,
     mutate: doInsertar,
     error,
   } = useMutation({
-    mutationKey: ["insertar ingresos salidas caja"],
+    mutationKey: ['insertar ingresos salidas caja'],
     mutationFn: insertar,
     onSuccess: () => {
-      toast.success("🎉 Registrado!!!");
+      toast.success('🎉 Registrado!!!')
       setStateIngresoSalida(false)
-      reset();
+      reset()
     },
     onError: (error) => {
-      const errorMessage = error.response?.data?.message || error.message || "Error al registrar  !!!";
-    toast.error(`Error: ${errorMessage}`);
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Error al registrar  !!!'
+      toast.error(`Error: ${errorMessage}`)
     },
-  });
+  })
   const manejadorEnvio = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
   const handleMetodoClick = (item) => {
-    setSelectedMetodo(item);
-  };
+    setSelectedMetodo(item)
+  }
   useEffect(() => {
-    const efectivo = dataMetodosPago?.find(
-      (item) => item.nombre === "Efectivo"
-    );
+    const efectivo = dataMetodosPago?.find((item) => item.nombre === 'Efectivo')
     if (efectivo) {
       console.log(efectivo)
-      setSelectedMetodo(efectivo);
+      setSelectedMetodo(efectivo)
     }
-  }, [dataMetodosPago]);
+  }, [dataMetodosPago])
   return (
     <Container>
-      <VolverBtn funcion={()=>setStateIngresoSalida(false)} />
+      <BackButton onClick={() => setStateIngresoSalida(false)} />
 
       <span className="title">
-        {tipoRegistro === "ingreso"
-          ? "INGRESAR DINERO A CAJA"
-          : "RETIRAR DINERO DE CAJA"}
+        {tipoRegistro === 'ingreso' ? 'INGRESAR DINERO A CAJA' : 'RETIRAR DINERO DE CAJA'}
       </span>
-      
+
       <section className="areatipopago">
         {dataMetodosPago
-          ?.filter((item) => item.nombre !== "Mixto")
+          ?.filter((item) => item.nombre !== 'Mixto')
           .map((item, index) => {
             return (
               <article className="box" key={index}>
-                <Btn1
-                  imagen={item.icono != "-" ? item.icono : null}
-                  titulo={item.nombre}
+                <Button
+                  image={item.icono != '-' ? item.icono : null}
+                  title={item.nombre}
                   border="0"
                   height="70px"
                   width="100%"
-                  funcion={() => handleMetodoClick(item)}
-                  bgcolor={item.id === selectedMetodo?.id ? "#FFD700" : "#FFF"}
+                  onClick={() => handleMetodoClick(item)}
+                  bgColor={item.id === selectedMetodo?.id ? '#FFD700' : '#FFF'}
                 />
               </article>
-            );
+            )
           })}
       </section>
       <form onSubmit={handleSubmit(manejadorEnvio)}>
@@ -115,9 +112,9 @@ export function PantallaIngresoSalidaDinero() {
               className="form__field"
               placeholder="0.00"
               type="number"
-              {...register("monto", { required: true })}
+              {...register('monto', { required: true })}
             />
-            {errors.monto?.type === "required" && <p>Campon requerido</p>}
+            {errors.monto?.type === 'required' && <p>Campon requerido</p>}
           </InputText2>
 
           {/* <StyledDatePickerWrapper>
@@ -135,21 +132,16 @@ export function PantallaIngresoSalidaDinero() {
               rows="3"
               placeholder="motivo"
               type="text"
-              {...register("motivo")}
+              {...register('motivo')}
             />
           </InputText2>
           <article className="contentbtn">
-            <Btn1
-              titulo={"REGISTRAR"}
-              color="#ffffff"
-              border="2px"
-              bgcolor="#1da939"
-            />
+            <Button title={'REGISTRAR'} color="#ffffff" border="2px" bgColor="#1da939" />
           </article>
         </section>
       </form>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: 100vh;
@@ -187,12 +179,12 @@ const Container = styled.div`
       gap: 12px;
     }
   }
-`;
+`
 const StyledDatePickerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
+`
 const StyledDatePicker = styled(DatePicker)`
   width: 100%;
   padding: 10px;
@@ -210,4 +202,4 @@ const StyledDatePicker = styled(DatePicker)`
   &::placeholder {
     color: ${({ theme }) => theme.placeholder};
   }
-`;
+`

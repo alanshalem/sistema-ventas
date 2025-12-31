@@ -1,22 +1,31 @@
-import styled from "styled-components";
-export function SwitchHamburguesa({ state, setstate }) {
+import styled from 'styled-components'
+
+interface HamburgerSwitchProps {
+  isActive: boolean
+  onClick: () => void
+}
+
+export function HamburgerSwitch({ isActive, onClick }: Readonly<HamburgerSwitchProps>) {
   return (
-    <Container onClick={setstate}>
-      <label className={state ? "toggle active" : "toggle"} onClick={setstate}>
-        <div className="bars" id="bar1" onClick={setstate}></div>
-        <div className="bars" id="bar2" onClick={setstate}></div>
-        <div className="bars" id="bar3" onClick={setstate}></div>
+    <Container onClick={onClick}>
+      <label className={isActive ? 'toggle active' : 'toggle'} onClick={onClick}>
+        <div className="bars" id="bar1" onClick={onClick}></div>
+        <div className="bars" id="bar2" onClick={onClick}></div>
+        <div className="bars" id="bar3" onClick={onClick}></div>
       </label>
     </Container>
-  );
+  )
 }
+
 const Container = styled.div`
-position:fixed;
+  position: fixed;
   display: flex;
+  z-index: 101;
+
   articule {
     display: flex;
   }
-z-index:101;
+
   .toggle {
     position: relative;
     width: 40px;
@@ -29,21 +38,25 @@ z-index:101;
     gap: 10px;
     transition-duration: 0.3s;
     transform: scale(0.55);
+
     &.active {
       .bars {
         margin-left: 13px;
       }
+
       #bar2 {
         transform: rotate(135deg);
         margin-left: 0;
         transform-origin: center;
         transition-duration: 0.3s;
       }
+
       #bar1 {
         transform: rotate(45deg);
         transition-duration: 0.3s;
         transform-origin: left center;
       }
+
       #bar3 {
         transform: rotate(-45deg);
         transition-duration: 0.3s;
@@ -59,4 +72,4 @@ z-index:101;
     border-radius: 5px;
     transition-duration: 0.3s;
   }
-`;
+`

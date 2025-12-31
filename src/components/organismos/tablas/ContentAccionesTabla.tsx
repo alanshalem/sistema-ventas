@@ -1,7 +1,8 @@
-import styled from "styled-components";
-import { AccionTabla } from "../../../index";
-import { v } from "../../../styles/variables";
-import { Icon } from "@iconify/react";
+import { Icon } from '@iconify/react'
+import styled from 'styled-components'
+
+import { AccionTabla } from '../../../index'
+import { v } from '../../../styles/variables'
 export function ContentAccionesTabla({ funcionEditar, funcionEliminar }) {
   return (
     <Container>
@@ -22,7 +23,7 @@ export function ContentAccionesTabla({ funcionEditar, funcionEliminar }) {
         />
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   display: flex;
@@ -32,4 +33,4 @@ const Container = styled.div`
   @media (max-width: 48em) {
     justify-content: end;
   }
-`;
+`

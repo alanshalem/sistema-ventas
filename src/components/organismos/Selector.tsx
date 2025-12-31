@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown } from 'react-icons/io'
+import styled from 'styled-components'
 export function Selector({ color, state, funcion, texto1, texto2 }) {
   return (
     <Container color={color} onClick={funcion}>
@@ -7,9 +7,9 @@ export function Selector({ color, state, funcion, texto1, texto2 }) {
         <span>{texto1}</span>
         <span>{texto2}</span>
       </div>
-      <span className={state ? "open" : "close"}>{<IoIosArrowDown />}</span>
+      <span className={state ? 'open' : 'close'}>{<IoIosArrowDown />}</span>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   display: flex;
@@ -36,4 +36,4 @@ const Container = styled.div`
     background-color: ${(props) => props.color};
     color: #fff;
   }
-`;
+`

@@ -1,19 +1,20 @@
-import styled from "styled-components";
-import { Btn1 } from "../moleculas/Btn1";
-import { slideBackground } from "../../styles/keyframes";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useImpresorasStore } from "../../store/ImpresorasStore";
-import { BarLoader } from "react-spinners";
-import { Switch } from "../ui/toggles/Switch";
-import { SelectList } from "../ui/lists/SelectList";
-import { toast, Toaster } from "sonner";
-import { useAsignacionCajaSucursalStore } from "../../store/AsignacionCajaSucursalStore";
-import { useState } from "react";
-import ticket from "../../reports/TicketPrueba";
-import {HeaderImpresoras} from "../organismos/ImpresorasDesign/HeaderImpresoras"
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { BarLoader } from 'react-spinners'
+import { toast, Toaster } from 'sonner'
+import styled from 'styled-components'
+
+import ticket from '../../reports/TicketPrueba'
+import { useAsignacionCajaSucursalStore } from '../../store/AsignacionCajaSucursalStore'
+import { useImpresorasStore } from '../../store/ImpresorasStore'
+import { slideBackground } from '../../styles/keyframes'
+import { Button } from '../molecules/Button'
+import { HeaderImpresoras } from '../organismos/ImpresorasDesign/HeaderImpresoras'
+import { SelectList } from '../ui/lists/SelectList'
+import { Switch } from '../ui/toggles/Switch'
 export const ImpresorasTemplate = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null)
   const {
     mostrarDatosPc,
     statePrintDirecto,
@@ -23,9 +24,9 @@ export const ImpresorasTemplate = () => {
     setSelectImpresora,
     editarImpresoras,
     mostrarImpresoraXCaja,
-  } = useImpresorasStore();
-  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore();
-  const queryClient = useQueryClient();
+  } = useImpresorasStore()
+  const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
+  const queryClient = useQueryClient()
   //mostrar impresoras por caja
   const {
     data: dataImpresorasPorCaja,
@@ -33,7 +34,7 @@ export const ImpresorasTemplate = () => {
     error: errorImpresoras,
   } = useQuery({
     queryKey: [
-      "mostrar impresora por caja",
+      'mostrar impresora por caja',
       {
         id_caja: sucursalesItemSelectAsignadas?.id_caja,
       },
@@ -42,38 +43,38 @@ export const ImpresorasTemplate = () => {
       mostrarImpresoraXCaja({
         id_caja: sucursalesItemSelectAsignadas?.id_caja,
       }),
-  });
+  })
   //mostrar datos de Pc local
   const {
     data: dataPcLocal,
     isLoading: isLocadingDatosPc,
     error: errorDatosPc,
   } = useQuery({
-    queryKey: ["mostrar datos de PC"],
+    queryKey: ['mostrar datos de PC'],
     queryFn: mostrarDatosPc,
-  });
+  })
   //mostrar las impresoras locales
   const {
     data: dataImpresorasLocales,
     isLoading: isloadingImpresorasLocales,
     error: errorImpresorasLocales,
   } = useQuery({
-    queryKey: ["mostrar lista impresoras locales"],
+    queryKey: ['mostrar lista impresoras locales'],
     queryFn: mostrarListaImpresoraLocales,
     enabled: !!dataPcLocal,
-  });
+  })
   //editar impresoras
   const { mutate: doEditar, isPending } = useMutation({
-    mutationKey: ["editar impresoras"],
+    mutationKey: ['editar impresoras'],
     mutationFn: editar,
     onError: (error) => {
-      toast.error("Error al editar impresoras" + error.message);
+      toast.error('Error al editar impresoras' + error.message)
     },
     onSuccess: () => {
-      toast.success("Datos guardados");
-      queryClient.invalidateQueries(["mostrar impresora por caja"]);
+      toast.success('Datos guardados')
+      queryClient.invalidateQueries(['mostrar impresora por caja'])
     },
-  });
+  })
   async function editar() {
     const p = {
       id: dataImpresorasPorCaja?.id,
@@ -81,66 +82,66 @@ export const ImpresorasTemplate = () => {
       pc_name: dataPcLocal?.machineName,
       ip_local: dataPcLocal?.localIPs[0],
       name: selectImpresora?.name,
-    };
-    console.log("editar", p);
-    await editarImpresoras(p);
+    }
+    console.log('editar', p)
+    await editarImpresoras(p)
   }
   const probarTicket = async () => {
-    const response = await ticket("b64");
+    const response = await ticket('b64')
     // Convertir el contenido base64 en un archivo Blob
-    const binaryString = atob(response.content);
-    const binaryLen = binaryString.length;
-    const bytes = new Uint8Array(binaryLen);
+    const binaryString = atob(response.content)
+    const binaryLen = binaryString.length
+    const bytes = new Uint8Array(binaryLen)
     for (let i = 0; i < binaryLen; i++) {
-      bytes[i] = binaryString.charCodeAt(i);
+      bytes[i] = binaryString.charCodeAt(i)
     }
-    const blob = new Blob([bytes], { type: "application/pdf" });
+    const blob = new Blob([bytes], { type: 'application/pdf' })
     // Crear un archivo simulando un archivo subido
-    const file = new File([blob], "GeneratedTicket.pdf", {
-      type: "application/pdf",
-    });
+    const file = new File([blob], 'GeneratedTicket.pdf', {
+      type: 'application/pdf',
+    })
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("printerName", selectImpresora?.name);
-    const responseApi = await fetch("http://localhost:5075/api/print-ticket", {
-      method: "POST",
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('printerName', selectImpresora?.name)
+    const responseApi = await fetch('http://localhost:5075/api/print-ticket', {
+      method: 'POST',
       body: formData,
-    });
+    })
     if (responseApi.ok) {
-      toast.success("El PDF se envió a imprimir correctamente.");
+      toast.success('El PDF se envió a imprimir correctamente.')
     } else {
-      const error = await responseApi.text();
-      toast.error("Error al imprimir" + error);
+      const error = await responseApi.text()
+      toast.error('Error al imprimir' + error)
     }
-  };
+  }
   const descargarArchivo = (ruta) => {
-    const link = document.createElement("a");
-    link.href = ruta;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-  const isLoading = isLocadingDatosPc;
-  const error = errorDatosPc;
+    const link = document.createElement('a')
+    link.href = ruta
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+  const isLoading = isLocadingDatosPc
+  const error = errorDatosPc
   if (isLoading) {
-    return <BarLoader color="#b7b7b7" />;
+    return <BarLoader color="#b7b7b7" />
   }
   return (
     <Container>
       <Toaster />
       {dataPcLocal ? (
         <SubContainer>
-          <HeaderImpresoras/>
+          <HeaderImpresoras />
           <Title>IMPRESORAS</Title>
           <ContentSwich>
             <SubTitle>Imprimir directo</SubTitle>
             <Switch
               setState={() => {
-                setStatePrintDirecto();
-                doEditar();
+                setStatePrintDirecto()
+                doEditar()
               }}
               state={statePrintDirecto}
             />
@@ -149,23 +150,28 @@ export const ImpresorasTemplate = () => {
           <Avatar $bg="#d70e79">
             {statePrintDirecto ? (
               <>
-                <Btn1 funcion={probarTicket} bgcolor={"#d70e79"} color={"#fff"} titulo={"probar"} />
+                <Button
+                  onClick={probarTicket}
+                  bgColor={'#d70e79'}
+                  color={'#fff'}
+                  title={'probar'}
+                />
                 <SelectList
                   itemSelect={selectImpresora}
                   onSelect={setSelectImpresora}
                   data={dataImpresorasLocales}
                   displayField="name"
                 />
-                <Btn1
-                  funcion={doEditar}
+                <Button
+                  onClick={doEditar}
                   disabled={isPending}
-                  bgcolor={"#fff"}
-                  titulo={"Guardar"}
+                  bgColor={'#fff'}
+                  title={'Guardar'}
                 />
               </>
             ) : (
               <span className="anuncio">
-                {" "}
+                {' '}
                 se mostrara un cuadro de diálogo al momento de imprimir
               </span>
             )}
@@ -176,13 +182,13 @@ export const ImpresorasTemplate = () => {
           <Title>IMPRESORAS</Title>
           <SubTitle>Descargue e instale el servidor</SubTitle>
           <Avatar $bg="#1424a0">
-            <Btn1
-              funcion={() =>
+            <Button
+              onClick={() =>
                 descargarArchivo(
-                  "https://drive.google.com/file/d/1v5Q632tEWx8yTlfnC4HYT6SsGKnORduw/view?usp=sharing"
+                  'https://drive.google.com/file/d/1v5Q632tEWx8yTlfnC4HYT6SsGKnORduw/view?usp=sharing'
                 )
               }
-              titulo={"descargar"}
+              title={'descargar'}
             />
             <span className="nombre">ver tutorial</span>
           </Avatar>
@@ -197,13 +203,13 @@ export const ImpresorasTemplate = () => {
         </SubContainer>
       )}
     </Container>
-  );
-};
+  )
+}
 const ContentSwich = styled.section`
   display: flex;
   gap: 15px;
   margin-bottom: 10px;
-`;
+`
 const Container = styled.div`
   max-width: 400px;
   height: 100vh;
@@ -211,7 +217,7 @@ const Container = styled.div`
   align-items: center;
   margin: auto;
   position: relative;
-`;
+`
 const SubContainer = styled.div`
   width: 100%;
   display: flex;
@@ -231,7 +237,7 @@ const SubContainer = styled.div`
       font-size: 100px;
     }
   }
-`;
+`
 const Title = styled.span`
   font-size: 44px;
   margin-bottom: 20px;
@@ -241,10 +247,10 @@ const Title = styled.span`
   right: 0;
   left: 0;
   text-align: center;
-`;
+`
 const SubTitle = styled.span`
   font-size: 20px;
-`;
+`
 const Avatar = styled.div`
   display: flex;
   align-items: center;
@@ -271,4 +277,4 @@ const Avatar = styled.div`
 
   background-size: 60px 60px;
   animation: ${slideBackground} 10s linear infinite;
-`;
+`

@@ -1,18 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEmpresaStore } from "../store/EmpresaStore";
+import { useQuery } from '@tanstack/react-query'
 
-import { useDashboardStore } from "../store/DashboardStore";
-import { useReportesStore } from "../store/ReportesStore";
-import { useSucursalesStore } from "../store/SucursalesStore";
-import { useReportStore } from "../store/ReportStore";
-import { useAlmacenesStore } from "../store/AlmacenesStore";
+import { useAlmacenesStore } from '../store/AlmacenesStore'
+import { useDashboardStore } from '../store/DashboardStore'
+import { useEmpresaStore } from '../store/EmpresaStore'
+import { useReportesStore } from '../store/ReportesStore'
+import { useReportStore } from '../store/ReportStore'
+import { useSucursalesStore } from '../store/SucursalesStore'
 export const useMostrarVentasDashboardQuery = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { fechaInicio, fechaFin } = useDashboardStore();
-  const { mostrarVentasDashboard } = useReportesStore();
+  const { dataempresa } = useEmpresaStore()
+  const { fechaInicio, fechaFin } = useDashboardStore()
+  const { mostrarVentasDashboard } = useReportesStore()
   return useQuery({
     queryKey: [
-      "mostrar Ventas Dashboard",
+      'mostrar Ventas Dashboard',
       {
         _id_empresa: dataempresa?.id,
         _fecha_inicio: fechaInicio,
@@ -26,16 +26,16 @@ export const useMostrarVentasDashboardQuery = () => {
         _fecha_fin: fechaFin,
       }),
     enabled: !!dataempresa,
-  });
-};
+  })
+}
 export const useMostrarCantidadDetalleVentaDashboardQuery = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { fechaInicio, fechaFin } = useDashboardStore();
+  const { dataempresa } = useEmpresaStore()
+  const { fechaInicio, fechaFin } = useDashboardStore()
   const { mostrarVentasDashboard, mostrarCantidadDetalleVentasDashboard } =
-    useReportesStore();
+    useReportesStore()
   return useQuery({
     queryKey: [
-      "mostrar cantidad detalle Ventas Dashboard",
+      'mostrar cantidad detalle Ventas Dashboard',
       {
         _id_empresa: dataempresa?.id,
         _fecha_inicio: fechaInicio,
@@ -49,42 +49,41 @@ export const useMostrarCantidadDetalleVentaDashboardQuery = () => {
         _fecha_fin: fechaFin,
       }),
     enabled: !!dataempresa,
-  });
-};
-export const useMostrarCantidadDetalleVentaPeriodoAnteriorDashboardQuery =
-  () => {
-    const { dataempresa } = useEmpresaStore();
-    const { setFechasAnteriores } = useDashboardStore();
-    const { mostrarCantidadDetalleVentasDashboard } = useReportesStore();
-    const fechasAnteriores = setFechasAnteriores();
-    return useQuery({
-      queryKey: [
-        "mostrar cantidad detalle Ventas Dashboard",
-        {
-          _id_empresa: dataempresa?.id,
-          _fecha_inicio: fechasAnteriores?.fechaAnteriorInicio,
-          _fecha_fin: fechasAnteriores?.fechaAnteriorFin,
-        },
-      ],
-      queryFn: () =>
-        mostrarCantidadDetalleVentasDashboard({
-          _id_empresa: dataempresa?.id,
-          _fecha_inicio: fechasAnteriores?.fechaAnteriorInicio,
-          _fecha_fin: fechasAnteriores?.fechaAnteriorFin,
-        }),
-      enabled: !!dataempresa,
-    });
-  };
-export const useMostrarVentasDashboardPeriodoAnteriorQuery = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { fechaInicio, fechaFin, setFechasAnteriores } = useDashboardStore();
-
-  const { mostrarVentasDashboardPeriodoAnterior, mostrarVentasDashboard } =
-    useReportesStore();
-  const fechasAnteriores = setFechasAnteriores();
+  })
+}
+export const useMostrarCantidadDetalleVentaPeriodoAnteriorDashboardQuery = () => {
+  const { dataempresa } = useEmpresaStore()
+  const { setFechasAnteriores } = useDashboardStore()
+  const { mostrarCantidadDetalleVentasDashboard } = useReportesStore()
+  const fechasAnteriores = setFechasAnteriores()
   return useQuery({
     queryKey: [
-      "mostrar Ventas Dashboard periodo anterior",
+      'mostrar cantidad detalle Ventas Dashboard',
+      {
+        _id_empresa: dataempresa?.id,
+        _fecha_inicio: fechasAnteriores?.fechaAnteriorInicio,
+        _fecha_fin: fechasAnteriores?.fechaAnteriorFin,
+      },
+    ],
+    queryFn: () =>
+      mostrarCantidadDetalleVentasDashboard({
+        _id_empresa: dataempresa?.id,
+        _fecha_inicio: fechasAnteriores?.fechaAnteriorInicio,
+        _fecha_fin: fechasAnteriores?.fechaAnteriorFin,
+      }),
+    enabled: !!dataempresa,
+  })
+}
+export const useMostrarVentasDashboardPeriodoAnteriorQuery = () => {
+  const { dataempresa } = useEmpresaStore()
+  const { fechaInicio, fechaFin, setFechasAnteriores } = useDashboardStore()
+
+  const { mostrarVentasDashboardPeriodoAnterior, mostrarVentasDashboard } =
+    useReportesStore()
+  const fechasAnteriores = setFechasAnteriores()
+  return useQuery({
+    queryKey: [
+      'mostrar Ventas Dashboard periodo anterior',
       {
         _id_empresa: dataempresa?.id,
         _fecha_inicio: fechasAnteriores?.fechaAnteriorInicio,
@@ -99,17 +98,17 @@ export const useMostrarVentasDashboardPeriodoAnteriorQuery = () => {
       }),
     enabled: !!dataempresa,
     refetchOnWindowFocus: false,
-  });
-};
+  })
+}
 export const useGananciasDetalleVentaQuery = () => {
-  const { dataempresa } = useEmpresaStore();
-  const { fechaInicio, fechaFin } = useDashboardStore();
+  const { dataempresa } = useEmpresaStore()
+  const { fechaInicio, fechaFin } = useDashboardStore()
 
-  const { mostrarGananciasDetalleVenta } = useReportesStore();
+  const { mostrarGananciasDetalleVenta } = useReportesStore()
 
   return useQuery({
     queryKey: [
-      "mostrar ganancias detalle venta",
+      'mostrar ganancias detalle venta',
       {
         _id_empresa: dataempresa?.id,
         _fecha_inicio: fechaInicio,
@@ -124,16 +123,16 @@ export const useGananciasDetalleVentaQuery = () => {
       }),
     enabled: !!dataempresa,
     refetchOnWindowFocus: false,
-  });
-};
+  })
+}
 export const useReporteInventarioValoradoQuery = () => {
-  const { sucursalesItemSelect } = useSucursalesStore();
-  const { reportStockPorAlmacenSucursal } = useReportStore();
-  const { almacenSelectItem } = useAlmacenesStore();
+  const { sucursalesItemSelect } = useSucursalesStore()
+  const { reportStockPorAlmacenSucursal } = useReportStore()
+  const { almacenSelectItem } = useAlmacenesStore()
 
   return useQuery({
     queryKey: [
-      "reporte de inventario valorado",
+      'reporte de inventario valorado',
       {
         sucursal_id: sucursalesItemSelect?.id,
         almacen_id: almacenSelectItem?.id,
@@ -145,5 +144,5 @@ export const useReporteInventarioValoradoQuery = () => {
         almacen_id: almacenSelectItem?.id,
       }),
     refetchOnWindowFocus: false,
-  });
-};
+  })
+}

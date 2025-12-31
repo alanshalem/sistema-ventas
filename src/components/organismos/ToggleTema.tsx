@@ -1,50 +1,44 @@
-import styled from "styled-components";
-import { useThemeStore } from "../../store/ThemeStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUsuariosStore } from "../../store/UsuariosStore";
-import { Dark, Light } from "../../styles/themes";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import styled from 'styled-components'
+
+import { useThemeStore } from '../../store/ThemeStore'
+import { useUsuariosStore } from '../../store/UsuariosStore'
+import { Dark, Light } from '../../styles/themes'
 export function ToggleTema() {
-  const { editarThemeUser, datausuarios } = useUsuariosStore();
-  const { setTheme, theme } = useThemeStore();
-  const queryClient = useQueryClient();
+  const { editarThemeUser, datausuarios } = useUsuariosStore()
+  const { setTheme, theme } = useThemeStore()
+  const queryClient = useQueryClient()
   const editarTemaUser = async () => {
-    const themeUse = theme === "light" ? "dark" : "light";
-    const themeStyle = datausuarios?.tema === "light" ? Dark : Light;
+    const themeUse = theme === 'light' ? 'dark' : 'light'
+    const themeStyle = datausuarios?.tema === 'light' ? Dark : Light
     setTheme({
       tema: themeUse,
       style: themeStyle,
-    });
+    })
     const p = {
       id: datausuarios?.id,
       tema: themeUse,
-    };
+    }
 
-    await editarThemeUser(p);
-  };
-  const { mutate,isPending } = useMutation({
-    mutationKey: ["editar tema"],
+    await editarThemeUser(p)
+  }
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['editar tema'],
     mutationFn: editarTemaUser,
     onError: (error) => {
-      console.log(`Error: ${error.message}`);
+      console.log(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["mostrar usuarios"]);
+      queryClient.invalidateQueries(['mostrar usuarios'])
     },
-  });
+  })
 
   return (
     <Container>
       <div className="container">
-        {
-          isPending && <span>espera...</span>
-        }
+        {isPending && <span>espera...</span>}
         <label className="toggle">
-          <input
-            id="switch"
-            className="input"
-            type="checkbox"
-            onClick={mutate}
-          />
+          <input id="switch" className="input" type="checkbox" onClick={mutate} />
           <div className="icon icon--moon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,13 +106,7 @@ export function ToggleTema() {
                   fill="#666865"
                   stroke="#5E5E5D"
                 ></circle>
-                <circle
-                  cx="317"
-                  cy="216"
-                  r="8"
-                  fill="#666865"
-                  stroke="#5E5E5D"
-                ></circle>
+                <circle cx="317" cy="216" r="8" fill="#666865" stroke="#5E5E5D"></circle>
                 <path
                   fill="#666865"
                   stroke="#5E5E5D"
@@ -130,11 +118,7 @@ export function ToggleTema() {
           </div>
 
           <div className="w-8 icon icon--sun">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 47.5 47.5"
-              id="sun"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.5 47.5" id="sun">
               <defs>
                 <clipPath id="a">
                   <path d="M0 38h38V0H0v38Z"></path>
@@ -148,7 +132,7 @@ export function ToggleTema() {
         </label>
       </div>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   justify-content: center;
@@ -196,4 +180,4 @@ const Container = styled.div`
   .w-8 {
     width: 2rem /* 32px */;
   }
-`;
+`

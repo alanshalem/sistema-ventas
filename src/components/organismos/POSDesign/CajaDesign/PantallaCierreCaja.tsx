@@ -1,17 +1,19 @@
-import styled from "styled-components";
-import { VolverBtn } from "../../../moleculas/VolverBtn";
-import { Btn1 } from "../../../moleculas/Btn1";
-import { Device } from "../../../../styles/breakpoints";
-import { useCierreCajaStore } from "../../../../store/CierreCajaStore";
-import { useFormattedDate } from "../../../../hooks/useFormattedDate";
-import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
-import { useMovCajaStore } from "../../../../store/MovCajaStore";
-import { FormatearNumeroDinero } from "../../../../utils/Conversiones";
-import { useEmpresaStore } from "../../../../store/EmpresaStore";
-import { PantallaConteoCaja } from "./PantallaConteoCaja";
+import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../../hooks/useFormattedDate'
+import { useCierreCajaStore } from '../../../../store/CierreCajaStore'
+import { useEmpresaStore } from '../../../../store/EmpresaStore'
+import { useMovCajaStore } from '../../../../store/MovCajaStore'
+import { Device } from '../../../../styles/breakpoints'
+import { FormatearNumeroDinero } from '../../../../utils/Conversiones'
+import { BackButton } from '../../../molecules/BackButton'
+import { Button } from '../../../molecules/Button'
+import { PantallaConteoCaja } from './PantallaConteoCaja'
 export function PantallaCierreCaja() {
-  const { setStateCierraCaja, dataCierreCaja,stateConteoCaja,setStateConteoCaja } = useCierreCajaStore();
+  const { setStateCierraCaja, dataCierreCaja, stateConteoCaja, setStateConteoCaja } =
+    useCierreCajaStore()
   const {
     mostrarEfectivoSinVentasMovcierrecaja,
     mostrarVentasMetodoPagoMovCaja,
@@ -22,70 +24,70 @@ export function PantallaCierreCaja() {
     totalIngresosVariosCaja,
     totalEfectivoCajaSinVentas,
     totalEfectivoTotalCaja,
-  } = useMovCajaStore();
-  const { dataempresa } = useEmpresaStore();
-  const fechaactual = useFormattedDate();
+  } = useMovCajaStore()
+  const { dataempresa } = useEmpresaStore()
+  const fechaactual = useFormattedDate()
   const fechaInicioFormateada = format(
     new Date(dataCierreCaja?.fechainicio),
-    "dd/MM/yyyy HH:mm:ss"
-  );
+    'dd/MM/yyyy HH:mm:ss'
+  )
   const {
     isLoading: isloading1,
     isError: iserror1,
     error: error1,
   } = useQuery({
-    queryKey: ["mostrar efectivo sin ventas movCaja"],
+    queryKey: ['mostrar efectivo sin ventas movCaja'],
     queryFn: () =>
       mostrarEfectivoSinVentasMovcierrecaja({
         _id_cierre_caja: dataCierreCaja?.id,
       }),
-  });
+  })
   const {
     data: dataventasmetodopago,
     isLoading: isloading2,
     isError: iserror2,
     error: error2,
   } = useQuery({
-    queryKey: ["mostrar ventas metodoPago movCaja"],
+    queryKey: ['mostrar ventas metodoPago movCaja'],
     queryFn: () =>
       mostrarVentasMetodoPagoMovCaja({ _id_cierre_caja: dataCierreCaja?.id }),
-  });
-  const isLoading = isloading1 || isloading2;
-  const isError = iserror1 || iserror2;
-  const error = error1 || error2;
+  })
+  const isLoading = isloading1 || isloading2
+  const isError = iserror1 || iserror2
+  const error = error1 || error2
   if (isloading1) {
-    return <span>cargando datos...</span>;
+    return <span>cargando datos...</span>
   }
   if (isError) {
-    return <span>error...{error.message} </span>;
+    return <span>error...{error.message} </span>
   }
 
   return (
     <Container>
-      <VolverBtn funcion={()=>setStateCierraCaja(false)} />
+      <BackButton onClick={() => setStateCierraCaja(false)} />
 
       <Fechas>
         Corte de caja desde: {fechaInicioFormateada} Hasta: {fechaactual}
       </Fechas>
       <Datos>
         <section>
-          Ventas Totales:{" "}
+          Ventas Totales:{' '}
           <span>
             {FormatearNumeroDinero(
               totalVentasMetodoPago,
               dataempresa?.currency,
               dataempresa?.iso
-            )}{" "}
+            )}{' '}
           </span>
         </section>
         <section>
-          Efectivo en CAJA:{" "}
+          Efectivo en CAJA:{' '}
           <span>
             {FormatearNumeroDinero(
               totalEfectivoTotalCaja,
               dataempresa?.currency,
               dataempresa?.iso
-            )}{" "}
+            )}{' '}
           </span>
         </section>
       </Datos>
@@ -97,7 +99,7 @@ export function PantallaCierreCaja() {
             <h4>Dinero en CAJA</h4>
             <ul>
               <li>
-                Fondo de caja:{" "}
+                Fondo de caja:{' '}
                 <span>
                   {FormatearNumeroDinero(
                     totalAperturaCaja,
@@ -107,9 +109,9 @@ export function PantallaCierreCaja() {
                 </span>
               </li>
               <li>
-                Ventas en efectivo:{" "}
+                Ventas en efectivo:{' '}
                 <span>
-                  {" "}
+                  {' '}
                   {FormatearNumeroDinero(
                     totalVentasEfectivo,
                     dataempresa?.currency,
@@ -119,7 +121,7 @@ export function PantallaCierreCaja() {
               </li>
 
               <li>
-                Ingresos varios:{" "}
+                Ingresos varios:{' '}
                 <span>
                   {FormatearNumeroDinero(
                     totalIngresosVariosCaja,
@@ -129,8 +131,9 @@ export function PantallaCierreCaja() {
                 </span>
               </li>
               <li>
-                Gastos varios:{" "}
-                <span style={{ color: "#f15050", fontWeight: "bold" }}>-
+                Gastos varios:{' '}
+                <span style={{ color: '#f15050', fontWeight: 'bold' }}>
+                  -
                   {FormatearNumeroDinero(
                     totalGastosVariosCaja,
                     dataempresa?.currency,
@@ -155,16 +158,16 @@ export function PantallaCierreCaja() {
               {dataventasmetodopago?.map((item, index) => {
                 return (
                   <li key={index}>
-                    En {item?.metodo_pago}:{" "}
+                    En {item?.metodo_pago}:{' '}
                     <span>
                       {FormatearNumeroDinero(
                         item?.monto,
                         dataempresa?.currency,
                         dataempresa?.iso
-                      )}{" "}
+                      )}{' '}
                     </span>
                   </li>
-                );
+                )
               })}
               <li className="total">
                 <Divider />
@@ -179,18 +182,16 @@ export function PantallaCierreCaja() {
           <DivisionY />
         </Tablas>
       </Resumen>
-      <Btn1 funcion={()=>setStateConteoCaja(true)}
-        titulo={"CERRAR CAJA"}
+      <Button
+        onClick={() => setStateConteoCaja(true)}
+        title={'CERRAR CAJA'}
         color="#ffffff"
         border="2px"
-        bgcolor="#e88018"
+        bgColor="#e88018"
       />
-{
-  stateConteoCaja && <PantallaConteoCaja/>
-}
-      
+      {stateConteoCaja && <PantallaConteoCaja />}
     </Container>
-  );
+  )
 }
 
 const Divider = styled.div`
@@ -198,7 +199,7 @@ const Divider = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.color2};
   margin-right: 10px;
-`;
+`
 const DivisionY = styled.span`
   width: 1px;
   border-radius: 15px;
@@ -211,7 +212,7 @@ const DivisionY = styled.span`
   @media ${Device.tablet} {
     display: block;
   }
-`;
+`
 const Division = styled.span`
   background-color: ${({ theme }) => theme.color2};
   height: 1px;
@@ -221,24 +222,24 @@ const Division = styled.span`
   text-align: center;
   display: block;
   width: 95%;
-`;
+`
 // Styled Components
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: ${({ theme }) => theme.bgtotal || "#fff"};
+  background-color: ${({ theme }) => theme.bgtotal || '#fff'};
   gap: 20px;
   position: absolute;
   width: 100%;
   justify-content: center;
   z-index: 10;
-`;
+`
 
 const VolverWrapper = styled.div`
   align-self: flex-start;
-`;
+`
 
 const Fechas = styled.p`
   font-size: 14px;
@@ -246,7 +247,7 @@ const Fechas = styled.p`
   @media (max-width: 768px) {
     text-align: center;
   }
-`;
+`
 
 const Resumen = styled.div`
   display: flex;
@@ -259,14 +260,14 @@ const Resumen = styled.div`
     flex-direction: column;
     align-items: center;
   }
-`;
+`
 
 const Datos = styled.div`
   display: flex;
   gap: 8px;
   justify-content: space-around;
   width: 100%;
-`;
+`
 
 const Tablas = styled.div`
   display: flex;
@@ -275,7 +276,7 @@ const Tablas = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
-`;
+`
 
 const Tabla = styled.div`
   display: flex;
@@ -308,4 +309,4 @@ const Tabla = styled.div`
     display: flex;
     justify-content: flex-end;
   }
-`;
+`

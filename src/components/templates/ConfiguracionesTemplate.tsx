@@ -1,29 +1,30 @@
-import styled from "styled-components";
-import fondocuadros from "../../assets/fondocuadros.svg";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useModulosStore } from "../../index";
-import { usePermisosStore } from "../../store/PermisosStore";
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
+import fondocuadros from '../../assets/fondocuadros.svg'
+import { useModulosStore } from '../../index'
+import { usePermisosStore } from '../../store/PermisosStore'
 export function ConfiguracionesTemplate() {
-  const {dataPermisosConfiguracion} = usePermisosStore();
+  const { dataPermisosConfiguracion } = usePermisosStore()
   useEffect(() => {
     const handleMouseMove = (e) => {
-      document.querySelectorAll(".card").forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
-      });
-    };
-    const cardsContainer = document.getElementById("cards");
-    if (cardsContainer) {
-      cardsContainer.addEventListener("mousemove", handleMouseMove);
-      return () => {
-        cardsContainer.removeEventListener("mousemove", handleMouseMove);
-      };
+      document.querySelectorAll('.card').forEach((card) => {
+        const rect = card.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        card.style.setProperty('--mouse-x', `${x}px`)
+        card.style.setProperty('--mouse-y', `${y}px`)
+      })
     }
-  }, []);
+    const cardsContainer = document.getElementById('cards')
+    if (cardsContainer) {
+      cardsContainer.addEventListener('mousemove', handleMouseMove)
+      return () => {
+        cardsContainer.removeEventListener('mousemove', handleMouseMove)
+      }
+    }
+  }, [])
   return (
     <Container>
       <div id="cards">
@@ -31,7 +32,7 @@ export function ConfiguracionesTemplate() {
           return (
             <Link
               to={item.modulos.link}
-              className={item.modulos.state ? "card" : "card false"}
+              className={item.modulos.state ? 'card' : 'card false'}
               key={index}
             >
               <div className="card-content">
@@ -50,11 +51,11 @@ export function ConfiguracionesTemplate() {
                 </div>
               </div>
             </Link>
-          );
+          )
         })}
       </div>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   background-image: url(${fondocuadros});
@@ -64,12 +65,12 @@ const Container = styled.div`
   align-items: center;
   background-color: ${({ theme }) => theme.bgtotal};
   display: flex;
-  height:calc(100vh - 50px);
-   margin-top:50px;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
   justify-content: center;
   width: 100%;
   align-items: flex-start;
- 
+
   #cards {
     display: flex;
     flex-wrap: wrap;
@@ -108,7 +109,7 @@ const Container = styled.div`
   .card::before,
   .card::after {
     border-radius: inherit;
-    content: "";
+    content: '';
     height: 100%;
     left: 0px;
     opacity: 0;
@@ -154,7 +155,7 @@ const Container = styled.div`
   h4,
   span {
     color: ${({ theme }) => theme.colorsubtitlecard};
-    font-family: "Rubik", sans-serif;
+    font-family: 'Rubik', sans-serif;
     font-weight: 600;
     margin: 0px;
   }
@@ -272,4 +273,4 @@ const Container = styled.div`
       margin-top: 4px;
     }
   }
-`;
+`

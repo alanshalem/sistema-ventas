@@ -1,41 +1,38 @@
-import styled from "styled-components";
-import { VolverBtn } from "../../../moleculas/VolverBtn";
-import { InputText2 } from "../../formularios/InputText2";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { BarLoader } from 'react-spinners'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
 import {
-  Btn1,
+  Button,
   FormatearNumeroDinero,
   useAuthStore,
   useEmpresaStore,
   useUsuariosStore,
-} from "../../../..";
-import { useMovCajaStore } from "../../../../store/MovCajaStore";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useCierreCajaStore } from "../../../../store/CierreCajaStore";
-import { useFormattedDate } from "../../../../hooks/useFormattedDate";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { BarLoader } from "react-spinners";
+} from '../../../..'
+import { useFormattedDate } from '../../../../hooks/useFormattedDate'
+import { useCierreCajaStore } from '../../../../store/CierreCajaStore'
+import { useMovCajaStore } from '../../../../store/MovCajaStore'
+import { BackButton } from '../../../molecules/BackButton'
+import { InputText2 } from '../../formularios/InputText2'
 export function PantallaConteoCaja() {
-  const { cerrarSesion } = useAuthStore();
-  const [montoEfectivo, setMontoEfectivo] = useState(0);
-  const { totalEfectivoTotalCaja } = useMovCajaStore();
-  const { datausuarios } = useUsuariosStore();
-  const fechaactual = useFormattedDate();
-  const { dataempresa } = useEmpresaStore();
-  const {
-    cerrarTurnoCaja,
-    dataCierreCaja,
-    setStateConteoCaja,
-    setStateCierraCaja,
-  } = useCierreCajaStore();
-  const queryClient = useQueryClient();
+  const { cerrarSesion } = useAuthStore()
+  const [montoEfectivo, setMontoEfectivo] = useState(0)
+  const { totalEfectivoTotalCaja } = useMovCajaStore()
+  const { datausuarios } = useUsuariosStore()
+  const fechaactual = useFormattedDate()
+  const { dataempresa } = useEmpresaStore()
+  const { cerrarTurnoCaja, dataCierreCaja, setStateConteoCaja, setStateCierraCaja } =
+    useCierreCajaStore()
+  const queryClient = useQueryClient()
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm();
+  } = useForm()
 
   const insertar = async (data) => {
     const p = {
@@ -46,48 +43,48 @@ export function PantallaConteoCaja() {
       total_efectivo_real: parseFloat(data.montoreal),
       estado: 1,
       diferencia_efectivo: diferencia,
-    };
-    console.log(p);
-    await cerrarTurnoCaja(p);
-  };
+    }
+    console.log(p)
+    await cerrarTurnoCaja(p)
+  }
   const { isPending, mutate: doInsertar } = useMutation({
-    mutationKey: ["cerrar turno caja"],
+    mutationKey: ['cerrar turno caja'],
     mutationFn: insertar,
     onSuccess: () => {
-      toast.success("🎉 Caja cerrada correctamente!!!");
-      setStateConteoCaja(false);
-      setStateCierraCaja(false);
-      reset();
-      queryClient.invalidateQueries(["mostrar cierre de caja"]);
-      cerrarSesion();
+      toast.success('🎉 Caja cerrada correctamente!!!')
+      setStateConteoCaja(false)
+      setStateCierraCaja(false)
+      reset()
+      queryClient.invalidateQueries(['mostrar cierre de caja'])
+      cerrarSesion()
     },
     onError: (error) => {
-      toast.error(`Error al cerrar caja: ${error.message}`);
+      toast.error(`Error al cerrar caja: ${error.message}`)
     },
-  });
+  })
   const handleSub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
 
   // Calcula la diferencia entre el total esperado en caja y el monto ingresado
-  const diferencia = montoEfectivo - totalEfectivoTotalCaja;
+  const diferencia = montoEfectivo - totalEfectivoTotalCaja
   // Define el mensaje y el color del anuncio basado en la diferencia
   const anuncioMensaje =
     diferencia === 0
-      ? "Genial, todo está perfecto"
-      : "La diferencia será registrada en su turno y se enviará a gerencia";
-  const anuncioColor = diferencia === 0 ? "#09bc42" : "#ff3f56";
+      ? 'Genial, todo está perfecto'
+      : 'La diferencia será registrada en su turno y se enviará a gerencia'
+  const anuncioColor = diferencia === 0 ? '#09bc42' : '#ff3f56'
 
   return (
     <Container>
-      <VolverBtn funcion={() => setStateConteoCaja(false)} />
+      <BackButton onClick={() => setStateConteoCaja(false)} />
       <span className="title">Efectivo esperado en caja:</span>
       <span className="title">
         {FormatearNumeroDinero(
           totalEfectivoTotalCaja,
           dataempresa?.currency,
           dataempresa?.iso
-        )}{" "}
+        )}{' '}
       </span>
       {isPending ? (
         <BarLoader color="#2af169" />
@@ -99,42 +96,35 @@ export function PantallaConteoCaja() {
               <input
                 type="number"
                 placeholder="0.00"
-                 step="0.01"
+                step="0.01"
                 className="form__field"
-                {...register("montoreal", {
+                {...register('montoreal', {
                   required: true,
-                  onChange: (e) =>
-                    setMontoEfectivo(parseFloat(e.target.value) || 0),
+                  onChange: (e) => setMontoEfectivo(parseFloat(e.target.value) || 0),
                 })}
               />
-              {errors.montoreal?.type === "required" && <p>Campo requerido</p>}
+              {errors.montoreal?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Divider />
-            <span style={{ textAlign: "center" }}>
-              diferencia:{" "}
-              {FormatearNumeroDinero(
-                diferencia,
-                dataempresa?.currency,
-                dataempresa?.iso
-              )}
+            <span style={{ textAlign: 'center' }}>
+              diferencia:{' '}
+              {FormatearNumeroDinero(diferencia, dataempresa?.currency, dataempresa?.iso)}
             </span>
             <article className="contentbtn">
-              <Btn1
-                titulo="CERRAR TURNO"
+              <Button
+                title="CERRAR TURNO"
                 color="#ffffff"
                 border="2px"
-                bgcolor="#1da939"
+                bgColor="#1da939"
               />
             </article>
           </section>
         </form>
       )}
 
-      <span style={{ color: anuncioColor, textAlign: "center" }}>
-        {anuncioMensaje}{" "}
-      </span>
+      <span style={{ color: anuncioColor, textAlign: 'center' }}>{anuncioMensaje} </span>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   position: absolute;
@@ -168,10 +158,10 @@ const Container = styled.div`
       justify-content: center;
     }
   }
-`;
+`
 const Divider = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.color2};
   margin-right: 10px;
-`;
+`

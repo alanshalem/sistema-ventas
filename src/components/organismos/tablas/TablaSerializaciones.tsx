@@ -1,11 +1,3 @@
-import styled from "styled-components";
-import {
-  ContentAccionesTabla,
-  Paginacion,
-} from "../../../index";
-
-import { v } from "../../../styles/variables";
-import { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -13,97 +5,103 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { FaArrowsAltV } from "react-icons/fa";
-import { useGlobalStore } from "../../../store/GlobalStore";
-import { Check } from "../../ui/toggles/Check";
-import { useEditarSerializacionDefaultMutation } from "../../../tanstack/SerializacionStack";
+} from '@tanstack/react-table'
+import { useState } from 'react'
+import { FaArrowsAltV } from 'react-icons/fa'
+import styled from 'styled-components'
+
+import { ContentAccionesTabla, Paginacion } from '../../../index'
+import { useGlobalStore } from '../../../store/GlobalStore'
+import { v } from '../../../styles/variables'
+import { useEditarSerializacionDefaultMutation } from '../../../tanstack/SerializacionStack'
+import { Check } from '../../ui/toggles/Check'
 export function TablaSerializaciones({ data }) {
-  if (data == null) return;
-  const [pagina, setPagina] = useState(1);
-  const [datas, setData] = useState(data);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const { setStateClose, setItemSelect, setAccion } = useGlobalStore();
-  const {mutate:mutateEditarPorDefault} = useEditarSerializacionDefaultMutation()
+  if (data == null) return
+  const [pagina, setPagina] = useState(1)
+  const [datas, setData] = useState(data)
+  const [columnFilters, setColumnFilters] = useState([])
+  const { setStateClose, setItemSelect, setAccion } = useGlobalStore()
+  const { mutate: mutateEditarPorDefault } = useEditarSerializacionDefaultMutation()
 
   function editarPorDefault(data) {
-    setItemSelect(data); 
+    setItemSelect(data)
     mutateEditarPorDefault()
   }
 
   function editar(data) {
-    setStateClose(true);
-    setItemSelect(data);
-    setAccion("Editar");
+    setStateClose(true)
+    setItemSelect(data)
+    setAccion('Editar')
   }
   const columns = [
     {
-      accessorKey: "tipo_comprobantes.nombre",
-      header: "Comprobante",
+      accessorKey: 'tipo_comprobantes.nombre',
+      header: 'Comprobante',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "serie",
-      header: "Serie",
+      accessorKey: 'serie',
+      header: 'Serie',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "correlativo",
-      header: "Correlativo",
+      accessorKey: 'correlativo',
+      header: 'Correlativo',
       cell: (info) => <span>{info.getValue()}</span>,
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
     {
-      accessorKey: "por_default",
-      header: "Por default",
+      accessorKey: 'por_default',
+      header: 'Por default',
       cell: (info) => (
-        <div  className="ContentCell">
-          <Check onChange={() => editarPorDefault(info.row.original)} checked={info.getValue()} />
-        </div>
-      ),
-      enableColumnFilter: true,
-      filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
-      },
-    },
-    {
-      accessorKey: "acciones",
-      header: "",
-      enableSorting: false,
-      cell: (info) => (
-        <div data-title="Acciones" className="ContentCell">
-          <ContentAccionesTabla
-            funcionEditar={() => editar(info.row.original)}
+        <div className="ContentCell">
+          <Check
+            onChange={() => editarPorDefault(info.row.original)}
+            checked={info.getValue()}
           />
         </div>
       ),
       enableColumnFilter: true,
       filterFn: (row, columnId, filterStatuses) => {
-        if (filterStatuses.length === 0) return true;
-        const status = row.getValue(columnId);
-        return filterStatuses.includes(status?.id);
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
       },
     },
-  ];
+    {
+      accessorKey: 'acciones',
+      header: '',
+      enableSorting: false,
+      cell: (info) => (
+        <div data-title="Acciones" className="ContentCell">
+          <ContentAccionesTabla funcionEditar={() => editar(info.row.original)} />
+        </div>
+      ),
+      enableColumnFilter: true,
+      filterFn: (row, columnId, filterStatuses) => {
+        if (filterStatuses.length === 0) return true
+        const status = row.getValue(columnId)
+        return filterStatuses.includes(status?.id)
+      },
+    },
+  ]
   const table = useReactTable({
     data,
     columns,
@@ -114,7 +112,7 @@ export function TablaSerializaciones({ data }) {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
     meta: {
       updateData: (rowIndex, columnId, value) =>
         setData((prev) =>
@@ -128,7 +126,7 @@ export function TablaSerializaciones({ data }) {
           )
         ),
     },
-  });
+  })
   return (
     <>
       <Container>
@@ -141,7 +139,7 @@ export function TablaSerializaciones({ data }) {
                     {header.column.columnDef.header}
                     {header.column.getCanSort() && (
                       <span
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         <FaArrowsAltV />
@@ -149,15 +147,15 @@ export function TablaSerializaciones({ data }) {
                     )}
                     {
                       {
-                        asc: " 🔼",
-                        desc: " 🔽",
+                        asc: ' 🔼',
+                        desc: ' 🔽',
                       }[header.column.getIsSorted()]
                     }
                     <div
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className={`resizer ${
-                        header.column.getIsResizing() ? "isResizing" : ""
+                        header.column.getIsResizing() ? 'isResizing' : ''
                       }`}
                     />
                   </th>
@@ -186,7 +184,7 @@ export function TablaSerializaciones({ data }) {
         />
       </Container>
     </>
-  );
+  )
 }
 const Container = styled.div`
   position: relative;
@@ -204,11 +202,11 @@ const Container = styled.div`
     margin-bottom: 1.5em;
     border-spacing: 0;
     font-size: 0.9em;
-.ContentCell{
-  display:flex;
-  margin:auto;
-  justify-content:center;
-}
+    .ContentCell {
+      display: flex;
+      margin: auto;
+      justify-content: center;
+    }
     @media (max-width: 768px) {
       font-size: 0.8em;
       transform: scale(0.9);
@@ -251,7 +249,7 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 const Colorcontent = styled.div`
   justify-content: center;
   min-height: ${(props) => props.$alto};
@@ -260,4 +258,4 @@ const Colorcontent = styled.div`
   background-color: ${(props) => props.color};
   border-radius: 50%;
   text-align: center;
-`;
+`

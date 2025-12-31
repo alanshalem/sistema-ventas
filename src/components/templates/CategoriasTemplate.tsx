@@ -1,31 +1,28 @@
-import styled from "styled-components";
-import {
-  Btn1,
-  Buscador,
-  RegistrarCategorias,
-  useCategoriasStore,
-} from "../../index";
-import { PageTitle } from "../atoms/PageTitle";
-import { v } from "../../styles/variables";
-import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
-import { useState } from "react";
-import ConfettiExplosion from "react-confetti-explosion";
+import { useState } from 'react'
+import ConfettiExplosion from 'react-confetti-explosion'
+import styled from 'styled-components'
+
+import { Btn1, Buscador, RegistrarCategorias, useCategoriasStore } from '../../index'
+import { v } from '../../styles/variables'
+import { PageTitle } from '../atoms/PageTitle'
+import { TablaCategorias } from '../organismos/tablas/TablaCategorias'
 export function CategoriasTemplate() {
-  const [openRegistro, SetopenRegistro] = useState(false);
-  const { datacategorias,setBuscador } = useCategoriasStore();
-  const [accion, setAccion] = useState("");
-  const [dataSelect, setdataSelect] = useState([]);
-  const [isExploding, setIsExploding] = useState(false);
+  const [openRegistro, SetopenRegistro] = useState(false)
+  const { datacategorias, setBuscador } = useCategoriasStore()
+  const [accion, setAccion] = useState('')
+  const [dataSelect, setdataSelect] = useState([])
+  const [isExploding, setIsExploding] = useState(false)
   function nuevoRegistro() {
-    SetopenRegistro(!openRegistro);
-    setAccion("Nuevo");
-    setdataSelect([]);
+    SetopenRegistro(!openRegistro)
+    setAccion('Nuevo')
+    setdataSelect([])
     setIsExploding(false)
   }
   return (
     <Container>
       {openRegistro && (
-        <RegistrarCategorias setIsExploding={setIsExploding}
+        <RegistrarCategorias
+          setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
           accion={accion}
@@ -41,26 +38,31 @@ export function CategoriasTemplate() {
         />
       </section>
       <section className="area2">
-        <Buscador setBuscador={setBuscador}/>
+        <Buscador setBuscador={setBuscador} />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaCategorias setdataSelect={setdataSelect} setAccion={setAccion} SetopenRegistro={SetopenRegistro} data={datacategorias} />
+        <TablaCategorias
+          setdataSelect={setdataSelect}
+          setAccion={setAccion}
+          SetopenRegistro={SetopenRegistro}
+          data={datacategorias}
+        />
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: calc(100vh - 80px);
-  
-   margin-top:50px;
+
+  margin-top: 50px;
   padding: 15px;
   display: grid;
   grid-template:
-    "area1" 60px
-    "area2" 60px
-    "main" auto;
+    'area1' 60px
+    'area2' 60px
+    'main' auto;
   .area1 {
     grid-area: area1;
     /* background-color: rgba(103, 93, 241, 0.14); */
@@ -80,4 +82,4 @@ const Container = styled.div`
     grid-area: main;
     /* background-color: rgba(237, 7, 221, 0.14); */
   }
-`;
+`

@@ -1,92 +1,83 @@
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
-import {
-  InputText,
-  Btn1,
-  useCategoriasStore,
-  ConvertirCapitalize,
-} from "../../../index";
-import { Icon } from "../../atoms/Icon";
-import { useForm } from "react-hook-form";
-import { CirclePicker } from "react-color";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
+import { CirclePicker } from 'react-color'
+import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
 
-export function RegistrarCategorias({
-  onClose,
-  dataSelect,
-  accion,
-  setIsExploding,
-}) {
-  const { insertarCategorias, editarCategoria } = useCategoriasStore();
-  const { dataempresa } = useEmpresaStore();
-  const [currentColor, setColor] = useState("#F44336");
-  const [file, setFile] = useState([]);
-  const ref = useRef(null);
-  const [fileurl, setFileurl] = useState();
+import { Btn1, ConvertirCapitalize,InputText, useCategoriasStore } from '../../../index'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { v } from '../../../styles/variables'
+import { Icon } from '../../atoms/Icon'
+
+export function RegistrarCategorias({ onClose, dataSelect, accion, setIsExploding }) {
+  const { insertarCategorias, editarCategoria } = useCategoriasStore()
+  const { dataempresa } = useEmpresaStore()
+  const [currentColor, setColor] = useState('#F44336')
+  const [file, setFile] = useState([])
+  const ref = useRef(null)
+  const [fileurl, setFileurl] = useState()
   function elegirColor(color) {
-    setColor(color.hex);
+    setColor(color.hex)
   }
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm()
   const { isPending, mutate: doInsertar } = useMutation({
     mutationFn: insertar,
-    mutationKey: "insertar categorias",
-    onError: (err) => console.log("El error", err.message),
+    mutationKey: 'insertar categorias',
+    onError: (err) => console.log('El error', err.message),
     onSuccess: () => cerrarFormulario(),
-  });
+  })
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
   const cerrarFormulario = () => {
-    onClose();
-    setIsExploding(true);
-  };
+    onClose()
+    setIsExploding(true)
+  }
   async function insertar(data) {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       const p = {
         _nombre: ConvertirCapitalize(data.descripcion),
         _id_empresa: dataempresa.id,
         _color: currentColor,
         _id: dataSelect.id,
-      };
-      await editarCategoria(p, dataSelect.icono, file);
+      }
+      await editarCategoria(p, dataSelect.icono, file)
     } else {
       const p = {
         _nombre: ConvertirCapitalize(data.descripcion),
         _color: currentColor,
-        _icono: "-",
+        _icono: '-',
         _id_empresa: dataempresa.id,
-      };
+      }
 
-      await insertarCategorias(p, file);
+      await insertarCategorias(p, file)
     }
   }
   function abrirImagenes() {
-    ref.current.click();
+    ref.current.click()
   }
   function prepararImagen(e) {
-    let filelocal = e.target.files;
-    let fileReaderlocal = new FileReader();
-    fileReaderlocal.readAsDataURL(filelocal[0]);
-    const tipoimg = e.target.files[0];
-    setFile(tipoimg);
+    const filelocal = e.target.files
+    const fileReaderlocal = new FileReader()
+    fileReaderlocal.readAsDataURL(filelocal[0])
+    const tipoimg = e.target.files[0]
+    setFile(tipoimg)
     if (fileReaderlocal && filelocal && filelocal.length) {
       fileReaderlocal.onload = function load() {
-        setFileurl(fileReaderlocal.result);
-      };
+        setFileurl(fileReaderlocal.result)
+      }
     }
   }
   useEffect(() => {
-    if (accion === "Editar") {
-      setColor(dataSelect.color);
-      setFileurl(dataSelect.icono);
+    if (accion === 'Editar') {
+      setColor(dataSelect.color)
+      setFileurl(dataSelect.icono)
     }
-  }, []);
+  }, [])
   return (
     <Container>
       {isPending ? (
@@ -96,9 +87,7 @@ export function RegistrarCategorias({
           <div className="headers">
             <section>
               <h1>
-                {accion == "Editar"
-                  ? "Editar categoria"
-                  : "Registrar nueva categoria"}
+                {accion == 'Editar' ? 'Editar categoria' : 'Registrar nueva categoria'}
               </h1>
             </section>
 
@@ -107,7 +96,7 @@ export function RegistrarCategorias({
             </section>
           </div>
           <PictureContainer>
-            {fileurl != "-" ? (
+            {fileurl != '-' ? (
               <div className="ContentImage">
                 <img src={fileurl}></img>
               </div>
@@ -122,11 +111,7 @@ export function RegistrarCategorias({
               bgcolor="rgb(183, 183, 182)"
               icono={<v.iconosupabase />}
             />
-            <input
-              type="file"
-              ref={ref}
-              onChange={(e) => prepararImagen(e)}
-            ></input>
+            <input type="file" ref={ref} onChange={(e) => prepararImagen(e)}></input>
           </PictureContainer>
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
@@ -137,14 +122,12 @@ export function RegistrarCategorias({
                     defaultValue={dataSelect.nombre}
                     type="text"
                     placeholder="categoria"
-                    {...register("descripcion", {
+                    {...register('descripcion', {
                       required: true,
                     })}
                   />
                   <label className="form__label">categoria</label>
-                  {errors.descripcion?.type === "required" && (
-                    <p>Campo requerido</p>
-                  )}
+                  {errors.descripcion?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
 
@@ -158,17 +141,13 @@ export function RegistrarCategorias({
                 </div>
               </article>
 
-              <Btn1
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
+              <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
             </section>
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -222,7 +201,7 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
 
 const ContentTitle = styled.div`
   display: flex;
@@ -241,7 +220,7 @@ const ContentTitle = styled.div`
     width: 40px;
     font-size: 28px;
   }
-`;
+`
 const PictureContainer = styled.div`
   display: flex;
   align-items: center;
@@ -264,4 +243,4 @@ const PictureContainer = styled.div`
   input {
     display: none;
   }
-`;
+`

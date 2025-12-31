@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 export const Switch = ({ state, setState }) => {
   return (
@@ -7,8 +7,8 @@ export const Switch = ({ state, setState }) => {
       <ToggleInput type="checkbox" checked={state} onClick={setState} />
       <Slider />
     </SwitchLabel>
-  );
-};
+  )
+}
 
 const SwitchLabel = styled.label`
   --input-focus: #2d8cf0;
@@ -25,13 +25,13 @@ const SwitchLabel = styled.label`
   gap: 30px;
   width: 50px;
   height: 20px;
-`;
+`
 
 const ToggleInput = styled.input`
   opacity: 0;
   width: 0;
   height: 0;
-`;
+`
 
 const Slider = styled.span`
   box-sizing: border-box;
@@ -50,7 +50,7 @@ const Slider = styled.span`
   &:before {
     box-sizing: border-box;
     position: absolute;
-    content: "";
+    content: '';
     height: 20px;
     width: 20px;
     border: 2px solid var(--main-color);
@@ -69,4 +69,4 @@ const Slider = styled.span`
   ${ToggleInput}:checked + &:before {
     transform: translateX(30px);
   }
-`;
+`

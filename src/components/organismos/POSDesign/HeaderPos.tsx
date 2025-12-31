@@ -1,66 +1,64 @@
-import styled from "styled-components";
+import { Icon } from '@iconify/react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../hooks/useFormattedDate'
 import {
   Btn1,
   InputText2,
   ListaDesplegable,
   Reloj,
-  useProductosStore,
-  useVentasStore,
-  useUsuariosStore,
-  useEmpresaStore,
   useAlmacenesStore,
   useDetalleVentasStore,
-} from "../../../index";
-import { v } from "../../../styles/variables";
-import { Device } from "../../../styles/breakpoints";
-import { Icon } from "@iconify/react";
-import { useEffect, useRef, useState } from "react";
-
-import { useFormattedDate } from "../../../hooks/useFormattedDate";
-import { useCierreCajaStore } from "../../../store/CierreCajaStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { SelectList } from "../../ui/lists/SelectList";
-import { useStockStore } from "../../../store/StockStore";
-import { useEliminarVentasIncompletasMutate } from "../../../tanstack/VentasStack";
-
+  useEmpresaStore,
+  useProductosStore,
+  useUsuariosStore,
+  useVentasStore,
+} from '../../../index'
+import { useCierreCajaStore } from '../../../store/CierreCajaStore'
+import { useStockStore } from '../../../store/StockStore'
+import { Device } from '../../../styles/breakpoints'
+import { v } from '../../../styles/variables'
+import { useEliminarVentasIncompletasMutate } from '../../../tanstack/VentasStack'
+import { SelectList } from '../../ui/lists/SelectList'
 
 export function HeaderPos() {
-  const [stateLectora, setStateLectora] = useState(true);
-  const [cantidadInput, setCantidadInput] = useState(1);
-  const [stateTeclado, setStateTeclado] = useState(false);
-  const [stateListaproductos, setStateListaproductos] = useState(false);
-  const { setBuscador, dataProductos, selectProductos, buscador } =
-    useProductosStore();
-  
-  const { datausuarios } = useUsuariosStore();
-  const { dataStockXAlmacenesYProducto, setStateModal } = useStockStore();
+  const [stateLectora, setStateLectora] = useState(true)
+  const [cantidadInput, setCantidadInput] = useState(1)
+  const [stateTeclado, setStateTeclado] = useState(false)
+  const [stateListaproductos, setStateListaproductos] = useState(false)
+  const { setBuscador, dataProductos, selectProductos, buscador } = useProductosStore()
 
-  const { idventa, insertarVentas } = useVentasStore();
+  const { datausuarios } = useUsuariosStore()
+  const { dataStockXAlmacenesYProducto, setStateModal } = useStockStore()
 
-  const { dataempresa } = useEmpresaStore();
-  const { dataCierreCaja } = useCierreCajaStore();
+  const { idventa, insertarVentas } = useVentasStore()
+
+  const { dataempresa } = useEmpresaStore()
+  const { dataCierreCaja } = useCierreCajaStore()
   const { almacenSelectItem, dataAlmacenesXsucursal, setAlmacenSelectItem } =
-    useAlmacenesStore();
-  const { insertarDetalleVentas } = useDetalleVentasStore();
-  const queryClient = useQueryClient();
+    useAlmacenesStore()
+  const { insertarDetalleVentas } = useDetalleVentasStore()
+  const queryClient = useQueryClient()
 
-  const buscadorRef = useRef(null);
-  const fechaactual = useFormattedDate();
+  const buscadorRef = useRef(null)
+  const fechaactual = useFormattedDate()
 
   function focusclick() {
-    buscadorRef.current.focus();
-    buscadorRef.current.value.trim() === ""
+    buscadorRef.current.focus()
+    buscadorRef.current.value.trim() === ''
       ? setStateListaproductos(false)
-      : setStateListaproductos(true);
+      : setStateListaproductos(true)
   }
   function buscar(e) {
-    setBuscador(e.target.value);
-    let texto = e.target.value;
-    if (texto.trim() === "" || stateLectora) {
-      setStateListaproductos(false);
+    setBuscador(e.target.value)
+    const texto = e.target.value
+    if (texto.trim() === '' || stateLectora) {
+      setStateListaproductos(false)
     } else {
-      setStateListaproductos(true);
+      setStateListaproductos(true)
     }
   }
 
@@ -72,22 +70,21 @@ export function HeaderPos() {
         id_sucursal: dataCierreCaja?.caja?.id_sucursal,
         id_empresa: dataempresa?.id,
         id_cierre_caja: dataCierreCaja?.id,
-      };
+      }
 
-      const result = await insertarVentas(pventas);
+      const result = await insertarVentas(pventas)
       if (result?.id > 0) {
-        await insertarDVentas(result?.id);
+        await insertarDVentas(result?.id)
       }
     } else {
-      await insertarDVentas(idventa);
+      await insertarDVentas(idventa)
     }
-    setBuscador("");
-    buscadorRef.current.focus();
-    setCantidadInput(1);
+    setBuscador('')
+    buscadorRef.current.focus()
+    setCantidadInput(1)
   }
   async function insertarDVentas(idventa) {
-    const productosItemSelect =
-      useProductosStore.getState().productosItemSelect;
+    const productosItemSelect = useProductosStore.getState().productosItemSelect
     const pDetalleVentas = {
       _id_venta: idventa,
       _cantidad: parseFloat(cantidadInput) || 1,
@@ -95,78 +92,73 @@ export function HeaderPos() {
       _descripcion: productosItemSelect.nombre,
       _id_producto: productosItemSelect.id,
       _precio_compra: productosItemSelect.precio_compra,
-      _id_sucursal:  dataCierreCaja?.caja?.id_sucursal,
+      _id_sucursal: dataCierreCaja?.caja?.id_sucursal,
       _id_almacen: almacenSelectItem?.id,
-    };
-    console.log("pDetalleVentas", pDetalleVentas);
-    await insertarDetalleVentas(pDetalleVentas);
+    }
+    console.log('pDetalleVentas', pDetalleVentas)
+    await insertarDetalleVentas(pDetalleVentas)
   }
   const { mutate: mutationInsertarVentas } = useMutation({
-    mutationKey: ["insertar ventas"],
+    mutationKey: ['insertar ventas'],
     mutationFn: insertarventas,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
-      queryClient.invalidateQueries(["mostrar Stock XAlmacenes YProducto"]);
+      toast.error(`Error: ${error.message}`)
+      queryClient.invalidateQueries(['mostrar Stock XAlmacenes YProducto'])
       if (dataStockXAlmacenesYProducto) {
-        setStateModal(true);
+        setStateModal(true)
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["mostrar detalle venta"]);
+      queryClient.invalidateQueries(['mostrar detalle venta'])
     },
-  });
+  })
   //validar cantidad
   const ValidarCantidad = (e) => {
-    const value = Math.max(0, parseFloat(e.target.value));
-    setCantidadInput(value);
-  };
-  const {mutate} = useEliminarVentasIncompletasMutate();
+    const value = Math.max(0, parseFloat(e.target.value))
+    setCantidadInput(value)
+  }
+  const { mutate } = useEliminarVentasIncompletasMutate()
   useEffect(() => {
-    buscadorRef.current.focus();
-   mutate()
-  }, []);
+    buscadorRef.current.focus()
+    mutate()
+  }, [])
   useEffect(() => {
-    let timeout;
-    const texto = buscador.trim();
-    const isCodigoDeBarras = /^[0-9]{3,}$/.test(texto);
+    let timeout
+    const texto = buscador.trim()
+    const isCodigoDeBarras = /^[0-9]{3,}$/.test(texto)
     if (isCodigoDeBarras) {
-      setStateListaproductos(false);
+      setStateListaproductos(false)
       timeout = setTimeout(() => {
-        const productoEncontrado = dataProductos?.find(
-          (p) => p.codigo_barras === texto
-        );
+        const productoEncontrado = dataProductos?.find((p) => p.codigo_barras === texto)
         if (productoEncontrado) {
-          selectProductos(productoEncontrado);
-          mutationInsertarVentas();
-          setBuscador("");
+          selectProductos(productoEncontrado)
+          mutationInsertarVentas()
+          setBuscador('')
         } else {
-          toast.error("Producto no encontrado");
-          setBuscador("");
+          toast.error('Producto no encontrado')
+          setBuscador('')
         }
-      }, 100);
+      }, 100)
     } else {
       if (texto.length > 1) {
         timeout = setTimeout(() => {
-          setStateListaproductos(true);
-        }, 200);
+          setStateListaproductos(true)
+        }, 200)
       } else {
-        setStateListaproductos(false);
+        setStateListaproductos(false)
       }
     }
-  }, [buscador]);
+  }, [buscador])
   return (
     <Header>
       <ContentSucursal>
-      <div>
-         <strong>SUCURSAL:&nbsp; </strong>{" "}
-        {dataCierreCaja.caja?.sucursales?.nombre}
-      </div>
-      |
-       <div>
-       <strong>CAJA:&nbsp; </strong>{" "}
-       {dataCierreCaja.caja?.descripcion}
-       </div>
-
+        <div>
+          <strong>SUCURSAL:&nbsp; </strong> {dataCierreCaja.caja?.sucursales?.nombre}
+        </div>
+        |
+        <div>
+          <strong>CAJA:&nbsp; </strong> {dataCierreCaja.caja?.descripcion}
+        </div>
       </ContentSucursal>
       <section className="contentprincipal">
         <Contentuser className="area1">
@@ -175,7 +167,7 @@ export function HeaderPos() {
             <span>🧊{datausuarios?.roles?.nombre} </span>
           </div>
         </Contentuser>
-      
+
         <article className="contentfecha area3">
           <Reloj />
         </article>
@@ -203,9 +195,9 @@ export function HeaderPos() {
               type="search"
               placeholder="buscar..."
               onKeyDown={(e) => {
-                if (e.key === "ArrowDown" && stateListaproductos) {
-                  e.preventDefault(); // Evita que el input capture el foco
-                  document.querySelector("[tabindex='0'").focus(); //mandar el foco a la lista
+                if (e.key === 'ArrowDown' && stateListaproductos) {
+                  e.preventDefault() // Evita que el input capture el foco
+                  document.querySelector("[tabindex='0'").focus() //mandar el foco a la lista
                 }
               }}
             />
@@ -219,13 +211,10 @@ export function HeaderPos() {
             />
           </InputText2>
         </article>
-        <article className="area2">
-          
-        
-        </article>
+        <article className="area2"></article>
       </section>
     </Header>
-  );
+  )
 }
 const Header = styled.div`
   grid-area: header;
@@ -243,8 +232,8 @@ const Header = styled.div`
     width: 100%;
     display: grid;
     grid-template-areas:
-      "area1 area2"
-      "area3 area3";
+      'area1 area2'
+      'area3 area3';
 
     .area1 {
       grid-area: area1;
@@ -273,8 +262,8 @@ const Header = styled.div`
   .contentbuscador {
     display: grid;
     grid-template:
-      "area2 area2"
-      "area1 area1";
+      'area2 area2'
+      'area1 area1';
     gap: 10px;
     height: 100%;
     align-items: center;
@@ -304,7 +293,7 @@ const Header = styled.div`
       }
     }
   }
-`;
+`
 const ContentSucursal = styled.section`
   position: absolute;
   top: 0;
@@ -316,8 +305,8 @@ const ContentSucursal = styled.section`
   align-items: center;
   height: 45px;
   border-bottom: 1px solid ${({ theme }) => theme.color2};
-  gap:8px;
-`;
+  gap: 8px;
+`
 const Contentuser = styled.div`
   display: flex;
   align-items: center;
@@ -346,4 +335,4 @@ const Contentuser = styled.div`
       flex-direction: column;
     }
   }
-`;
+`

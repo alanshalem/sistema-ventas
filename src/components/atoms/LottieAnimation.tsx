@@ -1,10 +1,10 @@
-import Lottie from "react-lottie";
-import type { ReactElement } from "react";
+import type { ReactElement } from 'react'
+import Lottie from 'react-lottie'
 
 interface LottieAnimationProps {
-  animation: unknown;
-  height: string;
-  width: string;
+  animation: unknown
+  height: string
+  width: string
 }
 
 export function LottieAnimation({
@@ -16,7 +16,7 @@ export function LottieAnimation({
     loop: true,
     autoplay: true,
     animationData: animation,
-  };
+  }
 
   return (
     <Lottie
@@ -25,5 +25,5 @@ export function LottieAnimation({
       width={`${width}px`}
       isClickToPauseDisabled
     />
-  );
+  )
 }

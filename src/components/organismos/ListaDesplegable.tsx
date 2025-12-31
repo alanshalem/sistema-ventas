@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { Device } from "../../index";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+
+import { Device } from '../../index'
 export function ListaDesplegable({
   data,
   setState,
@@ -11,33 +12,29 @@ export function ListaDesplegable({
   refetch,
   funcioncrud,
 }) {
-  if (!state) return;
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const dropdownRef = useRef(null);
+  if (!state) return
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const dropdownRef = useRef(null)
   function seleccionar(p) {
     if (refetch) {
-      refetch();
+      refetch()
     }
 
-    funcion(p);
-    setState();
+    funcion(p)
+    setState()
     if (funcioncrud) {
-      funcioncrud();
+      funcioncrud()
     }
   }
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      seleccionar(data[selectedIndex]);
-    } else if (e.key === "ArrowUp") {
-      setSelectedIndex((prevIndex) =>
-        prevIndex === 0 ? data.length - 1 : prevIndex - 1
-      );
-    } else if (e.key === "ArrowDown") {
-      setSelectedIndex((prevIndex) =>
-        prevIndex === 0 ? data.length - 1 : prevIndex + 1
-      );
+    if (e.key === 'Enter') {
+      seleccionar(data[selectedIndex])
+    } else if (e.key === 'ArrowUp') {
+      setSelectedIndex((prevIndex) => (prevIndex === 0 ? data.length - 1 : prevIndex - 1))
+    } else if (e.key === 'ArrowDown') {
+      setSelectedIndex((prevIndex) => (prevIndex === 0 ? data.length - 1 : prevIndex + 1))
     }
-  };
+  }
 
   return (
     <Container
@@ -55,7 +52,7 @@ export function ListaDesplegable({
           return (
             <ItemContainer
               style={{
-                background: index === selectedIndex ? "rgba(47,48,52,0.3)" : "",
+                background: index === selectedIndex ? 'rgba(47,48,52,0.3)' : '',
               }}
               key={index}
               onClick={() => seleccionar(item)}
@@ -63,11 +60,11 @@ export function ListaDesplegable({
               <span>🌫️</span>
               <span>{item?.nombre}</span>
             </ItemContainer>
-          );
+          )
         })}
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   display: flex;
@@ -97,7 +94,7 @@ const Container = styled.div`
   .contentItems {
     overflow-y: ${(props) => props.scroll};
   }
-`;
+`
 const ItemContainer = styled.div`
   gap: 10px;
   display: flex;
@@ -109,4 +106,4 @@ const ItemContainer = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.bgtotal};
   }
-`;
+`

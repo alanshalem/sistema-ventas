@@ -1,31 +1,31 @@
-import styled from "styled-components";
-import { Btn1 } from "../../moleculas/Btn1";
-import { TotalPos } from "./TotalPos";
-import { Device } from "../../../styles/breakpoints";
-import { useVentasStore } from "../../../store/VentasStore";
+import { useQuery } from '@tanstack/react-query'
+import styled from 'styled-components'
 
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { useMetodosPagoStore } from "../../../store/MetodosPagoStore";
-import { useQuery } from "@tanstack/react-query";
-import { useValidarPermisosOperativos } from "../../../hooks/useValidarPermisosOperativos";
-import { useDetalleVentasStore } from "../../../store/DetalleVentasStore";
+import { useValidarPermisosOperativos } from '../../../hooks/useValidarPermisosOperativos'
+import { useDetalleVentasStore } from '../../../store/DetalleVentasStore'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useMetodosPagoStore } from '../../../store/MetodosPagoStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { Device } from '../../../styles/breakpoints'
+import { Button } from '../../molecules/Button'
+import { TotalPos } from './TotalPos'
 export function AreaTecladoPos() {
-  const { setStatePantallaCobro, stateMetodosPago } = useVentasStore();
-  const { dataempresa } = useEmpresaStore();
-  const { dataMetodosPago: datametodospago } = useMetodosPagoStore();
-  const {datadetalleventa} = useDetalleVentasStore()
-  const { validarPermiso } = useValidarPermisosOperativos();
+  const { setStatePantallaCobro, stateMetodosPago } = useVentasStore()
+  const { dataempresa } = useEmpresaStore()
+  const { dataMetodosPago: datametodospago } = useMetodosPagoStore()
+  const { datadetalleventa } = useDetalleVentasStore()
+  const { validarPermiso } = useValidarPermisosOperativos()
   // const { data: datametodospago } = useQuery({
   //   queryKey: ["mostrar metodos de pago"],
   //   queryFn: () => mostrarMetodosPago({ id_empresa: dataempresa?.id }),
   //   enabled: !!dataempresa,
   // });
   const ValidarPermisocobrar = (p) => {
-    const response = validarPermiso("Cobrar venta");
-    if (!response) return;
-    console.log("tipocobro",p.nombre)
-    setStatePantallaCobro({data:datadetalleventa, tipocobro: p.nombre });
-  };
+    const response = validarPermiso('Cobrar venta')
+    if (!response) return
+    console.log('tipocobro', p.nombre)
+    setStatePantallaCobro({ data: datadetalleventa, tipocobro: p.nombre })
+  }
 
   return (
     <Container stateMetodosPago={stateMetodosPago}>
@@ -33,16 +33,16 @@ export function AreaTecladoPos() {
         {datametodospago?.map((item, index) => {
           return (
             <article className="box" key={index}>
-              <Btn1
-                imagen={item.icono != "-" ? item.icono : null}
-                funcion={() => ValidarPermisocobrar( item )}
-                titulo={item.nombre}
+              <Button
+                image={item.icono != '-' ? item.icono : null}
+                onClick={() => ValidarPermisocobrar(item)}
+                title={item.nombre}
                 border="0"
                 height="70px"
                 width="100%"
               />
             </article>
-          );
+          )
         })}
       </section>
       <section className="totales">
@@ -58,7 +58,7 @@ export function AreaTecladoPos() {
         <TotalPos />
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.color2};
@@ -75,7 +75,7 @@ const Container = styled.div`
     bottom: initial;
   }
   .areatipopago {
-    display: ${({ stateMetodosPago }) => (stateMetodosPago ? "flex" : "none")};
+    display: ${({ stateMetodosPago }) => (stateMetodosPago ? 'flex' : 'none')};
     flex-wrap: wrap;
     gap: 10px;
     padding: 10px;
@@ -108,4 +108,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

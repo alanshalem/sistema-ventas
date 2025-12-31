@@ -1,4 +1,8 @@
-import styled from "styled-components";
+import { useState } from 'react'
+import ConfettiExplosion from 'react-confetti-explosion'
+import { useLocation } from 'react-router-dom'
+import styled from 'styled-components'
+
 import {
   Btn1,
   Buscador,
@@ -6,41 +10,41 @@ import {
   RegistrarClientesProveedores,
   useCategoriasStore,
   useClientesProveedoresStore,
-} from "../../index";
-import { PageTitle } from "../atoms/PageTitle";
-import { v } from "../../styles/variables";
-import { TablaCategorias } from "../organismos/tablas/TablaCategorias";
-import { useState } from "react";
-import ConfettiExplosion from "react-confetti-explosion";
-import { useLocation } from "react-router-dom";
-import { TablaClientesProveedores } from "../organismos/tablas/TablaClientesProveedores";
+} from '../../index'
+import { v } from '../../styles/variables'
+import { PageTitle } from '../atoms/PageTitle'
+import { TablaCategorias } from '../organismos/tablas/TablaCategorias'
+import { TablaClientesProveedores } from '../organismos/tablas/TablaClientesProveedores'
 export function ClientesProveedoresTemplate() {
-  const [openRegistro, SetopenRegistro] = useState(false);
-  const { dataclipro,setBuscador } = useClientesProveedoresStore();
-  const {setTipo} = useClientesProveedoresStore()
-  const [accion, setAccion] = useState("");
-  const [dataSelect, setdataSelect] = useState([]);
-  const [isExploding, setIsExploding] = useState(false);
+  const [openRegistro, SetopenRegistro] = useState(false)
+  const { dataclipro, setBuscador } = useClientesProveedoresStore()
+  const { setTipo } = useClientesProveedoresStore()
+  const [accion, setAccion] = useState('')
+  const [dataSelect, setdataSelect] = useState([])
+  const [isExploding, setIsExploding] = useState(false)
   const location = useLocation()
   function nuevoRegistro() {
-    const tipo= location.pathname==="/configuracion/clientes"?"cliente":"proveedor"
+    const tipo = location.pathname === '/configuracion/clientes' ? 'cliente' : 'proveedor'
     setTipo(tipo)
-    SetopenRegistro(!openRegistro);
-    setAccion("Nuevo");
-    setdataSelect([]);
+    SetopenRegistro(!openRegistro)
+    setAccion('Nuevo')
+    setdataSelect([])
     setIsExploding(false)
   }
   return (
     <Container>
       {openRegistro && (
-        <RegistrarClientesProveedores setIsExploding={setIsExploding}
+        <RegistrarClientesProveedores
+          setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
           accion={accion}
         />
       )}
       <section className="area1">
-        <PageTitle>{location.pathname==="/configuracion/clientes"?"Clientes":"Proveedores"}</PageTitle>
+        <PageTitle>
+          {location.pathname === '/configuracion/clientes' ? 'Clientes' : 'Proveedores'}
+        </PageTitle>
         <Btn1
           funcion={nuevoRegistro}
           bgcolor={v.colorPrincipal}
@@ -49,26 +53,31 @@ export function ClientesProveedoresTemplate() {
         />
       </section>
       <section className="area2">
-        <Buscador setBuscador={setBuscador}/>
+        <Buscador setBuscador={setBuscador} />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaClientesProveedores setdataSelect={setdataSelect} setAccion={setAccion} SetopenRegistro={SetopenRegistro} data={dataclipro} />
+        <TablaClientesProveedores
+          setdataSelect={setdataSelect}
+          setAccion={setAccion}
+          SetopenRegistro={SetopenRegistro}
+          data={dataclipro}
+        />
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: calc(100vh - 80px);
-  
-   margin-top:50px;
+
+  margin-top: 50px;
   padding: 15px;
   display: grid;
   grid-template:
-    "area1" 60px
-    "area2" 60px
-    "main" auto;
+    'area1' 60px
+    'area2' 60px
+    'main' auto;
   .area1 {
     grid-area: area1;
     /* background-color: rgba(103, 93, 241, 0.14); */
@@ -88,4 +97,4 @@ const Container = styled.div`
     grid-area: main;
     /* background-color: rgba(237, 7, 221, 0.14); */
   }
-`;
+`

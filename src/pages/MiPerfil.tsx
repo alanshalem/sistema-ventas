@@ -1,36 +1,35 @@
-import React from "react";
-import styled from "styled-components";
-import { InputText2 } from "../components/organismos/formularios/InputText2";
-import { Btn1 } from "../components/moleculas/Btn1";
-import { useForm } from "react-hook-form";
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { Toaster } from 'sonner'
+import styled from 'styled-components'
 
-import { slideBackground } from "../styles/keyframes";
-
-import { Toaster } from "sonner";
-import { useUsuariosStore } from "../store/UsuariosStore";
-import { useEditarPerfilMutation } from "../tanstack/UsuariosStack";
+import { Button } from '../components/molecules/Button'
+import { InputText2 } from '../components/organismos/formularios/InputText2'
+import { useUsuariosStore } from '../store/UsuariosStore'
+import { slideBackground } from '../styles/keyframes'
+import { useEditarPerfilMutation } from '../tanstack/UsuariosStack'
 export const MiPerfil = () => {
-  const { datausuarios } = useUsuariosStore();
-  const {mutate,isPending} = useEditarPerfilMutation()
+  const { datausuarios } = useUsuariosStore()
+  const { mutate, isPending } = useEditarPerfilMutation()
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm({
     defaultValues: {
-      nombres: datausuarios?.nombres || "",
-      nro_doc: datausuarios?.nro_doc || "",
-      telefono: datausuarios?.telefono || "",
+      nombres: datausuarios?.nombres || '',
+      nro_doc: datausuarios?.nro_doc || '',
+      telefono: datausuarios?.telefono || '',
     },
-  });
+  })
   return (
     <Container>
-       <Toaster position="top-right" />
+      <Toaster position="top-right" />
       {isPending ? (
         <span>guardando...🐖</span>
       ) : (
         <>
-          <Title>Mi Perfil</Title> 
+          <Title>Mi Perfil</Title>
           <Avatar>
             <ContentRol>
               <span>{datausuarios?.roles?.nombre} </span>
@@ -44,11 +43,11 @@ export const MiPerfil = () => {
                 className="form__field"
                 placeholder="nombres"
                 type="text"
-                {...register("nombres", {
+                {...register('nombres', {
                   required: true,
                 })}
               />
-              {errors.nombres?.type === "required" && <p>Campo requerido</p>}
+              {errors.nombres?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Numero Identidad</Label>
             <InputText2>
@@ -56,11 +55,11 @@ export const MiPerfil = () => {
                 className="form__field"
                 placeholder="nro_doc"
                 type="text"
-                {...register("nro_doc", {
+                {...register('nro_doc', {
                   required: true,
                 })}
               />
-              {errors.nro_doc?.type === "required" && <p>Campo requerido</p>}
+              {errors.nro_doc?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Celular</Label>
             <InputText2>
@@ -68,11 +67,11 @@ export const MiPerfil = () => {
                 className="form__field"
                 placeholder="telefono"
                 type="text"
-                {...register("telefono", {
+                {...register('telefono', {
                   required: true,
                 })}
               />
-              {errors.telefono?.type === "required" && <p>Campo requerido</p>}
+              {errors.telefono?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Email</Label>
             <InputText2>
@@ -86,13 +85,13 @@ export const MiPerfil = () => {
               />
             </InputText2>
             <br></br>
-            <Btn1 bgcolor="#0930bb" color="#fff" titulo="GUARDAR CAMBIOS" />
+            <Button bgColor="#0930bb" color="#fff" title="GUARDAR CAMBIOS" />
           </form>
         </>
       )}
     </Container>
-  );
-};
+  )
+}
 const ContentRol = styled.div`
   background-color: #391ebb;
   border: 2px solid #fff;
@@ -104,7 +103,7 @@ const ContentRol = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: #fff;
-`;
+`
 const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
@@ -130,12 +129,12 @@ const Container = styled.div`
       font-size: 100px;
     }
   }
-`;
+`
 
 const Title = styled.h1`
   font-size: 24px;
   margin-bottom: 20px;
-`;
+`
 
 const Avatar = styled.div`
   display: flex;
@@ -168,9 +167,9 @@ const Avatar = styled.div`
   input {
     display: none;
   }
-`;
+`
 
 const Label = styled.label`
   display: block;
   margin: 10px 0 5px;
-`;
+`

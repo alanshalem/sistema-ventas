@@ -1,11 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 export function CardModos({ title, subtitle, img, bgcolor, funcion }) {
   return (
     <Container $bgcolor={bgcolor} onClick={funcion}>
       <section className="card-container">
         <article className="content-wrapper">
           <section className="badge-container">
-          
             <span className="badge-button">{title} </span>
           </section>
           <section className="title-section">
@@ -13,15 +12,11 @@ export function CardModos({ title, subtitle, img, bgcolor, funcion }) {
           </section>
         </article>
         <article className="image-container">
-          <img
-            className="character-image"
-            src={img}
-            alt="My Hero Academia character"
-          />
+          <img className="character-image" src={img} alt="My Hero Academia character" />
         </article>
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.section`
   overflow: hidden;
@@ -84,4 +79,4 @@ const Container = styled.section`
     height: 100%;
     position: relative;
   }
-`;
+`

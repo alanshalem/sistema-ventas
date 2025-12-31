@@ -1,15 +1,16 @@
-import styled from "styled-components";
-import { Btn1 } from "../../moleculas/Btn1";
-import { Device } from "../../../styles/breakpoints";
-import { Icon } from "@iconify/react";
-import { useDetalleVentasStore, useEmpresaStore, useVentasStore } from "../../..";
-import {FormatearNumeroDinero} from "../../../utils/Conversiones"
-import {useValidarPermisosOperativos} from "../../../hooks/useValidarPermisosOperativos"
+import { Icon } from '@iconify/react'
+import styled from 'styled-components'
+
+import { useDetalleVentasStore, useEmpresaStore, useVentasStore } from '../../..'
+import { useValidarPermisosOperativos } from '../../../hooks/useValidarPermisosOperativos'
+import { Device } from '../../../styles/breakpoints'
+import { FormatearNumeroDinero } from '../../../utils/Conversiones'
+import { Button } from '../../molecules/Button'
 export function TotalPos() {
-  const {setStateMetodosPago} = useVentasStore()
-  const {total} = useDetalleVentasStore()
-  const {dataempresa} = useEmpresaStore()
-  const {validarPermiso} = useValidarPermisosOperativos()
+  const { setStateMetodosPago } = useVentasStore()
+  const { total } = useDetalleVentasStore()
+  const { dataempresa } = useEmpresaStore()
+  const { validarPermiso } = useValidarPermisosOperativos()
   // const textLength = total.length;
   // // Definir las clases CSS para diferentes longitudes de texto
   // let textSizeClass = 'medium-text';
@@ -20,26 +21,33 @@ export function TotalPos() {
   // } else {
   //   textSizeClass = 'small-text';
   // }
-  const validarPermisoCobrar = ()=>{
-    const hasPermission = validarPermiso("Cobrar venta")
-    if(!hasPermission) return;
+  const validarPermisoCobrar = () => {
+    const hasPermission = validarPermiso('Cobrar venta')
+    if (!hasPermission) return
     setStateMetodosPago()
   }
   return (
     <Container>
-    <section className="imagen">
+      <section className="imagen">
         <img src="https://i.ibb.co/HdYgDdp/corazon-2.png" />
       </section>
       <section className="contentTotal">
         <section className="contentTituloTotal">
-          <Btn1 border="2px"  bgcolor="#ffffff"   color="#207c33" funcion={validarPermisoCobrar} titulo="COBRAR" icono={<Icon icon="fluent-emoji:money-with-wings" />} />
-         
+          <Button
+            border="2px"
+            bgColor="#ffffff"
+            color="#207c33"
+            onClick={validarPermisoCobrar}
+            title="COBRAR"
+            icon={<Icon icon="fluent-emoji:money-with-wings" />}
+          />
         </section>
-        <span>{FormatearNumeroDinero(total,dataempresa?.currency,dataempresa?.iso)}</span>
-      
-      </section> 
+        <span>
+          {FormatearNumeroDinero(total, dataempresa?.currency, dataempresa?.iso)}
+        </span>
+      </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   display: flex;
@@ -54,7 +62,7 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 100px;
     height: 100px;
@@ -65,7 +73,7 @@ const Container = styled.div`
     left: -15px;
   }
   &::before {
-    content: "";
+    content: '';
     display: block;
     width: 20px;
     height: 20px;
@@ -78,7 +86,7 @@ const Container = styled.div`
   .imagen {
     z-index: 1;
     width: 55px;
-   
+
     position: relative;
     @media ${Device.desktop} {
       bottom: initial;
@@ -88,7 +96,7 @@ const Container = styled.div`
     }
   }
   .contentTotal {
-    z-index:10;
+    z-index: 10;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
@@ -97,11 +105,11 @@ const Container = styled.div`
       align-items: center;
       position: relative;
       margin-top: 30px;
-      justify-content:end;
-      align-content:end;
+      justify-content: end;
+      align-content: end;
       @media ${Device.desktop} {
         display: none;
       }
     }
   }
-`;
+`

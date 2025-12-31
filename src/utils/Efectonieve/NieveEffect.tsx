@@ -1,82 +1,80 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-export const NieveEffect = ({canvasRef}) => {
-  
-  let flakes = [];
-  let mX = -100;
-  let mY = -100;
+export const NieveEffect = ({ canvasRef }) => {
+  const flakes = []
+  let mX = -100
+  let mY = -100
 
   const reset = (flake) => {
-    flake.x = Math.floor(Math.random() * window.innerWidth);
-    flake.y = 0;
-    flake.size = (Math.random() * 3) + 2;
-    flake.speed = (Math.random() * 1) + 0.3;
-    flake.velY = flake.speed;
-    flake.velX = 2;
-    flake.opacity = (Math.random() * 0.5) + 0.3;
-  };
+    flake.x = Math.floor(Math.random() * window.innerWidth)
+    flake.y = 0
+    flake.size = Math.random() * 3 + 2
+    flake.speed = Math.random() * 1 + 0.3
+    flake.velY = flake.speed
+    flake.velX = 2
+    flake.opacity = Math.random() * 0.5 + 0.3
+  }
 
   const snow = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     for (let i = 0; i < flakes.length; i++) {
-      let flake = flakes[i];
-      let x = mX;
-      let y = mY;
-      let minDist = 150;
-      let x2 = flake.x;
-      let y2 = flake.y;
+      const flake = flakes[i]
+      const x = mX
+      const y = mY
+      const minDist = 150
+      const x2 = flake.x
+      const y2 = flake.y
 
-      let dist = Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
-      let dx = x2 - x;
-      let dy = y2 - y;
-     
+      const dist = Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y))
+      const dx = x2 - x
+      const dy = y2 - y
 
       if (dist < minDist) {
-        let force = minDist / (dist * dist);
-        let xcomp = (x - x2) / dist;
-        let ycomp = (y - y2) / dist;
-        let deltaV = force / 2;
+        const force = minDist / (dist * dist)
+        const xcomp = (x - x2) / dist
+        const ycomp = (y - y2) / dist
+        const deltaV = force / 2
 
-        flake.velX -= deltaV * xcomp;
-        flake.velY -= deltaV * ycomp;
+        flake.velX -= deltaV * xcomp
+        flake.velY -= deltaV * ycomp
       } else {
-        flake.velX *= .98;
+        flake.velX *= 0.98
         if (flake.velY <= flake.speed) {
           flake.velY = flake.speed
         }
-        flake.velX += Math.cos(flake.step += .05) * flake.stepSize;
+        flake.velX += Math.cos((flake.step += 0.05)) * flake.stepSize
       }
 
-      ctx.fillStyle = "rgba(255,255,255," + flake.opacity + ")";
-      flake.y += flake.velY;
-      flake.x += flake.velX;
+      ctx.fillStyle = 'rgba(255,255,255,' + flake.opacity + ')'
+      flake.y += flake.velY
+      flake.x += flake.velX
 
       if (flake.y >= canvas.height || flake.y <= 0) {
-        reset(flake);
+        reset(flake)
       }
 
       if (flake.x >= canvas.width || flake.x <= 0) {
-        reset(flake);
+        reset(flake)
       }
 
-      ctx.beginPath();
-      ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.beginPath()
+      ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2)
+      ctx.fill()
     }
 
-    requestAnimationFrame(snow);
-  };
+    requestAnimationFrame(snow)
+  }
 
   const init = () => {
     for (let i = 0; i < 400; i++) {
-      let x = Math.floor(Math.random() * window.innerWidth);
-      let y = Math.floor(Math.random() * window.innerHeight);
-      let size = (Math.random() * 3) + 2;
-      let speed = (Math.random() * 10) + 0.5;
-      let opacity = (Math.random() * 0.5) + 0.3;
+      const x = Math.floor(Math.random() * window.innerWidth)
+      const y = Math.floor(Math.random() * window.innerHeight)
+      const size = Math.random() * 3 + 2
+      const speed = Math.random() * 10 + 0.5
+      const opacity = Math.random() * 0.5 + 0.3
 
       flakes.push({
         speed: speed,
@@ -85,42 +83,41 @@ export const NieveEffect = ({canvasRef}) => {
         x: x,
         y: y,
         size: size,
-        stepSize: (Math.random()) / 30,
+        stepSize: Math.random() / 30,
         step: 0,
-        opacity: opacity
-      });
+        opacity: opacity,
+      })
     }
 
-    snow();
-  };
+    snow()
+  }
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const canvas = canvasRef.current
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 
     const handleMouseMove = (e) => {
-      mX = e.clientX;
-      mY = e.clientY;
-    };
+      mX = e.clientX
+      mY = e.clientY
+    }
 
-    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener('mousemove', handleMouseMove)
 
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize)
 
-    init();
+    init()
 
     return () => {
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+      canvas.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
-  return <canvas ref={canvasRef} />;
-};
-
+  return <canvas ref={canvasRef} />
+}

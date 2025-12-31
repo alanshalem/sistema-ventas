@@ -1,12 +1,12 @@
-import { create } from "zustand";
-import { MostrarModulos } from "../index";
+import { create } from 'zustand'
 
-export const useModulosStore = create((set)=>({
+import { MostrarModulos } from '../index'
 
-dataModulos:[],
-mostrarModulos:async()=>{
+export const useModulosStore = create((set) => ({
+  dataModulos: [],
+  mostrarModulos: async () => {
     const response = await MostrarModulos()
-    set({dataModulos:response})
-    return response;
-}
+    set({ dataModulos: response })
+    return response
+  },
 }))

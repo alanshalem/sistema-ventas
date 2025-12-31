@@ -1,21 +1,17 @@
-import styled from "styled-components";
-import { useState } from "react";
-import {
-  LinksArray,
-  SecondarylinksArray,
-  ToggleTema,
-} from "../../../index";
-import { v } from "../../../styles/variables";
-import { NavLink } from "react-router-dom";
-import { Icon } from "@iconify/react";
+import { Icon } from '@iconify/react'
+import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { LinksArray, SecondarylinksArray, ToggleTema } from '../../../index'
+import { v } from '../../../styles/variables'
 export const MenuMovil = ({ setState }) => {
-  const [state, setstate] = useState(true);
+  const [state, setstate] = useState(true)
 
   return (
     <Container>
-        
       <Main $isopen={state.toString()}>
-        <Container $isopen={state.toString()} className={state ? "active" : ""}>
+        <Container $isopen={state.toString()} className={state ? 'active' : ''}>
           <div className="Logocontent">
             <div className="imgcontent">
               <img src={v.logo} />
@@ -25,20 +21,16 @@ export const MenuMovil = ({ setState }) => {
           {LinksArray.map(({ icon, label, to }) => (
             <div
               onClick={setState}
-              className={state ? "LinkContainer active" : "LinkContainer"}
+              className={state ? 'LinkContainer active' : 'LinkContainer'}
               key={label}
             >
               <NavLink
                 to={to}
-                className={({ isActive }) =>
-                  `Links${isActive ? ` active` : ``}`
-                }
+                className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
               >
-                <section className={state ? "content open" : "content"}>
+                <section className={state ? 'content open' : 'content'}>
                   <Icon className="Linkicon" icon={icon} />
-                  <span className={state ? "label_ver" : "label_oculto"}>
-                    {label}
-                  </span>
+                  <span className={state ? 'label_ver' : 'label_oculto'}>{label}</span>
                 </section>
               </NavLink>
             </div>
@@ -46,39 +38,33 @@ export const MenuMovil = ({ setState }) => {
           <Divider />
           {SecondarylinksArray.map(({ icon, label, to, color }) => (
             <div
-              className={state ? "LinkContainer active" : "LinkContainer"}
+              className={state ? 'LinkContainer active' : 'LinkContainer'}
               key={label}
               onClick={setState}
             >
               <NavLink
                 to={to}
-                className={({ isActive }) =>
-                  `Links${isActive ? ` active` : ``}`
-                }
+                className={({ isActive }) => `Links${isActive ? ` active` : ``}`}
               >
-                <section className={state ? "content open" : "content"}>
+                <section className={state ? 'content open' : 'content'}>
                   <Icon color={color} className="Linkicon" icon={icon} />
-                  <span className={state ? "label_ver" : "label_oculto"}>
-                    {label}
-                  </span>
+                  <span className={state ? 'label_ver' : 'label_oculto'}>{label}</span>
                 </section>
               </NavLink>
             </div>
           ))}
-          <div className={state ? "LinkContainer active" : "LinkContainer"}>
+          <div className={state ? 'LinkContainer active' : 'LinkContainer'}>
             <div
               className="Links"
               onClick={() => SetstateDesplegableLinks(!stateDesplegableLinks)}
             >
-              <section className={state ? "content open" : "content"}>
+              <section className={state ? 'content open' : 'content'}>
                 <Icon
                   color="#CE82FF"
                   className="Linkicon"
                   icon="heroicons:ellipsis-horizontal-circle-solid"
                 />
-                <span className={state ? "label_ver" : "label_oculto"}>
-                  MÁS
-                </span>
+                <span className={state ? 'label_ver' : 'label_oculto'}>MÁS</span>
               </section>
             </div>
           </div>
@@ -87,8 +73,8 @@ export const MenuMovil = ({ setState }) => {
         </Container>
       </Main>
     </Container>
-  );
-};
+  )
+}
 const Container = styled.div`
   background: ${({ theme }) => theme.bgtotal};
   color: ${(props) => props.theme.text};
@@ -123,8 +109,7 @@ const Container = styled.div`
       width: 30px;
       cursor: pointer;
       transition: 0.3s ease;
-      transform: ${({ $isopen }) =>
-          $isopen === "true" ? `scale(0.7)` : `scale(1.5)`}
+      transform: ${({ $isopen }) => ($isopen === 'true' ? `scale(0.7)` : `scale(1.5)`)}
         rotate(${({ theme }) => theme.logorotate});
       img {
         width: 100%;
@@ -133,7 +118,7 @@ const Container = styled.div`
     }
     h2 {
       color: #f88533;
-      display: ${({ $isopen }) => ($isopen === "true" ? `block` : `none`)};
+      display: ${({ $isopen }) => ($isopen === 'true' ? `block` : `none`)};
     }
   }
   .LinkContainer {
@@ -197,9 +182,8 @@ const Container = styled.div`
       font-weight: 600;
     }
   }
-`;
+`
 const Main = styled.div`
-
   .Sidebarbutton {
     position: fixed;
     top: 70px;
@@ -208,7 +192,8 @@ const Main = styled.div`
     height: 32px;
     border-radius: 50%;
     background: ${(props) => props.theme.bgtgderecha};
-    box-shadow: 0 0 4px ${(props) => props.theme.bg3},
+    box-shadow:
+      0 0 4px ${(props) => props.theme.bg3},
       0 0 7px ${(props) => props.theme.bg};
     display: flex;
     align-items: center;
@@ -217,13 +202,13 @@ const Main = styled.div`
     transition: all 0.2s;
     z-index: 3;
     transform: ${({ $isopen }) =>
-      $isopen === "true" ? `translateX(173px) rotate(3.142rad)` : `initial`};
+      $isopen === 'true' ? `translateX(173px) rotate(3.142rad)` : `initial`};
     color: ${(props) => props.theme.text};
   }
-`;
+`
 const Divider = styled.div`
   height: 1px;
   width: 100%;
   background: ${(props) => props.theme.bg4};
   margin: ${() => v.lgSpacing} 0;
-`;
+`

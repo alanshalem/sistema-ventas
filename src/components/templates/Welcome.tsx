@@ -1,29 +1,26 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import { useAuthStore } from "../../index";
-import { NieveComponente } from "../organismos/NieveComponente";
+import { useAuthStore } from '../../index'
+import { NieveComponente } from '../organismos/NieveComponente'
 export function Welcome() {
-  const { cerrarSesion } = useAuthStore();
-  function cerrar(){
+  const { cerrarSesion } = useAuthStore()
+  function cerrar() {
     cerrarSesion()
-   
   }
   return (
     <Container>
-     
       <section className="home">
         <div className="description">
           <h1 className="title">
-            <span className="gradient-text">BIENVENIDO AL</span> POS VENTAS CON
-            REACT.JS
+            <span className="gradient-text">BIENVENIDO AL</span> POS VENTAS CON REACT.JS
           </h1>
           <p className="paragraph">
-            Este proyecto-curso esta en construcción, pueder probar la
-            configuración y VENTAS por ahora. Si desean ser parte del proyecto
-            pueden inscribirse en el botón INSCRIBIRSE:
+            Este proyecto-curso esta en construcción, pueder probar la configuración y
+            VENTAS por ahora. Si desean ser parte del proyecto pueden inscribirse en el
+            botón INSCRIBIRSE:
           </p>
           <ContainerBtn>
-          <a
+            <a
               target="_blank"
               href="https://t.me/+7sFLx37KM4xjYzkx"
               className="btn"
@@ -41,11 +38,7 @@ export function Welcome() {
               <span>Inscribirse</span>
               <ion-icon name="arrow-forward-outline"></ion-icon>
             </a>
-            <a
-             className="btn"
-              onClick={cerrar}
-              aria-label="submit"
-            >
+            <a className="btn" onClick={cerrar} aria-label="submit">
               <span>Cerrar sesión</span>
               <ion-icon name="arrow-forward-outline"></ion-icon>
             </a>
@@ -93,9 +86,8 @@ export function Welcome() {
           />
         </div>
       </section>
-     
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: 100%;
@@ -130,14 +122,14 @@ const Container = styled.div`
   }
 
   .description > h1 {
-    font-family: "Tilt Neon", sans-serif;
+    font-family: 'Tilt Neon', sans-serif;
     font-size: clamp(2.3rem, 5vw, 4rem);
     line-height: 1.1;
     margin-bottom: 30px;
   }
 
   .gradient-text {
-    font-family: "Tilt Neon", sans-serif;
+    font-family: 'Tilt Neon', sans-serif;
     background-image: linear-gradient(
       90deg,
       rgb(245, 79, 7) 0%,
@@ -153,7 +145,7 @@ const Container = styled.div`
   }
 
   .description > p {
-    font-family: "Nunito", sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 1.2rem;
     line-height: 1.5;
     margin-bottom: 30px;
@@ -183,7 +175,8 @@ const Container = styled.div`
     border: 0;
     padding: 12px 16px;
     border-radius: 5px;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25),
+    box-shadow:
+      0 6px 8px rgba(0, 0, 0, 0.25),
       inset 0px 2px 2px rgba(255, 255, 255, 0.1);
     cursor: pointer;
     transition: all 0.3s ease-in;
@@ -199,7 +192,8 @@ const Container = styled.div`
   .item {
     max-width: 200px;
     aspect-ratio: 1/1;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.5),
+    box-shadow:
+      0 8px 8px rgba(0, 0, 0, 0.5),
       inset 0px 2px 2px rgba(255, 255, 255, 0.2);
     animation: fadeIn 0.5s linear 1 forwards;
     animation-delay: calc(0.2s * var(--i));
@@ -280,11 +274,7 @@ const Container = styled.div`
     width: 100%;
     min-height: 100vh;
     background: rgb(67, 69, 112);
-    background: radial-gradient(
-      circle,
-      rgba(67, 69, 112, 1) 3%,
-      rgba(35, 36, 57, 1) 60%
-    );
+    background: radial-gradient(circle, rgba(67, 69, 112, 1) 3%, rgba(35, 36, 57, 1) 60%);
     overflow: hidden;
     padding: 90px 50px;
   }
@@ -297,7 +287,8 @@ const Container = styled.div`
     overflow: hidden;
     border-top: 1px solid rgba(255, 255, 255, 0.7);
     border-left: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5),
+    box-shadow:
+      0 8px 10px rgba(0, 0, 0, 0.5),
       inset 0px 2px 2px rgba(255, 255, 255, 0.2);
     cursor: grab;
   }
@@ -315,7 +306,7 @@ const Container = styled.div`
 
   .content::before,
   .content::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
@@ -373,12 +364,7 @@ const Container = styled.div`
   }
 
   .btn-grad {
-    background-image: linear-gradient(
-      to right,
-      #ece9e6 0%,
-      #ffffff 51%,
-      #ece9e6 100%
-    );
+    background-image: linear-gradient(to right, #ece9e6 0%, #ffffff 51%, #ece9e6 100%);
     padding: 10px 16px;
     color: #000;
     box-shadow: 0 0 5px #eee;
@@ -446,8 +432,8 @@ const Container = styled.div`
       grid-template-columns: 1fr;
       grid-template-rows: 1fr 1fr;
       grid-template-areas:
-        "userscolorcontainer"
-        "description";
+        'userscolorcontainer'
+        'description';
       gap: 30px;
       padding: 90px 80px 70px;
     }
@@ -479,9 +465,9 @@ const Container = styled.div`
       padding: 30px 40px;
     }
   }
-`;
+`
 const ContainerBtn = styled.div`
-  display:flex;
-  gap:10px;
-  z-index:10;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
 `

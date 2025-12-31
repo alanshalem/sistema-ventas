@@ -1,68 +1,69 @@
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
 import {
-  InputText,
   Btn1,
-  useSucursalesStore,
   ConvertirCapitalize,
+  InputText,
   useEmpresaStore,
+  useSucursalesStore,
   useUsuariosStore,
-} from "../../../index";
-import { useForm } from "react-hook-form";
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useCajasStore } from "../../../store/CajasStore";
-import { useAsignacionCajaSucursalStore } from "../../../store/AsignacionCajaSucursalStore";
+} from '../../../index'
+import { useAsignacionCajaSucursalStore } from '../../../store/AsignacionCajaSucursalStore'
+import { useCajasStore } from '../../../store/CajasStore'
+import { v } from '../../../styles/variables'
+import { BtnClose } from '../../ui/buttons/BtnClose'
 export function RegistrarCaja() {
-  const queryClient = useQueryClient();
-  const { insertarAsignacionSucursal } = useAsignacionCajaSucursalStore();
+  const queryClient = useQueryClient()
+  const { insertarAsignacionSucursal } = useAsignacionCajaSucursalStore()
   const { accion, cajaSelectItem, setStateCaja, insertarCaja, editarCaja } =
-    useCajasStore();
-  const { dataempresa } = useEmpresaStore();
-  const { datausuarios } = useUsuariosStore();
+    useCajasStore()
+  const { dataempresa } = useEmpresaStore()
+  const { datausuarios } = useUsuariosStore()
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm()
   const insertar = async (data) => {
-    if (accion === "Editar") {
+    if (accion === 'Editar') {
       const p = {
         id: cajaSelectItem?.id,
         descripcion: ConvertirCapitalize(data.descripcion),
-      };
-      await editarCaja(p);
+      }
+      await editarCaja(p)
     } else {
       const p = {
         descripcion: ConvertirCapitalize(data.descripcion),
         id_sucursal: cajaSelectItem?.id,
-      };
-      const response = await insertarCaja(p);
+      }
+      const response = await insertarCaja(p)
       const pAsignaciones = {
         id_sucursal: cajaSelectItem?.id,
         id_usuario: datausuarios?.id,
         id_caja: response?.id,
-      };
-      await insertarAsignacionSucursal(pAsignaciones);
+      }
+      await insertarAsignacionSucursal(pAsignaciones)
     }
-  };
+  }
   const { isPending, mutate: doInsertar } = useMutation({
-    mutationKey: ["insertar caja"],
+    mutationKey: ['insertar caja'],
     mutationFn: insertar,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
-      toast.success("Caja registrada correctamente");
-      queryClient.invalidateQueries(["mostrar Cajas XSucursal"]);
-      setStateCaja(false);
+      toast.success('Caja registrada correctamente')
+      queryClient.invalidateQueries(['mostrar Cajas XSucursal'])
+      setStateCaja(false)
     },
-  });
+  })
 
   const handlesub = (data) => {
-    doInsertar(data);
-  };
+    doInsertar(data)
+  }
 
   return (
     <Container>
@@ -72,9 +73,7 @@ export function RegistrarCaja() {
         <div className="sub-contenedor">
           <div className="headers">
             <section>
-              <h1>
-                {accion == "Editar" ? "Editar caja" : "Registrar nueva caja"}
-              </h1>
+              <h1>{accion == 'Editar' ? 'Editar caja' : 'Registrar nueva caja'}</h1>
             </section>
 
             <section>
@@ -88,33 +87,25 @@ export function RegistrarCaja() {
                 <InputText icono={<v.iconoflechaderecha />}>
                   <input
                     className="form__field"
-                    defaultValue={
-                      accion === "Editar" ? cajaSelectItem?.descripcion : ""
-                    }
+                    defaultValue={accion === 'Editar' ? cajaSelectItem?.descripcion : ''}
                     type="text"
                     placeholder="sucursal"
-                    {...register("descripcion", {
+                    {...register('descripcion', {
                       required: true,
                     })}
                   />
                   <label className="form__label">caja</label>
-                  {errors.descripcion?.type === "required" && (
-                    <p>Campo requerido</p>
-                  )}
+                  {errors.descripcion?.type === 'required' && <p>Campo requerido</p>}
                 </InputText>
               </article>
 
-              <Btn1
-                icono={<v.iconoguardar />}
-                titulo="Guardar"
-                bgcolor="#F9D70B"
-              />
+              <Btn1 icono={<v.iconoguardar />} titulo="Guardar" bgcolor="#F9D70B" />
             </section>
           </form>
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -170,4 +161,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

@@ -1,31 +1,31 @@
-import styled from "styled-components";
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import styled from 'styled-components'
+
 import {
-  Sidebar,
-  SwitchHamburguesa,
-  Spinner1,
-  useEmpresaStore,
-  useUsuariosStore,
+  HamburgerSwitch,
   MenuMovil,
-  useSucursalesStore,
+  Sidebar,
+  Spinner,
   useAuthStore,
+  useEmpresaStore,
   UserAuth,
-} from "../index";
-import { useState } from "react";
-import { Device } from "../styles/breakpoints";
-import { useQuery } from "@tanstack/react-query";
-import { useAsignacionCajaSucursalStore } from "../store/AsignacionCajaSucursalStore";
-import { usePermisosStore } from "../store/PermisosStore";
-import { useMostrarSucursalAsignadasQuery } from "../tanstack/AsignacionesSucursalStack";
+  useSucursalesStore,
+  useUsuariosStore,
+} from '../index'
+import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
+import { usePermisosStore } from '../store/PermisosStore'
+import { Device } from '../styles/breakpoints'
+import { useMostrarSucursalAsignadasQuery } from '../tanstack/AsignacionesSucursalStack'
 export function Layout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [stateMenu, setStateMenu] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [stateMenu, setStateMenu] = useState(false)
 
-  const { mostrarusuarios } = useUsuariosStore();
-  const { mostrarempresa } = useEmpresaStore();
-    const { user } = UserAuth(); // Accedemos al contexto
-  const id_auth = user?.id; // Obtenemos el id_auth del usuario autenticado
-  const { mostrarSucursalCajaAsignada } = useAsignacionCajaSucursalStore();
-
+  const { mostrarusuarios } = useUsuariosStore()
+  const { mostrarempresa } = useEmpresaStore()
+  const { user } = UserAuth() // Accedemos al contexto
+  const id_auth = user?.id // Obtenemos el id_auth del usuario autenticado
+  const { mostrarSucursalCajaAsignada } = useAsignacionCajaSucursalStore()
 
   const {
     data: datausuarios,
@@ -33,62 +33,55 @@ export function Layout({ children }) {
     error: errorUsuarios,
     refetch: refetchUsuarios,
   } = useQuery({
-    queryKey: ["mostrar usuarios"],
+    queryKey: ['mostrar usuarios'],
     queryFn: () => mostrarusuarios({ id_auth: id_auth }),
     refetchOnWindowFocus: false,
     enabled: !!id_auth,
-  });
+  })
 
   const {
     data: dataSucursales,
     isLoading: isLoadingSucursales,
     error: errorSucursales,
-  } = useMostrarSucursalAsignadasQuery();
+  } = useMostrarSucursalAsignadasQuery()
 
   const {
     data: dataEmpresa,
     isLoading: isLoadingEmpresa,
     error: errorEmpresa,
   } = useQuery({
-    queryKey: ["mostrar empresa", datausuarios?.id],
+    queryKey: ['mostrar empresa', datausuarios?.id],
     queryFn: () => mostrarempresa({ _id_usuario: datausuarios?.id }),
     enabled: !!datausuarios,
     refetchOnWindowFocus: false,
-  });
+  })
 
   // Consolidación de isLoading y error
-  const isLoading =
-    isLoadingUsuarios || isLoadingSucursales || isLoadingEmpresa;
-  const error = errorUsuarios || errorSucursales || errorEmpresa;
+  const isLoading = isLoadingUsuarios || isLoadingSucursales || isLoadingEmpresa
+  const error = errorUsuarios || errorSucursales || errorEmpresa
 
   //  if (datausuarios == null) {
   //    refetchUsuarios();
   //  }
   if (isLoading) {
-    return <Spinner1 />;
+    return <Spinner />
   }
   if (error) {
-    return <span>error layout...{error.message} </span>;
+    return <span>error layout...{error.message} </span>
   }
   return (
-    <Container className={sidebarOpen ? "active" : ""}>
+    <Container className={sidebarOpen ? 'active' : ''}>
       <section className="contentSidebar">
-        <Sidebar
-          state={sidebarOpen}
-          setState={() => setSidebarOpen(!sidebarOpen)}
-        />
+        <Sidebar state={sidebarOpen} setState={() => setSidebarOpen(!sidebarOpen)} />
       </section>
       <section className="contentMenuhambur">
-        <SwitchHamburguesa
-          state={stateMenu}
-          setstate={() => setStateMenu(!stateMenu)}
-        />
+        <HamburgerSwitch isActive={stateMenu} onClick={() => setStateMenu(!stateMenu)} />
         {stateMenu ? <MenuMovil setState={() => setStateMenu(false)} /> : null}
       </section>
 
       <Containerbody>{children}</Containerbody>
     </Container>
-  );
+  )
 }
 const Container = styled.main`
   display: grid;
@@ -115,7 +108,7 @@ const Container = styled.main`
       display: none;
     }
   }
-`;
+`
 const Containerbody = styled.section`
   /* background-color: rgba(231, 13, 136, 0.5); */
   grid-column: 1;
@@ -125,4 +118,4 @@ const Containerbody = styled.section`
     margin-top: 0;
     grid-column: 2;
   }
-`;
+`

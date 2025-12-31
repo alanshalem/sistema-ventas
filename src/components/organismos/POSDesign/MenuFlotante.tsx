@@ -1,40 +1,40 @@
-import { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { useCierreCajaStore } from "../../../store/CierreCajaStore";
-import { Device } from "../../../styles/breakpoints";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useVentasStore } from "../../../store/VentasStore";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import styled, { keyframes } from 'styled-components'
+
+import { useCierreCajaStore } from '../../../store/CierreCajaStore'
+import { useVentasStore } from '../../../store/VentasStore'
+import { Device } from '../../../styles/breakpoints'
 export function MenuFlotante() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { eliminarVenta,idventa } = useVentasStore();
+  const [isOpen, setIsOpen] = useState(false)
+  const { eliminarVenta, idventa } = useVentasStore()
   const { setStateIngresoSalida, setTipoRegistro, setStateCierraCaja } =
-  useCierreCajaStore();
+    useCierreCajaStore()
   const queryClient = useQueryClient()
-  const {mutate:mutateEliminarVenta,isPending} = useMutation({
-    mutationKey:["eliminar venta"],
-    mutationFn: ()=>{
-      if(idventa>0){
-       return eliminarVenta({id:idventa})
-      }else{
-        return Promise.reject(new Error("Sin registro de venta para eliminar"))
+  const { mutate: mutateEliminarVenta, isPending } = useMutation({
+    mutationKey: ['eliminar venta'],
+    mutationFn: () => {
+      if (idventa > 0) {
+        return eliminarVenta({ id: idventa })
+      } else {
+        return Promise.reject(new Error('Sin registro de venta para eliminar'))
       }
     },
-    onError:(error)=>{
+    onError: (error) => {
       toast.error(`Error: ${error.message}`)
     },
-    onSuccess:()=>{
-      toast.success("Venta eliminada")
+    onSuccess: () => {
+      toast.success('Venta eliminada')
       toggleMenu()
-      queryClient.invalidateQueries(["mostrar detalle venta"])
-    }
+      queryClient.invalidateQueries(['mostrar detalle venta'])
+    },
   })
- 
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   return (
     <Container>
@@ -44,9 +44,9 @@ export function MenuFlotante() {
           isOpen={isOpen}
           delay="0s"
           onClick={() => {
-            toggleMenu();
-            setStateIngresoSalida(true);
-            setTipoRegistro("ingreso");
+            toggleMenu()
+            setStateIngresoSalida(true)
+            setTipoRegistro('ingreso')
           }}
         >
           <Icon icon="noto:money-with-wings" />
@@ -56,9 +56,9 @@ export function MenuFlotante() {
           isOpen={isOpen}
           delay="0.1s"
           onClick={() => {
-            toggleMenu();
-            setStateIngresoSalida(true);
-            setTipoRegistro("salida");
+            toggleMenu()
+            setStateIngresoSalida(true)
+            setTipoRegistro('salida')
           }}
         >
           <Icon icon="noto-v1:money-bag" />
@@ -68,8 +68,8 @@ export function MenuFlotante() {
           isOpen={isOpen}
           delay="0.2s"
           onClick={() => {
-            toggleMenu();
-            setStateCierraCaja(true);
+            toggleMenu()
+            setStateCierraCaja(true)
           }}
         >
           <Icon icon="fxemoji:closedmailboxraised" />
@@ -89,7 +89,7 @@ export function MenuFlotante() {
         <Icon icon="mdi:menu-up-outline" fontSize={50} />
       </FloatingButton>
     </Container>
-  );
+  )
 }
 
 // Styled Components y animaciones
@@ -103,7 +103,7 @@ const slideUp = keyframes`
     transform: translateY(0);
     opacity: 1;
   }
-`;
+`
 
 const Container = styled.div`
   position: fixed;
@@ -118,7 +118,7 @@ const Container = styled.div`
     display: none;
   }
   /* background-color: ${({ theme }) => theme.text}; */
-`;
+`
 
 const FloatingButton = styled.button`
   border: none;
@@ -135,7 +135,7 @@ const FloatingButton = styled.button`
   &:hover {
     transform: rotate(90deg);
   }
-`;
+`
 
 const MenuItems = styled.div`
   margin-top: 10px;
@@ -143,8 +143,8 @@ const MenuItems = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  ${({ isOpen }) => !isOpen && "display: none;"}
-`;
+  ${({ isOpen }) => !isOpen && 'display: none;'}
+`
 
 const MenuItem = styled.div`
   background-color: #ffffff;
@@ -158,15 +158,15 @@ const MenuItem = styled.div`
   cursor: pointer;
   transition: background-color 0.3s ease;
   opacity: 0;
-  animation: ${({ isOpen }) => (isOpen ? slideUp : "none")} 0.4s ease forwards;
+  animation: ${({ isOpen }) => (isOpen ? slideUp : 'none')} 0.4s ease forwards;
   animation-delay: ${({ delay }) => delay};
 
   &:hover {
     background-color: #c7c7c7;
   }
-`;
+`
 
 const Text = styled.span`
   font-size: 16px;
   color: #000;
-`;
+`

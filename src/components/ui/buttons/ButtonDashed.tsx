@@ -1,5 +1,5 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import styled from "styled-components";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import styled from 'styled-components'
 
 export const ButtonDashed = ({ title, funcion }) => {
   return (
@@ -7,8 +7,8 @@ export const ButtonDashed = ({ title, funcion }) => {
       <Icon className="icon" icon="ic:baseline-add-circle-outline" />
       <span>{title} </span>
     </Container>
-  );
-};
+  )
+}
 const Container = styled.button`
   display: flex;
   align-items: center;
@@ -30,4 +30,4 @@ const Container = styled.button`
     background-color: ${(props) => props.theme.text};
     color: ${(props) => props.theme.body};
   }
-`;
+`

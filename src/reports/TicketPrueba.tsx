@@ -1,24 +1,24 @@
-import { urlToBase64 } from "../utils/Conversiones";
-import createPdf from "../utils/CreatePdf";
+import { urlToBase64 } from '../utils/Conversiones'
+import createPdf from '../utils/CreatePdf'
 const TicketPrueba = async (output) => {
   const content = [
     {
-      text: "PRUEBA EXITOSA",
-      style: "header",
+      text: 'PRUEBA EXITOSA',
+      style: 'header',
       margin: [0, 10, 0, 0],
     },
-  ];
+  ]
 
   //estilos
   const styles = {
     header: {
       fontSize: 9,
       bold: true,
-      alignment: "center",
+      alignment: 'center',
     },
     tHeaderLabel: {
       fontSize: 8,
-      alignment: "right",
+      alignment: 'right',
     },
     tHeaderValue: {
       fontSize: 8,
@@ -34,11 +34,11 @@ const TicketPrueba = async (output) => {
     tTotals: {
       fontSize: 9,
       bold: true,
-      alignment: "right",
+      alignment: 'right',
     },
     tClientLabel: {
       fontSize: 8,
-      alignment: "right",
+      alignment: 'right',
     },
     tClientValue: {
       fontSize: 8,
@@ -46,16 +46,16 @@ const TicketPrueba = async (output) => {
     },
     text: {
       fontSize: 8,
-      alignment: "center",
+      alignment: 'center',
     },
     link: {
       fontSize: 8,
       bold: true,
       margin: [0, 0, 0, 4],
-      alignment: "center",
+      alignment: 'center',
     },
-  };
-  const response = await createPdf({ content, styles }, output);
-  return response;
-};
-export default TicketPrueba;
+  }
+  const response = await createPdf({ content, styles }, output)
+  return response
+}
+export default TicketPrueba

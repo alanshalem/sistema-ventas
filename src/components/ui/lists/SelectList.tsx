@@ -1,28 +1,33 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
-import styled from "styled-components";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
 export const SelectList = ({
-  data, 
-  placeholder, 
-  onSelect, 
-  displayField = "nombre",itemSelect
+  data,
+  placeholder,
+  onSelect,
+  displayField = 'nombre',
+  itemSelect,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(itemSelect?.[displayField] || "Select an option");
+  const [isOpen, setIsOpen] = useState(false)
+  const [selected, setSelected] = useState(
+    itemSelect?.[displayField] || 'Select an option'
+  )
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => setIsOpen(!isOpen)
   const handleSelect = (item) => {
-     setSelected(item);
-    setIsOpen(false);
-    onSelect(item);
-  };
+    setSelected(item)
+    setIsOpen(false)
+    onSelect(item)
+  }
 
   return (
     <DropdownContainer>
       <DropdownHeader onClick={toggleDropdown}>
         {itemSelect?.[displayField]}
-        <Arrow isOpen={isOpen}><Icon icon="iconamoon:arrow-up-2-bold" width="24" height="24" /></Arrow>
+        <Arrow isOpen={isOpen}>
+          <Icon icon="iconamoon:arrow-up-2-bold" width="24" height="24" />
+        </Arrow>
       </DropdownHeader>
       {isOpen && (
         <DropdownList>
@@ -36,23 +41,22 @@ export const SelectList = ({
                 {item === selected && <CheckMark>✔</CheckMark>}
                 {item?.[displayField]}
               </DropdownItem>
-            );
+            )
           })}
         </DropdownList>
       )}
     </DropdownContainer>
-  );
-};
+  )
+}
 
 // Estilos usando Styled Components
 const DropdownContainer = styled.div`
   position: relative;
   width: ${(props) => props.width};
-
-`;
+`
 
 const DropdownHeader = styled.div`
- background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.body};
   color: ${({ theme }) => theme.text};
   padding: 8px 15px;
   border: 1px solid #333;
@@ -61,13 +65,13 @@ const DropdownHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap:10px;
-`;
+  gap: 10px;
+`
 
 const Arrow = styled.span`
-  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: transform 0.3s ease;
-`;
+`
 
 const DropdownList = styled.div`
   position: absolute;
@@ -85,7 +89,7 @@ const DropdownList = styled.div`
   min-width: 200px; /* Ancho mínimo */
   width: max-content; /* Ancho según el contenido */
   max-width: 300px; /* Ancho máximo */
-`;
+`
 
 const DropdownItem = styled.div`
   padding: 10px 15px;
@@ -95,15 +99,15 @@ const DropdownItem = styled.div`
   gap: 8px;
   cursor: pointer;
   background-color: ${({ isSelected }) =>
-    isSelected ? ( theme ) => theme.bg : "transparent"};
+    isSelected ? (theme) => theme.bg : 'transparent'};
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: ${({ theme }) => theme.bg};
   }
-`;
+`
 
 const CheckMark = styled.span`
-  color:${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.text};
   font-size: 14px;
-`;
+`

@@ -1,61 +1,56 @@
-import styled from "styled-components";
-import {
-  Btn1,
-  Footer,
-  Generarcodigo,
-  InputText2,
-  useAuthStore,
-} from "../../index";
-import { PageTitle } from "../atoms/PageTitle";
-import { Divider } from "../atoms/Divider";
-import { LottieAnimation } from "../atoms/LottieAnimation";
-import { v } from "../../styles/variables";
-import { Device } from "../../styles/breakpoints";
-import animacionlottie from "../../assets/navidad.json";
-import { NieveComponente } from "../organismos/NieveComponente";
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast, Toaster } from "sonner";
-import { useState } from "react";
-import { CardModos } from "../organismos/LoginDesign/CardModos";
-import { VolverBtn } from "../moleculas/VolverBtn";
-export function LoginTemplate() {
-  const [stateModos, setStateModos] = useState(true);
-  const [stateModo, setStateModo] = useState("empleado");
-  const { loginGoogle, loginEmail, crearUserYLogin } = useAuthStore();
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast, Toaster } from 'sonner'
+import styled from 'styled-components'
 
-  const { register, handleSubmit } = useForm();
-  const queryClient = useQueryClient();
+import animacionlottie from '../../assets/navidad.json'
+import { Button, Footer, GenerateCodeButton, InputText2, useAuthStore } from '../../index'
+import { Device } from '../../styles/breakpoints'
+import { v } from '../../styles/variables'
+import { Divider } from '../atoms/Divider'
+import { LottieAnimation } from '../atoms/LottieAnimation'
+import { PageTitle } from '../atoms/PageTitle'
+import { BackButton } from '../molecules/BackButton'
+import { CardModos } from '../organismos/LoginDesign/CardModos'
+import { NieveComponente } from '../organismos/NieveComponente'
+export function LoginTemplate() {
+  const [stateModos, setStateModos] = useState(true)
+  const [stateModo, setStateModo] = useState('empleado')
+  const { loginGoogle, loginEmail, crearUserYLogin } = useAuthStore()
+
+  const { register, handleSubmit } = useForm()
+  const queryClient = useQueryClient()
   const { mutate } = useMutation({
-    mutationKey: ["iniciar con email"],
+    mutationKey: ['iniciar con email'],
     mutationFn: loginEmail,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
-  });
+  })
   const { mutate: mutateTester, isPending } = useMutation({
-    mutationKey: ["iniciar con email tester"],
+    mutationKey: ['iniciar con email tester'],
     mutationFn: crearUserYLogin,
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
     onSuccess: () => {
       //queryClient.invalidateQueries();
       // window.location.reload();
     },
-  });
+  })
   const manejadorEmailSesionTester = () => {
-    mutateTester({ email: "tester1@gmail.com", password: "123456" });
-  };
+    mutateTester({ email: 'tester1@gmail.com', password: '123456' })
+  }
   const manejadorEmailSesion = (data) => {
-    mutate({ email: data.email, password: data.password });
-  };
+    mutate({ email: data.email, password: data.password })
+  }
   const manejarCrearUSerTester = () => {
-    const response = Generarcodigo({ id: 2 });
-    const gmail = "@gmail.com";
-    const correoCompleto = response.toLowerCase() + gmail;
-    mutateTester({ email: correoCompleto, password: "123456" });
-  };
+    const response = GenerateCodeButton({ id: 2 })
+    const gmail = '@gmail.com'
+    const correoCompleto = response.toLowerCase() + gmail
+    mutateTester({ email: correoCompleto, password: '123456' })
+  }
   return (
     <Container>
       <Toaster />
@@ -68,31 +63,31 @@ export function LoginTemplate() {
         {stateModos && (
           <ContentModos>
             <CardModos
-              title={"Super admin"}
-              subtitle={"crea y gestiona tu empresa"}
-              bgcolor={"#ed7323"}
-              img={"https://i.ibb.co/TDXYj7r9/rey.png"}
-              funcion={() => {
-                setStateModo("superadmin");
-                setStateModos(!stateModos);
+              title={'Super admin'}
+              subtitle={'crea y gestiona tu empresa'}
+              bgColor={'#ed7323'}
+              img={'https://i.ibb.co/TDXYj7r9/rey.png'}
+              onClick={() => {
+                setStateModo('superadmin')
+                setStateModos(!stateModos)
               }}
             />
             <CardModos
-              title={"Empleado"}
-              subtitle={"vende y crece"}
-              bgcolor={"#542a1b"}
-              img={"https://i.ibb.co/ksfCmJyy/casco.png"}
-              funcion={() => {
-                setStateModo("empleado");
-                setStateModos(!stateModos);
+              title={'Empleado'}
+              subtitle={'vende y crece'}
+              bgColor={'#542a1b'}
+              img={'https://i.ibb.co/ksfCmJyy/casco.png'}
+              onClick={() => {
+                setStateModo('empleado')
+                setStateModos(!stateModos)
               }}
             />
           </ContentModos>
         )}
-        {stateModo === "empleado"
+        {stateModo === 'empleado'
           ? stateModos === false && (
               <PanelModo>
-                <VolverBtn funcion={() => setStateModos(!stateModos)} />
+                <BackButton onClick={() => setStateModos(!stateModos)} />
                 <span>Modo empleado</span>
                 <form onSubmit={handleSubmit(manejadorEmailSesion)}>
                   <InputText2>
@@ -100,7 +95,7 @@ export function LoginTemplate() {
                       className="form__field"
                       placeholder="email"
                       type="text"
-                      {...register("email", { required: true })}
+                      {...register('email', { required: true })}
                     />
                   </InputText2>
                   <InputText2>
@@ -108,13 +103,13 @@ export function LoginTemplate() {
                       className="form__field"
                       placeholder="contraseña"
                       type="password"
-                      {...register("password", { required: true })}
+                      {...register('password', { required: true })}
                     />
                   </InputText2>
-                  <Btn1
+                  <Button
                     border="2px"
-                    titulo="INGRESAR"
-                    bgcolor="#1CB0F6"
+                    title="INGRESAR"
+                    bgColor="#1CB0F6"
                     color="255,255,255"
                     width="100%"
                   />
@@ -123,33 +118,33 @@ export function LoginTemplate() {
             )
           : stateModos === false && (
               <PanelModo>
-                <VolverBtn funcion={() => setStateModos(!stateModos)} />
+                <BackButton onClick={() => setStateModos(!stateModos)} />
                 <span>Modo super admin</span>
-                <Btn1
+                <Button
                   disabled={isPending}
-                  funcion={manejarCrearUSerTester}
+                  onClick={manejarCrearUSerTester}
                   border="2px"
-                  titulo="MODO INVITADO"
-                  bgcolor="#f6ce1c"
+                  title="MODO INVITADO"
+                  bgColor="#f6ce1c"
                   color="255,255,255"
                   width="100%"
                 />
                 <Divider>
                   <span>0</span>
                 </Divider>
-                <Btn1
+                <Button
                   border="2px"
-                  funcion={loginGoogle}
-                  titulo="Google"
-                  bgcolor="#fff"
-                  icono={<v.iconogoogle />}
+                  onClick={loginGoogle}
+                  title="Google"
+                  bgColor="#fff"
+                  icon={<v.iconogoogle />}
                 />
               </PanelModo>
             )}
       </div>
       <Footer />
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   height: 100vh;
@@ -176,7 +171,7 @@ const Container = styled.div`
       gap: 10px;
     }
   }
-`;
+`
 const ContentLogo = styled.section`
   display: flex;
   align-items: center;
@@ -188,14 +183,14 @@ const ContentLogo = styled.section`
   img {
     width: 10%;
   }
-`;
+`
 const ContentModos = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
+`
 const PanelModo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
+`

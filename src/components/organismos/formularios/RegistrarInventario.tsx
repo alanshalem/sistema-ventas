@@ -1,48 +1,49 @@
-import styled from "styled-components";
-import { v } from "../../../styles/variables";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../hooks/useFormattedDate'
 import {
-  InputText,
   Btn1,
-  useSucursalesStore,
   ConvertirCapitalize,
+  InputText,
+  useAlmacenesStore,
   useEmpresaStore,
   useProductosStore,
-  useAlmacenesStore,
-} from "../../../index";
-import { SelectorContainer } from "../../atoms/SelectorContainer";
-import { useForm } from "react-hook-form";
-import { BtnClose } from "../../ui/buttons/BtnClose";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useCajasStore } from "../../../store/CajasStore";
-import { useMovStockStore } from "../../../store/MovStockStore";
-import { BuscadorList } from "../../ui/lists/BuscadorList";
-import { SelectList } from "../../ui/lists/SelectList";
-import { useFormattedDate } from "../../../hooks/useFormattedDate";
-import { useStockStore } from "../../../store/StockStore";
-import { RadioChecks } from "../../ui/toggles/RadioChecks";
-import { useGlobalStore } from "../../../store/GlobalStore";
-import { useBuscarProductosQuery } from "../../../tanstack/ProductosStack";
-import { useInsertarMovStockMutation } from "../../../tanstack/MovStockStack";
-import { useMostrarSucursalesQuery } from "../../../tanstack/SucursalesStack";
+  useSucursalesStore,
+} from '../../../index'
+import { useCajasStore } from '../../../store/CajasStore'
+import { useGlobalStore } from '../../../store/GlobalStore'
+import { useMovStockStore } from '../../../store/MovStockStore'
+import { useStockStore } from '../../../store/StockStore'
+import { v } from '../../../styles/variables'
 import {
   useMostrarAlmacenesXSucursalInventarioQuery,
   useMostrarAlmacenesXSucursalQuery,
-} from "../../../tanstack/AlmacenesStack";
-import { useMostrarStockXAlmacenYProductoQuery } from "../../../tanstack/StockStack";
-import { MessageComponent } from "../../ui/messages/MessageComponent";
-import { useEffect } from "react";
+} from '../../../tanstack/AlmacenesStack'
+import { useInsertarMovStockMutation } from '../../../tanstack/MovStockStack'
+import { useBuscarProductosQuery } from '../../../tanstack/ProductosStack'
+import { useMostrarStockXAlmacenYProductoQuery } from '../../../tanstack/StockStack'
+import { useMostrarSucursalesQuery } from '../../../tanstack/SucursalesStack'
+import { SelectorContainer } from '../../atoms/SelectorContainer'
+import { BtnClose } from '../../ui/buttons/BtnClose'
+import { BuscadorList } from '../../ui/lists/BuscadorList'
+import { SelectList } from '../../ui/lists/SelectList'
+import { MessageComponent } from '../../ui/messages/MessageComponent'
+import { RadioChecks } from '../../ui/toggles/RadioChecks'
 export function RegistrarInventario() {
-  const { setStateClose } = useGlobalStore();
+  const { setStateClose } = useGlobalStore()
 
-  const { tipo, setTipo } = useMovStockStore();
+  const { tipo, setTipo } = useMovStockStore()
   const {
     selectProductos,
     setBuscador,
     productosItemSelect,
     dataProductos,
     resetProductosItemSelect,
-  } = useProductosStore();
+  } = useProductosStore()
   const {
     register,
     formState: { errors },
@@ -53,39 +54,39 @@ export function RegistrarInventario() {
       precio_compra: productosItemSelect?.precio_compra,
       precio_venta: productosItemSelect?.precio_venta,
     },
-  });
+  })
   useEffect(() => {
     if (productosItemSelect) {
       reset({
-        cantidad: "", // o 0
+        cantidad: '', // o 0
         precio_compra: productosItemSelect.precio_compra || 0,
         precio_venta: productosItemSelect.precio_venta || 0,
-      });
+      })
     }
-  }, [productosItemSelect]);
+  }, [productosItemSelect])
 
-  useBuscarProductosQuery();
-  const { selectSucursal, sucursalesItemSelect } = useSucursalesStore();
+  useBuscarProductosQuery()
+  const { selectSucursal, sucursalesItemSelect } = useSucursalesStore()
 
   const { data: dataSucursales, isLoading: isLoadingSucursal } =
-    useMostrarSucursalesQuery();
+    useMostrarSucursalesQuery()
   const { data: dataAlmacenes, isLoading: isLoadingAlmacenes } =
-    useMostrarAlmacenesXSucursalInventarioQuery();
+    useMostrarAlmacenesXSucursalInventarioQuery()
 
-  const { setAlmacenSelectItem, almacenSelectItem } = useAlmacenesStore();
+  const { setAlmacenSelectItem, almacenSelectItem } = useAlmacenesStore()
 
   const { data: dataStock, isLoading: isLoadingStockXAlmacenYProducto } =
-    useMostrarStockXAlmacenYProductoQuery();
+    useMostrarStockXAlmacenYProductoQuery()
 
-  const { mutate, isPending } = useInsertarMovStockMutation();
+  const { mutate, isPending } = useInsertarMovStockMutation()
 
   const resetFuction = () => {
-    reset();
-    setTipo("ingreso");
-  };
-  const isLoading = isLoadingSucursal || isLoadingAlmacenes;
+    reset()
+    setTipo('ingreso')
+  }
+  const isLoading = isLoadingSucursal || isLoadingAlmacenes
   if (isLoading) {
-    return <span>cargando almacenes...</span>;
+    return <span>cargando almacenes...</span>
   }
   // if (error) {
   //   return <span>error...{error.message} </span>;
@@ -99,16 +100,14 @@ export function RegistrarInventario() {
           <RadioChecks />
           <div className="headers">
             <section>
-              <h1>
-                {tipo == "ingreso" ? "REGISTRAR ENTRADA" : "REGISTRAR SALIDA"}
-              </h1>
+              <h1>{tipo == 'ingreso' ? 'REGISTRAR ENTRADA' : 'REGISTRAR SALIDA'}</h1>
             </section>
 
             <section>
               <BtnClose
                 funcion={() => {
-                  resetProductosItemSelect();
-                  setStateClose(false);
+                  resetProductosItemSelect()
+                  setStateClose(false)
                 }}
               />
             </section>
@@ -120,16 +119,13 @@ export function RegistrarInventario() {
               setBuscador={setBuscador}
             />
             <span>
-              Producto:{" "}
+              Producto:{' '}
               <strong>
-                {productosItemSelect?.nombre
-                  ? productosItemSelect?.nombre
-                  : "-"}{" "}
+                {productosItemSelect?.nombre ? productosItemSelect?.nombre : '-'}{' '}
               </strong>
             </span>
             <span>
-              Stock:{" "}
-              <strong>{dataStock?.stock ? dataStock?.stock : "-"} </strong>
+              Stock: <strong>{dataStock?.stock ? dataStock?.stock : '-'} </strong>
             </span>
 
             <SelectorContainer>
@@ -159,14 +155,12 @@ export function RegistrarInventario() {
                     <input
                       className="form__field"
                       type="number"
-                      {...register("cantidad", {
+                      {...register('cantidad', {
                         required: true,
                       })}
                     />
                     <label className="form__label">Cantidad</label>
-                    {errors.cantidad?.type === "required" && (
-                      <p>Campo requerido</p>
-                    )}
+                    {errors.cantidad?.type === 'required' && <p>Campo requerido</p>}
                   </InputText>
                 </article>
                 <article>
@@ -174,14 +168,12 @@ export function RegistrarInventario() {
                     <input
                       className="form__field"
                       type="number"
-                      {...register("precio_compra", {
+                      {...register('precio_compra', {
                         required: true,
                       })}
                     />
                     <label className="form__label">Precio costo</label>
-                    {errors.precio_compra?.type === "required" && (
-                      <p>Campo requerido</p>
-                    )}
+                    {errors.precio_compra?.type === 'required' && <p>Campo requerido</p>}
                   </InputText>
                 </article>
                 <article>
@@ -189,14 +181,12 @@ export function RegistrarInventario() {
                     <input
                       className="form__field"
                       type="number"
-                      {...register("precio_venta", {
+                      {...register('precio_venta', {
                         required: true,
                       })}
                     />
                     <label className="form__label">Precio venta</label>
-                    {errors.precio_venta?.type === "required" && (
-                      <p>Campo requerido</p>
-                    )}
+                    {errors.precio_venta?.type === 'required' && <p>Campo requerido</p>}
                   </InputText>
                 </article>
 
@@ -212,15 +202,15 @@ export function RegistrarInventario() {
             <MessageComponent
               text={
                 productosItemSelect?.nombre
-                  ? "Este producto no maneja inventarios, dirijase a configuración > productos y realice el cambio "
-                  : "Busque un producto"
+                  ? 'Este producto no maneja inventarios, dirijase a configuración > productos y realice el cambio '
+                  : 'Busque un producto'
               }
             />
           )}
         </div>
       )}
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   transition: 0.5s;
@@ -286,4 +276,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

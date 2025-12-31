@@ -1,85 +1,77 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import styled from "styled-components";
-import { InputText2 } from "../../formularios/InputText2";
-import { Btn1 } from "../../../moleculas/Btn1";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import styled from 'styled-components'
 
-import { useState } from "react";
-import { useUsuariosStore } from "../../../../store/UsuariosStore";
-
-import { useCierreCajaStore } from "../../../../store/CierreCajaStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useFormattedDate } from "../../../../hooks/useFormattedDate";
-import { useMetodosPagoStore } from "../../../../store/MetodosPagoStore";
-import { useMovCajaStore } from "../../../../store/MovCajaStore";
-import { useAsignacionCajaSucursalStore } from "../../../../store/AsignacionCajaSucursalStore";
-import { useCajasStore } from "../../../../store/CajasStore";
-export function CardListCajas({
-  title,
-  subtitle,
-  bgcolor,
-  funcion,
-  sucursal,
-  state,
-}) {
-  const [montoEfectivo, setMontoEfectivo] = useState(0);
-  const fechaActual = useFormattedDate();
-  const queryClient = useQueryClient();
-  const { datausuarios } = useUsuariosStore();
+import { useFormattedDate } from '../../../../hooks/useFormattedDate'
+import { useAsignacionCajaSucursalStore } from '../../../../store/AsignacionCajaSucursalStore'
+import { useCajasStore } from '../../../../store/CajasStore'
+import { useCierreCajaStore } from '../../../../store/CierreCajaStore'
+import { useMetodosPagoStore } from '../../../../store/MetodosPagoStore'
+import { useMovCajaStore } from '../../../../store/MovCajaStore'
+import { useUsuariosStore } from '../../../../store/UsuariosStore'
+import { Button } from '../../../molecules/Button'
+import { InputText2 } from '../../formularios/InputText2'
+export function CardListCajas({ title, subtitle, bgcolor, funcion, sucursal, state }) {
+  const [montoEfectivo, setMontoEfectivo] = useState(0)
+  const fechaActual = useFormattedDate()
+  const queryClient = useQueryClient()
+  const { datausuarios } = useUsuariosStore()
   const { sucursalesItemSelectAsignadas, dataSucursalesAsignadas } =
-    useAsignacionCajaSucursalStore();
+    useAsignacionCajaSucursalStore()
 
-  const { aperturarcaja } = useCierreCajaStore();
-  const { dataMetodosPago } = useMetodosPagoStore();
-  const { insertarMovCaja } = useMovCajaStore();
-  const {cajaSelectItem} = useCajasStore()
+  const { aperturarcaja } = useCierreCajaStore()
+  const { dataMetodosPago } = useMetodosPagoStore()
+  const { insertarMovCaja } = useMovCajaStore()
+  const { cajaSelectItem } = useCajasStore()
 
   const registrarMovCaja = async (p) => {
     const id_metodo_pago = dataMetodosPago
-      .filter((item) => item.nombre === "Efectivo")
-      .map((item) => item.id)[0];
+      .filter((item) => item.nombre === 'Efectivo')
+      .map((item) => item.id)[0]
     const pmovcaja = {
       fecha_movimiento: fechaActual,
-      tipo_movimiento: "apertura",
+      tipo_movimiento: 'apertura',
       monto: montoEfectivo ? montoEfectivo : 0,
       id_metodo_pago: id_metodo_pago,
       descripcion: `Apertura de caja con`,
       id_usuario: datausuarios?.id,
       id_cierre_caja: p.id_cierre_caja,
-    };
+    }
 
-    await insertarMovCaja(pmovcaja);
-  };
+    await insertarMovCaja(pmovcaja)
+  }
   const insertar = async () => {
     const p = {
       fechainicio: fechaActual,
       fechacierre: fechaActual,
       id_usuario: datausuarios?.id,
       id_caja: cajaSelectItem?.id_caja,
-    };
-    console.log("pcierrecaja",p)
-    const data = await aperturarcaja(p);
+    }
+    console.log('pcierrecaja', p)
+    const data = await aperturarcaja(p)
 
-    await registrarMovCaja({ id_cierre_caja: data?.id });
-  };
+    await registrarMovCaja({ id_cierre_caja: data?.id })
+  }
 
   const mutation = useMutation({
-    mutationKey: ["aperturar caja"],
+    mutationKey: ['aperturar caja'],
     mutationFn: insertar,
     onSuccess: () => {
-      toast.success("🎉 Caja aperturada correctamente!!!");
-      queryClient.invalidateQueries("mostrar cierre de caja");
+      toast.success('🎉 Caja aperturada correctamente!!!')
+      queryClient.invalidateQueries('mostrar cierre de caja')
     },
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`)
     },
-  });
+  })
   return (
     <Container $bgcolor={bgcolor} onClick={funcion} $state={!state}>
       <article className="content-wrapper">
         <section className="badge-container">
           <span className="badge-button">
-            {title} {state ? "(aperturada)" : "(libre)"}{" "}
+            {title} {state ? '(aperturada)' : '(libre)'}{' '}
           </span>
         </section>
 
@@ -96,12 +88,7 @@ export function CardListCajas({
             <span className="subtitle">{subtitle} </span>
           </section>
         )}
-        {state && (
-          <Btn1
-            titulo="TOMAR TURNO"
-           
-          />
-        )}
+        {state && <Button title="TOMAR TURNO" />}
 
         {!state && (
           <section className="contentInputs">
@@ -119,25 +106,25 @@ export function CardListCajas({
 
         {!state && (
           <article className="contentbtn">
-            <Btn1
-              titulo="OMITIR"
-              funcion={() => {
-                setMontoEfectivo(0);
-                mutation.mutateAsync();
+            <Button
+              title="OMITIR"
+              onClick={() => {
+                setMontoEfectivo(0)
+                mutation.mutateAsync()
               }}
             />
-            <Btn1
-              titulo="APERTURAR"
+            <Button
+              title="APERTURAR"
               color="#ffffff"
               border="2px"
-              bgcolor="#0d0d0d"
-              funcion={()=>mutation.mutateAsync()}
+              bgColor="#0d0d0d"
+              onClick={() => mutation.mutateAsync()}
             />
           </article>
         )}
       </article>
     </Container>
-  );
+  )
 }
 const Container = styled.section`
   transition: 0.2s;
@@ -158,7 +145,7 @@ const Container = styled.section`
   }
 
   &::before {
-    content: "";
+    content: '';
     display: flex;
     width: 60px;
     height: 60px;
@@ -237,4 +224,4 @@ const Container = styled.section`
     height: 100%;
     position: relative;
   }
-`;
+`

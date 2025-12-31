@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const Divider = styled.div`
   background-color: ${({ theme }: { theme: any }) => theme.color2};
@@ -17,4 +17,4 @@ export const Divider = styled.div`
     color: ${({ theme }: { theme: any }) => theme.color2};
     font-weight: 700;
   }
-`;
+`

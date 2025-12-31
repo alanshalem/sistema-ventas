@@ -1,49 +1,51 @@
-import { NavLink, Outlet, useLocation, useMatch } from "react-router-dom";
-import styled from "styled-components";
-import { useMostrarSucursalesQuery } from "../tanstack/SucursalesStack";
+import { useState } from 'react'
+import { NavLink, Outlet, useLocation, useMatch } from 'react-router-dom'
+import styled from 'styled-components'
+
+import { DashboardHeader } from '../components/organismos/DashboardDesign/DashboardHeader'
+import { SelectList } from '../components/ui/lists/SelectList'
+import { useAlmacenesStore } from '../store/AlmacenesStore'
+import { useSucursalesStore } from '../store/SucursalesStore'
+import { Device } from '../styles/breakpoints'
 import {
   useMostrarAlmacenesXSucursalQuery,
   useMostrarAlmacenesXSucursalSelectQuery,
-} from "../tanstack/AlmacenesStack";
-import { SelectList } from "../components/ui/lists/SelectList";
-import { useSucursalesStore } from "../store/SucursalesStore";
-import { useAlmacenesStore } from "../store/AlmacenesStore";
-import { useState } from "react";
-import { Device } from "../styles/breakpoints";
-import { DashboardHeader } from "../components/organismos/DashboardDesign/DashboardHeader";
+} from '../tanstack/AlmacenesStack'
+import { useMostrarSucursalesQuery } from '../tanstack/SucursalesStack'
 
 export const Reportes = () => {
-  const [reporteSeleccionado, setReporteSeleccionado] = useState(1);
-  const { data: dataSucursales } = useMostrarSucursalesQuery();
-  const { data: dataAlmacenes } = useMostrarAlmacenesXSucursalSelectQuery();
-  const { sucursalesItemSelect, selectSucursal } = useSucursalesStore();
-  const { almacenSelectItem, setAlmacenSelectItem } = useAlmacenesStore();
+  const [reporteSeleccionado, setReporteSeleccionado] = useState(1)
+  const { data: dataSucursales } = useMostrarSucursalesQuery()
+  const { data: dataAlmacenes } = useMostrarAlmacenesXSucursalSelectQuery()
+  const { sucursalesItemSelect, selectSucursal } = useSucursalesStore()
+  const { almacenSelectItem, setAlmacenSelectItem } = useAlmacenesStore()
 
   const tiposReporte = [
     {
       id: 1,
-      nombre: "Inventario valorado",
-      icono: "mdi:file-document-outline",
-      to: "inventario_valorado",
+      nombre: 'Inventario valorado',
+      icono: 'mdi:file-document-outline',
+      to: 'inventario_valorado',
     },
     {
       id: 2,
-      nombre: "Productos con Stock Bajo",
-      icono: "mdi:file-alert-outline",
+      nombre: 'Productos con Stock Bajo',
+      icono: 'mdi:file-alert-outline',
 
-      to: "report_stock_bajo_minimo",
+      to: 'report_stock_bajo_minimo',
     },
     {
       id: 3,
-      nombre: "Reporte de Ventas",
-      icono: "mdi:file-chart-outline",
+      nombre: 'Reporte de Ventas',
+      icono: 'mdi:file-chart-outline',
 
-      to: "report_ventas",
+      to: 'report_ventas',
     },
-  ];
-    // ✅ ¿Estamos en /reportes/report_ventas ?
- const location = useLocation();
-  const isReportVentas = location.pathname.includes("report_ventas");  return (
+  ]
+  // ✅ ¿Estamos en /reportes/report_ventas ?
+  const location = useLocation()
+  const isReportVentas = location.pathname.includes('report_ventas')
+  return (
     <Container>
       <section className="barra-lateral">
         <div className="titulo-barra">
@@ -54,7 +56,7 @@ export const Reportes = () => {
             <SidebarItem
               key={index}
               to={reporte.to}
-              className={reporteSeleccionado === reporte.id ? "activo" : ""}
+              className={reporteSeleccionado === reporte.id ? 'activo' : ''}
             >
               <span>{reporte.nombre} </span>
             </SidebarItem>
@@ -88,7 +90,7 @@ export const Reportes = () => {
                   />
                 </div>
               </div>
-               {isReportVentas && <DashboardHeader />}
+              {isReportVentas && <DashboardHeader />}
             </div>
           </div>
         </div>
@@ -98,10 +100,10 @@ export const Reportes = () => {
         </div>
       </section>
     </Container>
-  );
-};
+  )
+}
 const SidebarItem = styled(NavLink)`
-display: flex;
+  display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px;
@@ -124,22 +126,24 @@ display: flex;
     color: ${(props) => props.theme.color1};
     font-weight: 600;
   }
-`;
+`
 const Container = styled.main`
- display: flex;
+  display: flex;
   height: 100vh;
-    display:flex;
-    flex-direction:column;
-      @media ${Device.tablet} {
-       flex-direction:row;
-      }
+  display: flex;
+  flex-direction: column;
+  @media ${Device.tablet} {
+    flex-direction: row;
+  }
   .barra-lateral {
     width: 100%;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06);
     border-right: 1px solid ${({ theme }) => theme.color2};
-     @media ${Device.tablet} {
-         width: 16rem;
-      }
+    @media ${Device.tablet} {
+      width: 16rem;
+    }
     .titulo-barra {
       padding: 1rem;
 
@@ -151,7 +155,7 @@ const Container = styled.main`
 
     .navegacion {
       padding: 0.5rem;
-    
+
       button {
         display: flex;
         align-items: center;
@@ -201,8 +205,6 @@ const Container = styled.main`
           font-size: 1.25rem;
           font-weight: 600;
         }
-
-       
       }
     }
 
@@ -228,11 +230,7 @@ const Container = styled.main`
         @media (min-width: 1024px) {
           grid-template-columns: repeat(4, minmax(0, 1fr));
         }
-
-       
       }
-
-    
     }
 
     .visor-pdf {
@@ -243,7 +241,8 @@ const Container = styled.main`
       .contenedor-pdf {
         background-color: white;
         border-radius: 0.5rem;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+        box-shadow:
+          0 1px 3px 0 rgba(0, 0, 0, 0.1),
           0 1px 2px 0 rgba(0, 0, 0, 0.06);
         padding: 1rem;
         min-height: 100%;
@@ -293,7 +292,8 @@ const Container = styled.main`
           overflow: auto;
 
           .pagina-pdf {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            box-shadow:
+              0 4px 6px -1px rgba(0, 0, 0, 0.1),
               0 2px 4px -1px rgba(0, 0, 0, 0.06);
           }
         }
@@ -326,4 +326,4 @@ const Container = styled.main`
       }
     }
   }
-`;
+`

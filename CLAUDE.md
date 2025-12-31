@@ -1,12 +1,16 @@
 # AI Agent Guide - Sistema de Ventas
 
-This document helps AI assistants (Claude, Gemini, ChatGPT, etc.) understand the codebase architecture, patterns, and conventions to provide better assistance when working with this project.
+This document helps AI assistants (Claude, Gemini, ChatGPT, etc.) understand the codebase
+architecture, patterns, and conventions to provide better assistance when working with this project.
 
 ## 📌 Project Overview
 
-**Sistema de Ventas** is a comprehensive point-of-sale (POS) and inventory management system for retail businesses. It follows modern React best practices with TypeScript strict mode, functional components, and modular architecture.
+**Sistema de Ventas** is a comprehensive point-of-sale (POS) and inventory management system for
+retail businesses. It follows modern React best practices with TypeScript strict mode, functional
+components, and modular architecture.
 
 ### Tech Stack Summary
+
 - **Frontend**: React 19 + TypeScript 5.9 (strict)
 - **Build**: Vite 7.3
 - **State**: Zustand 5.0 (30 stores) + TanStack Query 5.90
@@ -30,6 +34,7 @@ components/
 ```
 
 **When creating components:**
+
 - Start with atoms for reusable UI elements
 - Build molecules by combining atoms
 - Create organisms for feature-specific functionality
@@ -43,7 +48,7 @@ Each entity has its own dedicated store following this pattern:
 
 ```typescript
 // Example: ProductosStore.ts
-import { create } from "zustand"
+import { create } from 'zustand'
 
 interface ProductosState {
   data: Producto[]
@@ -67,7 +72,7 @@ export const useProductosStore = create<ProductosStore>((set, get) => ({
   // State
   data: [],
   itemSelect: null,
-  buscador: "",
+  buscador: '',
   parametros: {},
 
   // Actions
@@ -87,6 +92,7 @@ export const useProductosStore = create<ProductosStore>((set, get) => ({
 ```
 
 **Key Patterns:**
+
 - Separate state interface from actions interface
 - Combine with intersection type (`State & Actions`)
 - CRUD operations call Supabase functions
@@ -103,8 +109,8 @@ import { supabase } from './supabase.config'
 import type { Producto, MostrarProductosParams } from '../types'
 
 export async function MostrarProductos(params: MostrarProductosParams): Promise<Producto[]> {
-  const { data, error } = await supabase.rpc("mostrarproductos", {
-    _id_empresa: params.id_empresa
+  const { data, error } = await supabase.rpc('mostrarproductos', {
+    _id_empresa: params.id_empresa,
   })
 
   if (error) throw new Error(error.message)
@@ -112,13 +118,14 @@ export async function MostrarProductos(params: MostrarProductosParams): Promise<
 }
 
 export async function InsertarProductos(params: InsertProductoParams): Promise<Producto> {
-  const { data, error } = await supabase.rpc("insertarproductos", params)
+  const { data, error } = await supabase.rpc('insertarproductos', params)
   if (error) throw new Error(error.message)
   return data as Producto
 }
 ```
 
 **Pattern:**
+
 - Use RPC functions for complex operations (mostrar, insertar, editar)
 - Use direct table operations for simple queries (eliminar)
 - Always check for errors and throw meaningful messages
@@ -164,6 +171,7 @@ const Container = styled.div`
 ```
 
 **Key Points:**
+
 - Use **named exports** (not default)
 - Props interface before component
 - Optional props with `?`
@@ -204,20 +212,20 @@ export function FormComponent() {
 ### 6. Data Fetching with TanStack Query
 
 ```typescript
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 function ProductList() {
   const queryClient = useQueryClient()
   const { data: productos, isLoading } = useQuery({
-    queryKey: ["productos", empresaId],
-    queryFn: () => useProductosStore.getState().mostrar({ id_empresa: empresaId })
+    queryKey: ['productos', empresaId],
+    queryFn: () => useProductosStore.getState().mostrar({ id_empresa: empresaId }),
   })
 
   const mutation = useMutation({
     mutationFn: insertarProducto,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["productos"] })
-    }
+      queryClient.invalidateQueries({ queryKey: ['productos'] })
+    },
   })
 }
 ```
@@ -286,17 +294,17 @@ interface ProductosStore {
 
 ## 🗂️ Critical Files to Know
 
-| File Path | Purpose |
-|-----------|---------|
-| `src/index.ts` | Barrel export file (re-exports all modules) |
-| `src/main.tsx` | App entry point, React root, providers |
-| `src/App.tsx` | Root component, routing setup |
-| `src/routers/routes.tsx` | Route definitions |
-| `src/supabase/supabase.config.ts` | Supabase client configuration |
-| `src/styles/variables.ts` | Global variables (colors, icons, spacing) |
-| `src/styles/GlobalStyles.ts` | Global CSS styles |
-| `src/styles/themes.ts` | Theme definitions (light/dark) |
-| `src/types/index.ts` | All TypeScript type definitions |
+| File Path                         | Purpose                                     |
+| --------------------------------- | ------------------------------------------- |
+| `src/index.ts`                    | Barrel export file (re-exports all modules) |
+| `src/main.tsx`                    | App entry point, React root, providers      |
+| `src/App.tsx`                     | Root component, routing setup               |
+| `src/routers/routes.tsx`          | Route definitions                           |
+| `src/supabase/supabase.config.ts` | Supabase client configuration               |
+| `src/styles/variables.ts`         | Global variables (colors, icons, spacing)   |
+| `src/styles/GlobalStyles.ts`      | Global CSS styles                           |
+| `src/styles/themes.ts`            | Theme definitions (light/dark)              |
+| `src/types/index.ts`              | All TypeScript type definitions             |
 
 ## 🛠️ Common Tasks
 
@@ -321,7 +329,8 @@ interface ProductosStore {
 ### Working with Supabase
 
 - **RPC functions** are defined in Supabase SQL Editor
-- **Row Level Security (RLS)** is enabled - users can only access their company's data (`id_empresa`)
+- **Row Level Security (RLS)** is enabled - users can only access their company's data
+  (`id_empresa`)
 - **Realtime subscriptions** available but not heavily used
 - Use `supabase.rpc()` for complex queries
 - Use `supabase.from().select()` for simple queries
@@ -340,6 +349,7 @@ interface ProductosStore {
 ## ⚠️ Common Pitfalls
 
 1. **Forgetting null checks** - Strict mode requires null handling
+
    ```typescript
    // ❌ Bad
    const item = items[0]
@@ -352,6 +362,7 @@ interface ProductosStore {
    ```
 
 2. **Not typing Zustand stores** - Always use `create<StoreType>`
+
    ```typescript
    // ❌ Bad
    const useStore = create((set) => ({ ... }))
@@ -361,6 +372,7 @@ interface ProductosStore {
    ```
 
 3. **Mutating state directly** - Use Zustand's `set()` function
+
    ```typescript
    // ❌ Bad
    state.data.push(newItem)
@@ -370,6 +382,7 @@ interface ProductosStore {
    ```
 
 4. **Not handling Supabase errors** - Always check error and throw
+
    ```typescript
    // ❌ Bad
    const { data } = await supabase.from('table').select()
@@ -380,6 +393,7 @@ interface ProductosStore {
    ```
 
 5. **Using npm instead of pnpm** - This project uses pnpm!
+
    ```bash
    # ❌ Bad
    npm install
@@ -436,6 +450,7 @@ When helping with this codebase:
 ## 📞 Getting Help
 
 For questions about:
+
 - **React patterns**: Check official React 19 docs
 - **TypeScript**: Check TypeScript handbook
 - **Zustand**: Check Zustand docs (v5)
@@ -446,6 +461,7 @@ For questions about:
 ## 🎯 Quick Reference
 
 ### Package Manager Commands
+
 ```bash
 pnpm install          # Install dependencies
 pnpm dev              # Start dev server
@@ -455,6 +471,7 @@ pnpm lint             # Lint code
 ```
 
 ### Important Directories
+
 - `src/store/` - Zustand stores (30 files)
 - `src/supabase/` - Database CRUD (22 files)
 - `src/components/` - React components (Atomic Design)
@@ -462,6 +479,7 @@ pnpm lint             # Lint code
 - `src/pages/` - Page components (19 files)
 
 ### Naming Patterns
+
 - Components: `PascalCase.tsx`
 - Stores: `NameStore.ts`
 - CRUD: `crudName.ts`
@@ -471,4 +489,5 @@ pnpm lint             # Lint code
 
 ---
 
-**Remember**: This is a TypeScript-strict, pnpm-based, Zustand-powered React 19 application with Supabase backend. Follow the patterns, keep types strict, and use pnpm!
+**Remember**: This is a TypeScript-strict, pnpm-based, Zustand-powered React 19 application with
+Supabase backend. Follow the patterns, keep types strict, and use pnpm!

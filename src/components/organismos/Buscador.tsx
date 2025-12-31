@@ -1,8 +1,9 @@
-import styled from "styled-components";
-import { v } from "../../styles/variables";
+import styled from 'styled-components'
+
+import { v } from '../../styles/variables'
 export function Buscador({ setBuscador }) {
   function buscar(e) {
-    setBuscador(e.target.value);
+    setBuscador(e.target.value)
   }
 
   return (
@@ -12,7 +13,7 @@ export function Buscador({ setBuscador }) {
         <input placeholder="...buscar" onChange={buscar} />
       </section>
     </Container>
-  );
+  )
 }
 const Container = styled.div`
   border-radius: 10px;
@@ -40,4 +41,4 @@ const Container = styled.div`
       color: ${(props) => props.theme.text};
     }
   }
-`;
+`

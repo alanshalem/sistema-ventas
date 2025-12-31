@@ -1,34 +1,35 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { CardFuncion } from "./CardFuncion";
-import { Device } from "../../../styles/breakpoints";
-import ScrollReveal from "scrollreveal";
-import { BtnLink } from "../../moleculas/BtnLink";
-import { useUsuariosStore } from "../../../store/UsuariosStore";
-export const LandingPagesWelcome = () => {
-  const {datausuarios} = useUsuariosStore()
-  useEffect(() => {
-    ScrollReveal().reveal(".left-section", {
-      origin: "left",
-      distance: "100px",
-      duration: 1000,
-      easing: "ease-in-out",
-    });
+import React, { useEffect } from 'react'
+import ScrollReveal from 'scrollreveal'
+import styled from 'styled-components'
 
-    ScrollReveal().reveal(".right-section", {
-      origin: "right",
-      distance: "100px",
+import { useUsuariosStore } from '../../../store/UsuariosStore'
+import { Device } from '../../../styles/breakpoints'
+import { LinkButton } from '../../molecules/LinkButton'
+import { CardFuncion } from './CardFuncion'
+export const LandingPagesWelcome = () => {
+  const { datausuarios } = useUsuariosStore()
+  useEffect(() => {
+    ScrollReveal().reveal('.left-section', {
+      origin: 'left',
+      distance: '100px',
       duration: 1000,
-      easing: "ease-in-out",
-    });
-    ScrollReveal().reveal(".footer-section", {
-      origin: "bottom",
-      distance: "100px",
+      easing: 'ease-in-out',
+    })
+
+    ScrollReveal().reveal('.right-section', {
+      origin: 'right',
+      distance: '100px',
       duration: 1000,
-      easing: "ease-in-out",
+      easing: 'ease-in-out',
+    })
+    ScrollReveal().reveal('.footer-section', {
+      origin: 'bottom',
+      distance: '100px',
+      duration: 1000,
+      easing: 'ease-in-out',
       delay: 200,
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <Container>
@@ -43,8 +44,7 @@ export const LandingPagesWelcome = () => {
               <Text>
                 <Title>Aprende desde cero</Title>
                 <Description>
-                  Descubre cómo crear tu sistema de postventa profesional paso a
-                  paso.
+                  Descubre cómo crear tu sistema de postventa profesional paso a paso.
                 </Description>
               </Text>
             </Step>
@@ -54,9 +54,7 @@ export const LandingPagesWelcome = () => {
               </IconPlaceholder>
               <Text>
                 <Title>Domina herramientas esenciales</Title>
-                <Description>
-                  Desarrolla habilidades clave en programación.
-                </Description>
+                <Description>Desarrolla habilidades clave en programación.</Description>
               </Text>
             </Step>
             <Step>
@@ -65,13 +63,11 @@ export const LandingPagesWelcome = () => {
               </IconPlaceholder>
               <Text>
                 <Title>Aplica lo aprendido</Title>
-                <Description>
-                  Desde la idea inicial hasta la implementación.
-                </Description>
+                <Description>Desde la idea inicial hasta la implementación.</Description>
               </Text>
             </Step>
 
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               {/* Enlaces externos removidos */}
             </div>
           </LeftSection>
@@ -79,44 +75,42 @@ export const LandingPagesWelcome = () => {
             <MockupImage>
               <CardFuncion
                 top="10px"
-                bgcontentimagen={"#fccdb8"}
-                left={"-50px"}
-                title={"Multi-empresa"}
-                imagen={"https://i.ibb.co/HCF7jnx/escaparate.png"}
+                bgcontentimagen={'#fccdb8'}
+                left={'-50px'}
+                title={'Multi-empresa'}
+                imagen={'https://i.ibb.co/HCF7jnx/escaparate.png'}
               />
               <CardFuncion
                 top="110px"
-                bgcontentimagen={"#e3d4cc"}
-                left={"-20px"}
-                title={"Multi-sucursal"}
-                imagen={"https://i.ibb.co/MV6xZz4/franquicia.png"}
+                bgcontentimagen={'#e3d4cc'}
+                left={'-20px'}
+                title={'Multi-sucursal'}
+                imagen={'https://i.ibb.co/MV6xZz4/franquicia.png'}
               />
               <CardFuncion
                 top="210px"
-                bgcontentimagen={"#aee0fd"}
-                left={"-50px"}
-                title={"Multi-caja"}
-                imagen={
-                  "https://i.ibb.co/3dZfQzF/caja-registradora.png"
-                }
+                bgcontentimagen={'#aee0fd'}
+                left={'-50px'}
+                title={'Multi-caja'}
+                imagen={'https://i.ibb.co/3dZfQzF/caja-registradora.png'}
               />
               <CardFuncion
                 top="310px"
-                bgcontentimagen={"#fdc2b7"}
-                left={"-20px"}
-                title={"Multi-almacen"}
+                bgcontentimagen={'#fdc2b7'}
+                left={'-20px'}
+                title={'Multi-almacen'}
                 imagen={
-                  "https://qkzybkelsdmoezaaypou.supabase.co/storage/v1/object/public/imagenes/modulos/almacen.png"
+                  'https://qkzybkelsdmoezaaypou.supabase.co/storage/v1/object/public/imagenes/modulos/almacen.png'
                 }
               />
-               <CardFuncion
+              <CardFuncion
                 top="410px"
-                bgcontentimagen={"#52e0f9"}
-                left={"-50px"}
-                title={"Imprime directo"}
-                subtitle={"sin cuadro de diálogo"}
+                bgcontentimagen={'#52e0f9'}
+                left={'-50px'}
+                title={'Imprime directo'}
+                subtitle={'sin cuadro de diálogo'}
                 imagen={
-                  "https://qkzybkelsdmoezaaypou.supabase.co/storage/v1/object/public/imagenes/modulos/impresora.png"
+                  'https://qkzybkelsdmoezaaypou.supabase.co/storage/v1/object/public/imagenes/modulos/impresora.png'
                 }
               />
             </MockupImage>
@@ -150,8 +144,8 @@ export const LandingPagesWelcome = () => {
         </FooterContent>
       </Footer>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -162,7 +156,7 @@ const Container = styled.div`
   @media ${Device.desktop} {
     height: calc(100vh - 40px);
   }
-`;
+`
 const SubContentSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -173,7 +167,7 @@ const SubContentSection = styled.div`
     justify-content: space-between;
     width: 60%;
   }
-`;
+`
 
 const ContentSection = styled.div`
   display: flex;
@@ -181,7 +175,7 @@ const ContentSection = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-`;
+`
 
 const LeftSection = styled.div`
   display: flex;
@@ -190,12 +184,12 @@ const LeftSection = styled.div`
   width: 100%;
   h1 {
     text-align: center;
-    font-size:35px;
+    font-size: 35px;
   }
   @media ${Device.desktop} {
     align-items: flex-start;
   }
-`;
+`
 
 const Step = styled.div`
   display: flex;
@@ -208,14 +202,16 @@ const Step = styled.div`
     align-items: flex-start;
     text-align: left;
   }
-`;
+`
 
 const IconPlaceholder = styled.div`
   width: 40px;
   height: 40px;
   background-color: #e0e0e0;
   border-radius: 50%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.06);
   border: 4px solid #f0f0f0;
   img {
     width: 40px;
@@ -224,12 +220,12 @@ const IconPlaceholder = styled.div`
   }
   @media ${Device.tablet} {
   }
-`;
+`
 
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
 
 const Title = styled.h3`
   font-size: 16px;
@@ -239,7 +235,7 @@ const Title = styled.h3`
   @media ${Device.desktop} {
     font-size: 18px;
   }
-`;
+`
 
 const Description = styled.p`
   font-size: 13px;
@@ -248,12 +244,12 @@ const Description = styled.p`
   @media ${Device.desktop} {
     font-size: 14px;
   }
-`;
+`
 
 const Highlight = styled.span`
   color: #0077ff;
   cursor: pointer;
-`;
+`
 
 const RegisterButton = styled.button`
   background-color: #ff6a00;
@@ -273,7 +269,7 @@ const RegisterButton = styled.button`
     align-self: flex-start;
     font-size: 16px;
   }
-`;
+`
 
 const RightSection = styled.div`
   width: 100%;
@@ -286,7 +282,7 @@ const RightSection = styled.div`
   @media ${Device.desktop} {
     margin-top: 0;
   }
-`;
+`
 
 const MockupImage = styled.div`
   width: 250px;
@@ -296,7 +292,7 @@ const MockupImage = styled.div`
   border: 6px solid #fff;
   position: relative;
   &::before {
-    content: "";
+    content: '';
     height: 360px;
     width: 360px;
     background-color: rgba(0, 51, 160, 0.1);
@@ -309,21 +305,21 @@ const MockupImage = styled.div`
     animation: palpitar 3s infinite;
   }
   @keyframes palpitar {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
+    0% {
+      transform: scale(1);
     }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
   @media ${Device.desktop} {
     width: 250px;
     height: 500px;
   }
-`;
+`
 
 const Footer = styled.div`
   background-color: #0033a0;
@@ -332,7 +328,7 @@ const Footer = styled.div`
   text-align: center;
   border-radius: 8px;
   padding: 10px 0 10px 0;
-`;
+`
 
 const FooterTitle = styled.h4`
   font-size: 18px;
@@ -340,7 +336,7 @@ const FooterTitle = styled.h4`
   @media ${Device.desktop} {
     font-size: 20px;
   }
-`;
+`
 
 const FooterContent = styled.div`
   display: flex;
@@ -351,7 +347,7 @@ const FooterContent = styled.div`
     justify-content: center;
     gap: 40px;
   }
-`;
+`
 
 const FooterItem = styled.div`
   display: flex;
@@ -364,7 +360,7 @@ const FooterItem = styled.div`
     align-items: center;
     text-align: left;
   }
-`;
+`
 
 const FooterIcon = styled.div`
   width: 60px;
@@ -378,12 +374,12 @@ const FooterIcon = styled.div`
     width: 60px;
     height: 60px;
   }
-`;
+`
 
 const FooterText = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
 
 const FooterTextTitle = styled.h5`
   font-size: 15px;
@@ -392,7 +388,7 @@ const FooterTextTitle = styled.h5`
   @media ${Device.desktop} {
     font-size: 16px;
   }
-`;
+`
 
 const FooterDescription = styled.p`
   font-size: 13px;
@@ -400,4 +396,4 @@ const FooterDescription = styled.p`
   @media ${Device.desktop} {
     font-size: 14px;
   }
-`;
+`

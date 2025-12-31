@@ -1,15 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { useCierreCajaStore } from "../store/CierreCajaStore";
-import { useEmpresaStore } from "../store/EmpresaStore";
-import { useUsuariosStore } from "../store/UsuariosStore";
+import { useQuery } from '@tanstack/react-query'
+
+import { useCierreCajaStore } from '../store/CierreCajaStore'
+import { useEmpresaStore } from '../store/EmpresaStore'
+import { useUsuariosStore } from '../store/UsuariosStore'
 
 export const useMostrarCierreCajaPorEmpresaQuery = () => {
-  const { mostrarCierreCajaPorEmpresa } = useCierreCajaStore();
+  const { mostrarCierreCajaPorEmpresa } = useCierreCajaStore()
 
-  const { dataempresa } = useEmpresaStore();
+  const { dataempresa } = useEmpresaStore()
   return useQuery({
     queryKey: [
-      "mostrar cierre caja por empresa",
+      'mostrar cierre caja por empresa',
       {
         _id_empresa: dataempresa?.id,
       },
@@ -19,15 +20,15 @@ export const useMostrarCierreCajaPorEmpresaQuery = () => {
         _id_empresa: dataempresa?.id,
       }),
     enabled: !!dataempresa,
-  });
-};
+  })
+}
 export const useMostrarAperturasCajaPorUsuarioQuery = () => {
-  const { mostrarCierreCajaPorUsuario } = useCierreCajaStore();
+  const { mostrarCierreCajaPorUsuario } = useCierreCajaStore()
 
-  const { datausuarios } = useUsuariosStore();
+  const { datausuarios } = useUsuariosStore()
   return useQuery({
     queryKey: [
-      "mostrar caja aperturada por usuario",
+      'mostrar caja aperturada por usuario',
       {
         id_usuario: datausuarios?.id,
       },
@@ -37,5 +38,5 @@ export const useMostrarAperturasCajaPorUsuarioQuery = () => {
         id_usuario: datausuarios?.id,
       }),
     enabled: !!datausuarios,
-  });
-};
+  })
+}

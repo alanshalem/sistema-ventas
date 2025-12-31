@@ -1,36 +1,34 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
-import styled from "styled-components";
-import { InputText2 } from "../formularios/InputText2";
-import { Btn1 } from "../../moleculas/Btn1";
-import { useForm } from "react-hook-form";
-import { useEmpresaStore } from "../../../store/EmpresaStore";
-import { slideBackground } from "../../../styles/keyframes";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import styled from 'styled-components'
 
-import { useUpdateEmpresaMutation } from "../../../tanstack/EmpresaStack";
-import { ImageSelector } from "../../../hooks/useImageSelector";
-import { useGlobalStore } from "../../../store/GlobalStore";
+import { ImageSelector } from '../../../hooks/useImageSelector'
+import { useEmpresaStore } from '../../../store/EmpresaStore'
+import { useGlobalStore } from '../../../store/GlobalStore'
+import { slideBackground } from '../../../styles/keyframes'
+import { useUpdateEmpresaMutation } from '../../../tanstack/EmpresaStack'
+import { Button } from '../../molecules/Button'
+import { InputText2 } from '../formularios/InputText2'
 export const BasicosConfig = () => {
-  const { fileUrl } = useGlobalStore();
+  const { fileUrl } = useGlobalStore()
 
-  const { dataempresa } = useEmpresaStore();
+  const { dataempresa } = useEmpresaStore()
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    
   } = useForm({
-    defaultValues:{
-      nombre:dataempresa?.nombre,
-      direccion:dataempresa?.direccion_fiscal,
-      impuesto:dataempresa?.impuesto,
-      valor_impuesto: dataempresa?.valor_impuesto
-    }
-  });
+    defaultValues: {
+      nombre: dataempresa?.nombre,
+      direccion: dataempresa?.direccion_fiscal,
+      impuesto: dataempresa?.impuesto,
+      valor_impuesto: dataempresa?.valor_impuesto,
+    },
+  })
 
-
-  const { mutate, isPending } = useUpdateEmpresaMutation();
+  const { mutate, isPending } = useUpdateEmpresaMutation()
 
   return (
     <Container>
@@ -43,7 +41,6 @@ export const BasicosConfig = () => {
           <Avatar>
             <span className="nombre">{dataempresa?.nombre}</span>
             <ImageSelector fileUrl={fileUrl || dataempresa?.logo} />
-            
           </Avatar>
           <form onSubmit={handleSubmit(mutate)}>
             <Label>Nombre</Label>
@@ -52,70 +49,62 @@ export const BasicosConfig = () => {
                 className="form__field"
                 placeholder="nombre"
                 type="text"
-               
-                {...register("nombre", {
+                {...register('nombre', {
                   required: true,
                 })}
               />
-              {errors.nombre?.type === "required" && <p>Campo requerido</p>}
+              {errors.nombre?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Dirección</Label>
             <InputText2>
               <input
-                
                 className="form__field"
                 placeholder="direccion"
                 type="text"
-                {...register("direccion", {
+                {...register('direccion', {
                   required: true,
                 })}
               />
-              {errors.direccion?.type === "required" && <p>Campo requerido</p>}
+              {errors.direccion?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Impuesto</Label>
             <InputText2>
               <input
-             
                 className="form__field"
                 placeholder="impuesto"
                 type="text"
-                {...register("impuesto", {
+                {...register('impuesto', {
                   required: true,
                 })}
               />
-              {errors.impuesto?.type === "required" && <p>Campo requerido</p>}
+              {errors.impuesto?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <Label>Valor impuesto</Label>
             <InputText2>
               <input
                 step="0.01"
-              
                 className="form__field"
                 placeholder="valor impuesto"
                 type="number"
-                {...register("valor_impuesto", {
+                {...register('valor_impuesto', {
                   required: true,
                 })}
               />
-              {errors.valor_impuesto?.type === "required" && (
-                <p>Campo requerido</p>
-              )}
+              {errors.valor_impuesto?.type === 'required' && <p>Campo requerido</p>}
             </InputText2>
             <br></br>
-            <Btn1 bgcolor="#0930bb" color="#fff" titulo="GUARDAR CAMBIOS" />
+            <Button bgColor="#0930bb" color="#fff" title="GUARDAR CAMBIOS" />
           </form>
           <br></br>
           <section className="advertencia">
             <Icon className="icono" icon="meteocons:barometer" />
-            <span>
-              los cambios de logo se ven reflejados en el lapso de 10 segundos.
-            </span>
+            <span>los cambios de logo se ven reflejados en el lapso de 10 segundos.</span>
           </section>
         </>
       )}
     </Container>
-  );
-};
+  )
+}
 const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
@@ -140,12 +129,12 @@ const Container = styled.div`
       font-size: 100px;
     }
   }
-`;
+`
 
 const Title = styled.h1`
   font-size: 24px;
   margin-bottom: 20px;
-`;
+`
 
 const Avatar = styled.div`
   display: flex;
@@ -182,14 +171,14 @@ const Avatar = styled.div`
   input {
     display: none;
   }
-`;
+`
 
 const AvatarImage = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 10px;
   margin-right: 10px;
-`;
+`
 
 const EditButton = styled.button`
   background-color: #00aaff;
@@ -208,12 +197,12 @@ const EditButton = styled.button`
   .icono {
     font-size: 20px;
   }
-`;
+`
 
 const Label = styled.label`
   display: block;
   margin: 10px 0 5px;
-`;
+`
 
 const Button = styled.button`
   width: 100%;
@@ -224,4 +213,4 @@ const Button = styled.button`
   background-color: #00aaff;
   color: #fff;
   cursor: pointer;
-`;
+`

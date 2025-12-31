@@ -1,14 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { useCajasStore } from "../store/CajasStore";
-import { useAsignacionCajaSucursalStore } from "../store/AsignacionCajaSucursalStore";
-import { useUsuariosStore } from "../store/UsuariosStore";
+import { useQuery } from '@tanstack/react-query'
+
+import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
+import { useCajasStore } from '../store/CajasStore'
+import { useUsuariosStore } from '../store/UsuariosStore'
 
 export const useMostrarSucursalAsignadasQuery = () => {
-  const { mostrarSucursalAsignadas } = useAsignacionCajaSucursalStore();
-  const { datausuarios } = useUsuariosStore();
+  const { mostrarSucursalAsignadas } = useAsignacionCajaSucursalStore()
+  const { datausuarios } = useUsuariosStore()
   return useQuery({
     queryKey: [
-      "mostrar sucursales asignadas",
+      'mostrar sucursales asignadas',
       {
         id_usuario: datausuarios?.id,
       },
@@ -18,5 +19,5 @@ export const useMostrarSucursalAsignadasQuery = () => {
         id_usuario: datausuarios?.id,
       }),
     enabled: !!datausuarios,
-  });
-};
+  })
+}
