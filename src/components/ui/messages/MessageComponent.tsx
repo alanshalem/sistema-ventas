@@ -1,7 +1,11 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import styled from 'styled-components'
 
-export const MessageComponent = ({ text }) => {
+interface MessageComponentProps {
+  text: string
+}
+
+export const MessageComponent = ({ text }: MessageComponentProps) => {
   return (
     <Container>
       <Icon className="icono" icon="meteocons:barometer" />

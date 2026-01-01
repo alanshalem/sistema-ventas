@@ -4,7 +4,7 @@ import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
 import { Button } from '../components/molecules/Button'
-import { InputText2 } from '../components/organismos/formularios/InputText2'
+import { TextInput2 } from '../components/organisms/forms/TextInput2'
 import { useUsuariosStore } from '../store/UsuariosStore'
 import { slideBackground } from '../styles/keyframes'
 import { useEditarPerfilMutation } from '../tanstack/UsuariosStack'
@@ -38,7 +38,7 @@ export const MiPerfil = () => {
           </Avatar>
           <form onSubmit={handleSubmit(mutate)}>
             <Label>Nombres</Label>
-            <InputText2>
+            <TextInput2>
               <input
                 className="form__field"
                 placeholder="nombres"
@@ -48,9 +48,9 @@ export const MiPerfil = () => {
                 })}
               />
               {errors.nombres?.type === 'required' && <p>Campo requerido</p>}
-            </InputText2>
+            </TextInput2>
             <Label>Numero Identidad</Label>
-            <InputText2>
+            <TextInput2>
               <input
                 className="form__field"
                 placeholder="nro_doc"
@@ -60,9 +60,9 @@ export const MiPerfil = () => {
                 })}
               />
               {errors.nro_doc?.type === 'required' && <p>Campo requerido</p>}
-            </InputText2>
+            </TextInput2>
             <Label>Celular</Label>
-            <InputText2>
+            <TextInput2>
               <input
                 className="form__field"
                 placeholder="telefono"
@@ -72,9 +72,9 @@ export const MiPerfil = () => {
                 })}
               />
               {errors.telefono?.type === 'required' && <p>Campo requerido</p>}
-            </InputText2>
+            </TextInput2>
             <Label>Email</Label>
-            <InputText2>
+            <TextInput2>
               <input
                 disabled="true"
                 step="0.01"
@@ -83,7 +83,7 @@ export const MiPerfil = () => {
                 placeholder="correo"
                 type="text"
               />
-            </InputText2>
+            </TextInput2>
             <br></br>
             <Button bgColor="#0930bb" color="#fff" title="GUARDAR CAMBIOS" />
           </form>

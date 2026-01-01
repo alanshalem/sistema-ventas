@@ -1,21 +1,28 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
-export const SelectList = ({
+interface SelectListProps<T> {
+  data: T[] | undefined
+  placeholder?: string
+  onSelect: (item: T) => void
+  displayField?: keyof T
+  itemSelect?: T | null
+}
+
+export const SelectList = <T extends Record<string, any>>({
   data,
   placeholder,
   onSelect,
   displayField = 'nombre',
   itemSelect,
-}) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState(
-    itemSelect?.[displayField] || 'Select an option'
-  )
+}: SelectListProps<T>) => {
+  console.log('placeholder:', placeholder)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [selected, setSelected] = useState<T | undefined>(itemSelect ?? undefined)
 
-  const toggleDropdown = () => setIsOpen(!isOpen)
-  const handleSelect = (item) => {
+  const toggleDropdown = (): void => setIsOpen(!isOpen)
+  const handleSelect = (item: T): void => {
     setSelected(item)
     setIsOpen(false)
     onSelect(item)
@@ -25,21 +32,22 @@ export const SelectList = ({
     <DropdownContainer>
       <DropdownHeader onClick={toggleDropdown}>
         {itemSelect?.[displayField]}
-        <Arrow isOpen={isOpen}>
+        <Arrow $isOpen={isOpen}>
           <Icon icon="iconamoon:arrow-up-2-bold" width="24" height="24" />
         </Arrow>
       </DropdownHeader>
       {isOpen && (
         <DropdownList>
-          {data?.map((item, index) => {
+          {data?.map((item: T, index: number) => {
+            const isSelected = item === selected
             return (
               <DropdownItem
                 key={index}
                 onClick={() => handleSelect(item)}
-                isSelected={item === selected}
+                $isSelected={isSelected}
               >
-                {item === selected && <CheckMark>✔</CheckMark>}
-                {item?.[displayField]}
+                {isSelected && <CheckMark>✔</CheckMark>}
+                {item?.[displayField] as string}
               </DropdownItem>
             )
           })}
@@ -52,11 +60,10 @@ export const SelectList = ({
 // Estilos usando Styled Components
 const DropdownContainer = styled.div`
   position: relative;
-  width: ${(props) => props.width};
 `
 
 const DropdownHeader = styled.div`
-  background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
   padding: 8px 15px;
   border: 1px solid #333;
@@ -68,8 +75,8 @@ const DropdownHeader = styled.div`
   gap: 10px;
 `
 
-const Arrow = styled.span`
-  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
+const Arrow = styled.span<{ $isOpen: boolean }>`
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
   transition: transform 0.3s ease;
 `
 
@@ -77,7 +84,7 @@ const DropdownList = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.background};
   border: 1px solid #333;
   border-radius: 5px;
   margin-top: 5px;
@@ -91,19 +98,19 @@ const DropdownList = styled.div`
   max-width: 300px; /* Ancho máximo */
 `
 
-const DropdownItem = styled.div`
+const DropdownItem = styled.div<{ $isSelected: boolean }>`
   padding: 10px 15px;
   color: ${({ theme }) => theme.text};
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  background-color: ${({ isSelected }) =>
-    isSelected ? (theme) => theme.bg : 'transparent'};
+  background-color: ${({ $isSelected }) =>
+    $isSelected ? (props) => props.theme.backgroundSecondary : 'transparent'};
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.bg};
+    background-color: ${({ theme }) => theme.backgroundSecondary};
   }
 `
 

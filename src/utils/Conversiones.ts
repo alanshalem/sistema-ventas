@@ -1,12 +1,19 @@
-export function ConvertirCapitalize(input) {
+export function ConvertirCapitalize(input: string): string {
   return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase()
 }
-export function ConvertirMinusculas(input) {
+export function ConvertirMinusculas(input: string): string {
   return input.toLowerCase()
 }
-export function FormatearNumeroDinero(numero, currency, iso) {
-  if (currency === undefined) {
-    return
+export function FormatearNumeroDinero(
+  numero: number,
+  currency?: string,
+  iso?: string
+): string {
+  if (!currency || !iso) {
+    return numero.toLocaleString('es-PE', {
+      style: 'currency',
+      currency: 'PEN',
+    })
   }
   const esiso = 'es-' + iso
   const numeroconvertido = numero.toLocaleString(esiso, {
@@ -15,19 +22,19 @@ export function FormatearNumeroDinero(numero, currency, iso) {
   })
   return numeroconvertido
 }
-export const urlToBase64 = async (imageUrl) => {
+export const urlToBase64 = async (imageUrl: string): Promise<string> => {
   const response = await fetch(imageUrl)
   const blob = await response.blob()
   const reader = new FileReader()
   return new Promise((resolve, reject) => {
     reader.onloadend = () => {
-      resolve(reader.result)
+      resolve(reader.result as string)
     }
     reader.onerror = reject
     reader.readAsDataURL(blob)
   })
 }
-export function numeroALetras(num, nombreMoneda) {
+export function numeroALetras(num: number, nombreMoneda: string): string {
   const unidades = [
     '',
     'UNO',
@@ -67,18 +74,18 @@ export function numeroALetras(num, nombreMoneda) {
   }
 
   const [entero, decimal] = num.toFixed(2).split('.')
-  const n = parseInt(entero, 10)
+  const n = parseInt(entero ?? '0', 10)
 
   let texto = ''
 
   if (n === 0) texto = 'CERO'
-  else if (n < 10) texto = unidades[n]
-  else if (n < 21) texto = especiales[n]
+  else if (n < 10) texto = (unidades[n] as string) ?? ''
+  else if (n < 21) texto = (especiales[n as keyof typeof especiales] as string) ?? ''
   else {
     const dec = Math.floor(n / 10)
     const uni = n % 10
-    texto = decenas[dec]
-    if (uni > 0) texto += ' Y ' + unidades[uni]
+    texto = (decenas[dec] as string) ?? ''
+    if (uni > 0) texto += ' Y ' + ((unidades[uni] as string) ?? '')
   }
 
   return `SON: ${texto} CON ${decimal}/100 ${nombreMoneda}`

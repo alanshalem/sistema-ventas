@@ -4,7 +4,7 @@ export const GlobalStyles = createGlobalStyle`
         margin:0;
         padding:0;
         box-sizing:border-box;
-        background-color:${({ theme }) => theme.bgtotal};
+        background-color:${({ theme }) => theme.backgroundSecondary};
         font-family:"Poppins",sans-serif;
         color:#fff;
     }

@@ -379,6 +379,7 @@ export interface MostrarMovimientosCajaParams {
   id_cierre_caja?: number
   fecha_inicio?: string
   fecha_fin?: string
+  id_empresa?: number
 }
 
 export interface EliminarMovimientoCajaParams {

@@ -1,32 +1,25 @@
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import {
-  AreaDetalleventaPos,
-  AreaTecladoPos,
-  Btn1,
-  FooterPos,
-  HeaderPos,
-  InputText2,
-  Reloj,
-  useVentasStore,
-} from '../../index'
+import { useVentasStore } from '../../index'
 import { useCierreCajaStore } from '../../store/CierreCajaStore'
 import { useStockStore } from '../../store/StockStore'
 import { Device } from '../../styles/breakpoints'
 import { blur_in } from '../../styles/keyframes'
-import { v } from '../../styles/variables'
 import { useMostrarAlmacenesXSucursalQuery } from '../../tanstack/AlmacenesStack'
 import { useMostrasrImpresorasPorCajaQuery } from '../../tanstack/ImpresorasStack'
-import { useMostrarMetodosPagoQuery } from '../../tanstack/MetodosPagoStack'
 import { useBuscarProductosQuery } from '../../tanstack/ProductosStack'
 import { useMostrarSerializacionesVentasQuery } from '../../tanstack/SerializacionStack'
 import { useMostrarStockXAlmacenesYProductoQuery } from '../../tanstack/StockStack'
-import { PantallaCierreCaja } from '../organismos/POSDesign/CajaDesign/PantallaCierreCaja'
-import { PantallaIngresoSalidaDinero } from '../organismos/POSDesign/CajaDesign/PantallaIngresoSalidaDinero'
-import { MenuFlotante } from '../organismos/POSDesign/MenuFlotante'
-import { PantallaCobro } from '../organismos/POSDesign/PantallaCobro'
-import { SelectAlmacenModal } from '../organismos/POSDesign/SelectAlmacenModal'
+import { CashRegisterClosingScreen } from '../organisms/POSDesign/CashRegisterDesign/CashRegisterClosingScreen'
+import { MoneyInOutScreen } from '../organisms/POSDesign/CashRegisterDesign/MoneyInOutScreen'
+import { FloatingMenu } from '../organisms/POSDesign/FloatingMenu'
+import { PaymentScreen } from '../organisms/POSDesign/PaymentScreen'
+import { POSFooter } from '../organisms/POSDesign/POSFooter'
+import { POSHeader } from '../organisms/POSDesign/POSHeader'
+import { POSKeyboardArea } from '../organisms/POSDesign/POSKeyboardArea'
+import { POSSaleDetailArea } from '../organisms/POSDesign/POSSaleDetailArea'
+import { SelectWarehouseModal } from '../organisms/POSDesign/SelectWarehouseModal'
 export function POSTemplate() {
   const { statePantallaCobro } = useVentasStore()
   const { stateIngresoSalida, stateCierreCaja } = useCierreCajaStore()
@@ -41,20 +34,20 @@ export function POSTemplate() {
   const { isLoading: isLoadingImpresoras } = useMostrasrImpresorasPorCajaQuery()
   return (
     <Container>
-      {stateModal && <SelectAlmacenModal />}
+      {stateModal && <SelectWarehouseModal />}
 
-      {statePantallaCobro && <PantallaCobro />}
+      {statePantallaCobro && <PaymentScreen />}
 
-      <HeaderPos />
+      <POSHeader />
       <Main>
         <Toaster position="top-center" />
-        <AreaDetalleventaPos />
-        <AreaTecladoPos />
+        <POSSaleDetailArea />
+        <POSKeyboardArea />
       </Main>
-      <FooterPos />
-      <MenuFlotante />
-      {stateIngresoSalida && <PantallaIngresoSalidaDinero />}
-      {stateCierreCaja && <PantallaCierreCaja />}
+      <POSFooter />
+      <FloatingMenu />
+      {stateIngresoSalida && <MoneyInOutScreen />}
+      {stateCierreCaja && <CashRegisterClosingScreen />}
     </Container>
   )
 }

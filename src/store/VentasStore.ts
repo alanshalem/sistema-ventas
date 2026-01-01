@@ -2,31 +2,63 @@ import { toast } from 'sonner'
 import { create } from 'zustand'
 
 import {
-  ConfirmarVenta,
   EliminarVenta,
   EliminarVentasIncompletas,
   InsertarVentas,
   MostrarVentasXsucursal,
-  supabase,
-  useClientesProveedoresStore,
-} from '../index'
+} from '../supabase/crudVenta'
+import { supabase } from '../supabase/supabase.config'
+import type {
+  ConfirmarVentaParams,
+  EliminarVentasIncompletasParams,
+  IdParam,
+  InsertarVentaParams,
+  MostrarVentasXSucursalParams,
+  Venta,
+} from '../types'
+import { useClientesProveedoresStore } from './ClientesProveedoresStore'
+
 const initialState = {
-  items: [],
+  items: [] as unknown[],
   total: 0,
   statePantallaCobro: false,
   tipocobro: '',
   stateMetodosPago: false,
   idventa: 0,
 }
-export const useVentasStore = create((set, get) => ({
+
+interface VentasState {
+  porcentajeCambio: number
+  dataventas: Venta[]
+  idventa: number
+}
+
+interface VentasActions {
+  resetState: () => void
+  setStatePantallaCobro: (params: { data: unknown[]; tipocobro: string }) => void
+  setStateMetodosPago: () => void
+  insertarVentas: (params: InsertarVentaParams) => Promise<Venta | null>
+  eliminarventasIncompletas: (params: EliminarVentasIncompletasParams) => Promise<void>
+  eliminarVenta: (params: IdParam) => Promise<void>
+  mostrarventasxsucursal: (params: MostrarVentasXSucursalParams) => Promise<Venta | null>
+  confirmarVenta: (params: ConfirmarVentaParams) => Promise<Venta | null>
+}
+
+type VentasStore = typeof initialState & VentasState & VentasActions
+
+export const useVentasStore = create<VentasStore>((set, get) => ({
   ...initialState,
   porcentajeCambio: 0,
   dataventas: [],
+
   resetState: () => {
-    const { selectCliPro } = useClientesProveedoresStore.getState()
-    selectCliPro([])
+    const clientStore = useClientesProveedoresStore.getState() as unknown as {
+      selectCliPro: (data: unknown[]) => void
+    }
+    clientStore.selectCliPro([])
     set(initialState)
   },
+
   setStatePantallaCobro: (p) =>
     set((state) => {
       if (p.data.length === 0) {
@@ -41,25 +73,30 @@ export const useVentasStore = create((set, get) => ({
         }
       }
     }),
+
   setStateMetodosPago: () =>
     set((state) => ({ stateMetodosPago: !state.stateMetodosPago })),
+
   insertarVentas: async (p) => {
     const result = await InsertarVentas(p)
-    set({ idventa: result?.id })
+    set({ idventa: result?.id ?? 0 })
     return result
   },
+
   eliminarventasIncompletas: async (p) => {
     await EliminarVentasIncompletas(p)
   },
+
   eliminarVenta: async (p) => {
     const { resetState } = get()
     await EliminarVenta(p)
     resetState()
   },
+
   mostrarventasxsucursal: async (p) => {
     const response = await MostrarVentasXsucursal(p)
-    set({ dataventas: response })
-    set({ idventa: response?.id ? response?.id : 0 })
+    set({ dataventas: response ? [response] : [] })
+    set({ idventa: response?.id ?? 0 })
     return response
   },
 
@@ -72,6 +109,6 @@ export const useVentasStore = create((set, get) => ({
       throw new Error(error.message)
     }
 
-    return data
+    return data as Venta | null
   },
 }))

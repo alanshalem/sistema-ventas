@@ -1,13 +1,43 @@
 import { create } from 'zustand'
 
 import { supabase } from '../supabase/supabase.config'
+import type { IdSucursalParam, Serializacion, TipoDocumento } from '../types'
+
 const tabla = 'serializacion_comprobantes'
-export const useSerializacionStore = create((set) => ({
+
+type SerializacionConTipoComprobante = Serializacion & {
+  tipo_comprobantes: TipoDocumento | null
+}
+
+interface SerializacionState {
+  dataComprobantes: SerializacionConTipoComprobante[] | null
+  itemComprobanteSelect: SerializacionConTipoComprobante | null
+}
+
+interface SerializacionActions {
+  setItemComprobanteSelect: (item: SerializacionConTipoComprobante | null) => void
+  mostrarSerializaciones: (
+    params: IdSucursalParam
+  ) => Promise<SerializacionConTipoComprobante[]>
+  mostrarSerializacionesVentas: (
+    params: IdSucursalParam
+  ) => Promise<SerializacionConTipoComprobante[]>
+  editarSerializacionDefault: (params: IdSucursalParam) => Promise<void>
+  editarSerializacion: (params: Serializacion) => Promise<void>
+}
+
+type SerializacionStore = SerializacionState & SerializacionActions
+
+export const useSerializacionStore = create<SerializacionStore>((set) => ({
+  // State
   dataComprobantes: null,
   itemComprobanteSelect: null,
+
+  // Actions
   setItemComprobanteSelect: (p) => {
     set({ itemComprobanteSelect: p })
   },
+
   mostrarSerializaciones: async (p) => {
     const { data, error } = await supabase
       .from(tabla)
@@ -17,7 +47,7 @@ export const useSerializacionStore = create((set) => ({
     if (error) {
       throw new Error(error.message)
     }
-    return data
+    return data as SerializacionConTipoComprobante[]
   },
 
   mostrarSerializacionesVentas: async (p) => {
@@ -31,17 +61,21 @@ export const useSerializacionStore = create((set) => ({
     if (error) {
       throw new Error(error.message)
     }
-    set({ dataComprobantes: data })
-    set({ itemComprobanteSelect: data[0] })
+    set({
+      dataComprobantes: data as SerializacionConTipoComprobante[],
+      itemComprobanteSelect: (data && data[0]) ?? null,
+    })
 
-    return data
+    return data as SerializacionConTipoComprobante[]
   },
+
   editarSerializacionDefault: async (p) => {
     const { error } = await supabase.rpc('setdefaultserializacion', p)
     if (error) {
       throw new Error(error.message)
     }
   },
+
   editarSerializacion: async (p) => {
     const { error } = await supabase.from(tabla).update(p).eq('id', p.id)
     if (error) {

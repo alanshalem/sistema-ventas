@@ -35,7 +35,16 @@ export default [
 
       /* TypeScript */
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+      '@typescript-eslint/no-unused-expressions': 'warn',
 
       /* Imports (ALT + SHIFT + O) */
       'simple-import-sort/imports': 'error',

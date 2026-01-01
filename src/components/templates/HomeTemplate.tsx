@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
 import { Welcome } from '../../index'
-import { LandingPagesWelcome } from '../organismos/LandingPages/LandingPagesWelcome'
+import { WelcomeLandingPage } from '../organisms/LandingPages/WelcomeLandingPage'
 
 export function HomeTemplate() {
-  return <LandingPagesWelcome />
+  return <WelcomeLandingPage />
 }
 const Container = styled.div`
   height: 100vh;

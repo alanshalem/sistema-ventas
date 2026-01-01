@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet, useLocation, useMatch } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { DashboardHeader } from '../components/organismos/DashboardDesign/DashboardHeader'
+import { DashboardHeader } from '../components/organisms/DashboardDesign'
 import { SelectList } from '../components/ui/lists/SelectList'
 import { useAlmacenesStore } from '../store/AlmacenesStore'
 import { useSucursalesStore } from '../store/SucursalesStore'
@@ -118,12 +118,12 @@ const SidebarItem = styled(NavLink)`
   height: 60px;
 
   &:hover {
-    color: ${(props) => props.theme.colorSubtitle};
+    color: ${(props) => props.theme.textSecondary};
   }
   &.active {
-    background: ${(props) => props.theme.bg6};
-    border: 2px solid ${(props) => props.theme.bg5};
-    color: ${(props) => props.theme.color1};
+    background: ${(props) => props.theme.backgroundSecondary6};
+    border: 2px solid ${(props) => props.theme.backgroundSecondary5};
+    color: ${(props) => props.theme.accent};
     font-weight: 600;
   }
 `
@@ -140,7 +140,7 @@ const Container = styled.main`
     box-shadow:
       0 1px 3px 0 rgba(0, 0, 0, 0.1),
       0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    border-right: 1px solid ${({ theme }) => theme.color2};
+    border-right: 1px solid ${({ theme }) => theme.neutral};
     @media ${Device.tablet} {
       width: 16rem;
     }
@@ -165,7 +165,7 @@ const Container = styled.main`
         text-align: left;
         margin-bottom: 0.25rem;
         transition: background-color 0.2s;
-        background-color: ${(props) => props.theme.bgtotal};
+        background-color: ${(props) => props.theme.backgroundSecondarytotal};
         color: ${(props) => props.theme.text};
         border: none;
         &:hover {
@@ -192,7 +192,7 @@ const Container = styled.main`
     flex-direction: column;
 
     .barra-superior {
-      background-color: ${({ theme }) => theme.body};
+      background-color: ${({ theme }) => theme.background};
       padding: 1rem;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
@@ -211,7 +211,7 @@ const Container = styled.main`
     .panel-filtros {
       margin-top: 1rem;
       padding: 1rem;
-      background-color: ${({ theme }) => theme.bg};
+      background-color: ${({ theme }) => theme.backgroundSecondary};
       border-radius: 0.5rem;
 
       .grid-filtros {

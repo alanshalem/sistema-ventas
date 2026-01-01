@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 
-import { useMovStockStore } from '../../../store/MovStockStore'
+interface RadioChecksProps {
+  tipo: 'entrada' | 'salida' | 'ajuste'
+  setTipo: (tipo: 'entrada' | 'salida' | 'ajuste') => void
+}
 
-export const RadioChecks = () => {
-  const { setTipo, tipo } = useMovStockStore()
-
+export const RadioChecks: React.FC<RadioChecksProps> = ({ tipo, setTipo }) => {
   return (
     <Container>
       <div className="radio-inputs">
@@ -12,9 +13,9 @@ export const RadioChecks = () => {
           <input
             type="radio"
             name="radio"
-            value="ingreso"
-            checked={tipo === 'ingreso'}
-            onChange={() => setTipo('ingreso')}
+            value="entrada"
+            checked={tipo === 'entrada'}
+            onChange={() => setTipo('entrada')}
           />
           <span className="name">Ingreso</span>
         </label>

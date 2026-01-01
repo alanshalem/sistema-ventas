@@ -1,16 +1,12 @@
-import Swal from 'sweetalert2'
-
 import { supabase } from '../index'
+import type { Modulo } from '../types'
+
 const tabla = 'modulos'
-export async function MostrarModulos() {
+
+export async function MostrarModulos(): Promise<Modulo[] | null> {
   const { data, error } = await supabase.from(tabla).select().neq('etiquetas', '#default')
   if (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: error.message,
-    })
-    return
+    throw new Error(error.message)
   }
-  return data
+  return data as Modulo[] | null
 }

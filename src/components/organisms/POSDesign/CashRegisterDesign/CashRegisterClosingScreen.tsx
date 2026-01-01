@@ -1,0 +1,325 @@
+import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import styled from 'styled-components'
+
+import { useFormattedDate } from '../../../../hooks/useFormattedDate'
+import { useCierreCajaStore } from '../../../../store/CierreCajaStore'
+import { useEmpresaStore } from '../../../../store/EmpresaStore'
+import { useMovCajaStore } from '../../../../store/MovCajaStore'
+import { Device } from '../../../../styles/breakpoints'
+import { FormatearNumeroDinero } from '../../../../utils/Conversiones'
+import { BackButton } from '../../../molecules/BackButton'
+import { Button } from '../../../molecules/Button'
+import { CashRegisterCountScreen } from './CashRegisterCountScreen'
+
+interface VentaMetodoPago {
+  metodo_pago: string
+  monto: number
+}
+
+export function CashRegisterClosingScreen() {
+  const { setStateCierraCaja, dataCierreCaja, stateConteoCaja, setStateConteoCaja } =
+    useCierreCajaStore()
+  const {
+    mostrarEfectivoSinVentasMovcierrecaja,
+    mostrarVentasMetodoPagoMovCaja,
+    totalVentasMetodoPago,
+    totalVentasEfectivo,
+    totalAperturaCaja,
+    totalGastosVariosCaja,
+    totalIngresosVariosCaja,
+    totalEfectivoTotalCaja,
+  } = useMovCajaStore()
+  const { dataempresa } = useEmpresaStore()
+  const fechaactual = useFormattedDate()
+  const fechaInicioFormateada = format(
+    new Date(dataCierreCaja?.fechainicio ?? dataCierreCaja?.fecha_apertura ?? ''),
+    'dd/MM/yyyy HH:mm:ss'
+  )
+
+  const {
+    isLoading: isloading1,
+    isError: iserror1,
+    error: error1,
+  } = useQuery({
+    queryKey: ['mostrar efectivo sin ventas movCaja', dataCierreCaja?.id],
+    queryFn: () =>
+      mostrarEfectivoSinVentasMovcierrecaja({
+        _id_cierre_caja: dataCierreCaja?.id ?? 0,
+      }),
+    enabled: !!dataCierreCaja?.id,
+  })
+
+  const {
+    data: dataventasmetodopago,
+    isError: iserror2,
+    error: error2,
+  } = useQuery<VentaMetodoPago[]>({
+    queryKey: ['mostrar ventas metodoPago movCaja', dataCierreCaja?.id],
+    queryFn: async () => {
+      await mostrarVentasMetodoPagoMovCaja({
+        _id_cierre_caja: dataCierreCaja?.id ?? 0,
+        _id_metodo_pago: 1,
+      })
+      return [] as VentaMetodoPago[]
+    },
+    enabled: !!dataCierreCaja?.id,
+  })
+
+  const isError = iserror1 || iserror2
+  const error = error1 || error2
+
+  if (isloading1) {
+    return <span>cargando datos...</span>
+  }
+
+  if (isError) {
+    return <span>error...{error?.message} </span>
+  }
+
+  return (
+    <Container>
+      <BackButton onClick={() => setStateCierraCaja(false)} />
+
+      <Fechas>
+        Corte de caja desde: {fechaInicioFormateada} Hasta: {fechaactual}
+      </Fechas>
+      <Datos>
+        <section>
+          Ventas Totales:{' '}
+          <span>
+            {FormatearNumeroDinero(
+              totalVentasMetodoPago,
+              dataempresa?.currency,
+              dataempresa?.iso
+            )}{' '}
+          </span>
+        </section>
+        <section>
+          Efectivo en CAJA:{' '}
+          <span>
+            {FormatearNumeroDinero(
+              totalEfectivoTotalCaja,
+              dataempresa?.currency,
+              dataempresa?.iso
+            )}{' '}
+          </span>
+        </section>
+      </Datos>
+      <Division></Division>
+
+      <Resumen>
+        <Tablas>
+          <Tabla>
+            <h4>Dinero en CAJA</h4>
+            <ul>
+              <li>
+                Fondo de caja:{' '}
+                <span>
+                  {FormatearNumeroDinero(
+                    totalAperturaCaja,
+                    dataempresa?.currency,
+                    dataempresa?.iso
+                  )}
+                </span>
+              </li>
+              <li>
+                Ventas en efectivo:{' '}
+                <span>
+                  {' '}
+                  {FormatearNumeroDinero(
+                    totalVentasEfectivo,
+                    dataempresa?.currency,
+                    dataempresa?.iso
+                  )}
+                </span>
+              </li>
+
+              <li>
+                Ingresos varios:{' '}
+                <span>
+                  {FormatearNumeroDinero(
+                    totalIngresosVariosCaja,
+                    dataempresa?.currency,
+                    dataempresa?.iso
+                  )}
+                </span>
+              </li>
+              <li>
+                Gastos varios:{' '}
+                <span style={{ color: '#f15050', fontWeight: 'bold' }}>
+                  -
+                  {FormatearNumeroDinero(
+                    totalGastosVariosCaja,
+                    dataempresa?.currency,
+                    dataempresa?.iso
+                  )}
+                </span>
+              </li>
+              <li className="total">
+                <Divider />
+                {FormatearNumeroDinero(
+                  totalEfectivoTotalCaja,
+                  dataempresa?.currency,
+                  dataempresa?.iso
+                )}
+              </li>
+            </ul>
+          </Tabla>
+          <DivisionY />
+          <Tabla>
+            <h4>Ventas Totales</h4>
+            <ul>
+              {(dataventasmetodopago ?? []).map((item, index) => {
+                return (
+                  <li key={index}>
+                    En {item?.metodo_pago}:{' '}
+                    <span>
+                      {FormatearNumeroDinero(
+                        item?.monto,
+                        dataempresa?.currency,
+                        dataempresa?.iso
+                      )}{' '}
+                    </span>
+                  </li>
+                )
+              })}
+              <li className="total">
+                <Divider />
+                {FormatearNumeroDinero(
+                  totalVentasMetodoPago,
+                  dataempresa?.currency,
+                  dataempresa?.iso
+                )}
+              </li>
+            </ul>
+          </Tabla>
+          <DivisionY />
+        </Tablas>
+      </Resumen>
+      <Button
+        onClick={() => setStateConteoCaja(true)}
+        title="CERRAR CAJA"
+        color="#ffffff"
+        border="2px"
+        bgColor="#e88018"
+      />
+      {stateConteoCaja && <CashRegisterCountScreen />}
+    </Container>
+  )
+}
+
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${({ theme }) => theme.neutral};
+  margin-right: 10px;
+`
+
+const DivisionY = styled.span`
+  width: 1px;
+  border-radius: 15px;
+  margin: 20px 0;
+  position: relative;
+  text-align: center;
+  display: none;
+  border-left: 1px dashed ${({ theme }) => theme.neutral};
+  height: 95%;
+  @media ${Device.tablet} {
+    display: block;
+  }
+`
+
+const Division = styled.span`
+  background-color: ${({ theme }) => theme.neutral};
+  height: 1px;
+  border-radius: 15px;
+  margin: 20px 0;
+  position: relative;
+  text-align: center;
+  display: block;
+  width: 95%;
+`
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: ${({ theme }) => theme.backgroundSecondarytotal || '#fff'};
+  gap: 20px;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+  z-index: 10;
+`
+
+const Fechas = styled.p`
+  font-size: 14px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`
+
+const Resumen = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`
+
+const Datos = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: space-around;
+  width: 100%;
+`
+
+const Tablas = styled.div`
+  display: flex;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`
+
+const Tabla = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 120%;
+  h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .total {
+    font-weight: bold;
+    margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+  }
+`

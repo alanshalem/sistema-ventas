@@ -4,34 +4,27 @@ import styled from 'styled-components'
 
 import { PageTitle } from '../components/atoms/PageTitle'
 import { Button } from '../components/molecules/Button'
-import { RegistrarInventario } from '../components/organismos/formularios/RegistrarInventario'
-import { TablaInventarios } from '../components/organismos/tablas/TablaInventarios'
-import { CrudTemplate } from '../components/templates/CrudTemplate'
+import { RegisterInventory } from '../components/organisms/forms/RegisterInventory'
+import { InventoriesTable } from '../components/organisms/tables/InventoriesTable'
 import { BuscadorList } from '../components/ui/lists/BuscadorList'
 import { useEmpresaStore } from '../store/EmpresaStore'
 import { useGlobalStore } from '../store/GlobalStore'
 import { useMovStockStore } from '../store/MovStockStore'
 import { useProductosStore } from '../store/ProductosStore'
+
 export const Inventario = () => {
   const { mostrarMovStock } = useMovStockStore()
   const { dataempresa } = useEmpresaStore()
   const { buscarProductos, buscador } = useProductosStore()
   const { productosItemSelect, setBuscador, selectProductos } = useProductosStore()
-  const [openRegistro, SetopenRegistro] = useState(false)
-  const { setStateClose, setAccion, stateClose, accion } = useGlobalStore()
+  const [openRegistro] = useState(false)
+  const { setStateClose, setAccion, stateClose } = useGlobalStore()
 
-  const [dataSelect, setdataSelect] = useState([])
-  const [isExploding, setIsExploding] = useState(false)
-  const {
-    data: dataproductos,
-    isLoading: isLoadingBuscarProductos,
-    error,
-  } = useQuery({
+  useQuery({
     queryKey: ['buscar productos', buscador],
     queryFn: () =>
       buscarProductos({
-        id_empresa: dataempresa?.id,
-        buscador: buscador,
+        id_empresa: dataempresa?.id ?? 0,
       }),
     enabled: !!dataempresa,
   })
@@ -46,8 +39,8 @@ export const Inventario = () => {
     ],
     queryFn: () =>
       mostrarMovStock({
-        id_empresa: dataempresa?.id,
-        id_producto: productosItemSelect?.id,
+        id_empresa: dataempresa?.id ?? 0,
+        id_producto: productosItemSelect?.id ?? 0,
       }),
     enabled: !!dataempresa,
   })
@@ -55,11 +48,10 @@ export const Inventario = () => {
   function nuevoRegistro() {
     setStateClose(true)
     setAccion('Nuevo')
-    setItemSelect([])
   }
   return (
     <Container>
-      {stateClose && <RegistrarInventario />}
+      {stateClose && <RegisterInventory />}
 
       <section className="area1">
         {productosItemSelect?.nombre && (
@@ -72,19 +64,14 @@ export const Inventario = () => {
         <Button onClick={nuevoRegistro} title="Registrar" />
       </section>
       <section className="area2">
-        <BuscadorList
-          setBuscador={setBuscador}
-          data={dataproductos}
-          onSelect={selectProductos}
-        />
+        <BuscadorList setBuscador={setBuscador} data={[]} onSelect={selectProductos} />
       </section>
 
       <section className="main">
-        <TablaInventarios
-          setdataSelect={setdataSelect}
-          setAccion={setAccion}
-          SetopenRegistro={SetopenRegistro}
-          data={data}
+        <InventoriesTable
+          setAction={setAccion}
+          setOpenRegister={openRegistro}
+          data={(data as any) ?? []}
         />
       </section>
     </Container>

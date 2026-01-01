@@ -1,7 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const Switch = ({ state, setState }) => {
+interface SwitchProps {
+  state: boolean
+  setState: () => void | ((e: React.MouseEvent<HTMLInputElement>) => void)
+}
+
+export const Switch: React.FC<SwitchProps> = ({ state, setState }) => {
   return (
     <SwitchLabel>
       <ToggleInput type="checkbox" checked={state} onClick={setState} />

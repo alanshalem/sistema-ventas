@@ -1,18 +1,41 @@
-import { useQueryClient } from '@tanstack/react-query'
+import type { User } from '@supabase/supabase-js'
 import { create } from 'zustand'
 
-import { MostrarUsuarios, ObtenerIdAuthSupabase,supabase } from '../index'
+import { supabase } from '../index'
 
-export const useAuthStore = create((set) => ({
-  loginGoogle: async () => {
+interface LoginCredentials {
+  email: string
+  password: string
+}
+
+interface SignUpCredentials {
+  email: string
+  password: string
+}
+
+interface AuthState {
+  // No state properties currently
+}
+
+interface AuthActions {
+  loginGoogle: () => Promise<void>
+  cerrarSesion: () => Promise<void>
+  loginEmail: (credentials: LoginCredentials) => Promise<User | null>
+  crearUserYLogin: (credentials: SignUpCredentials) => Promise<User | null>
+}
+
+type AuthStore = AuthState & AuthActions
+
+export const useAuthStore = create<AuthStore>(() => ({
+  loginGoogle: async (): Promise<void> => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
     })
   },
-  cerrarSesion: async () => {
+  cerrarSesion: async (): Promise<void> => {
     await supabase.auth.signOut()
   },
-  loginEmail: async (p) => {
+  loginEmail: async (p: LoginCredentials): Promise<User | null> => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: p.email,
       password: p.password,
@@ -26,15 +49,15 @@ export const useAuthStore = create((set) => ({
     }
     return data.user
   },
-  crearUserYLogin: async (p) => {
-    const { data, error } = await supabase.auth.signUp({
+  crearUserYLogin: async (p: SignUpCredentials): Promise<User | null> => {
+    const { data } = await supabase.auth.signUp({
       email: p.email,
       password: p.password,
     })
     return data.user
   },
-  // obtenerIdAuthSupabase: async () => {
-  //     const response = await ObtenerIdAuthSupabase();
-  //     return response;
+  // obtenerIdAuthSupabase: async (): Promise<string> => {
+  //     const response = await ObtenerIdAuthSupabase()
+  //     return response
   //   },
 }))

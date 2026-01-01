@@ -3,13 +3,12 @@ import ConfettiExplosion from 'react-confetti-explosion'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import { Btn1, Buscador, RegistrarCategorias, useCategoriasStore } from '../../index'
+import { Button } from '../../index'
 import { useMetodosPagoStore } from '../../store/MetodosPagoStore'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
-import { RegistrarMetodosPago } from '../organismos/formularios/RegistrarMetodosPago'
-import { TablaCategorias } from '../organismos/tablas/TablaCategorias'
-import { TablaMetodosPago } from '../organismos/tablas/TablaMetodosPago'
+import { RegisterPaymentMethods } from '../organisms/forms/RegisterPaymentMethods'
+import { PaymentMethodsTable } from '../organisms/tables/PaymentMethodsTable'
 export function MetodosPagoTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const { dataMetodosPago } = useMetodosPagoStore()
@@ -26,7 +25,7 @@ export function MetodosPagoTemplate() {
     <Container>
       <Toaster richColors position="top-right" />
       {openRegistro && (
-        <RegistrarMetodosPago
+        <RegisterPaymentMethods
           setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
@@ -35,17 +34,17 @@ export function MetodosPagoTemplate() {
       )}
       <section className="area1">
         <PageTitle>Métodos de pago</PageTitle>
-        <Btn1
-          funcion={nuevoRegistro}
-          bgcolor={v.colorPrincipal}
-          titulo="nuevo"
-          icono={<v.iconoagregar />}
+        <Button
+          onClick={nuevoRegistro}
+          bgColor={v.colorPrincipal}
+          title="nuevo"
+          icon={<v.iconoagregar />}
         />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaMetodosPago
+        <PaymentMethodsTable
           setdataSelect={setdataSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}

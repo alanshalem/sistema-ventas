@@ -20,6 +20,9 @@ export interface Producto extends BaseEntity {
   id_empresa: number
   imagen_url?: string
   descripcion?: string
+  maneja_inventarios?: boolean
+  sevende_por?: string
+  maneja_multiprecios?: boolean
 }
 
 export interface Categoria extends BaseEntity {
@@ -30,21 +33,30 @@ export interface Categoria extends BaseEntity {
 }
 
 export interface Cliente extends BaseEntity {
-  nombre: string
+  nombres?: string
+  nombre?: string
   documento?: string
+  identificador_nacional?: string
+  identificador_fiscal?: string
   tipo_documento?: string
   email?: string
   telefono?: string
   direccion?: string
+  tipo?: string
   id_empresa: number
 }
 
 export interface Proveedor extends BaseEntity {
-  nombre: string
+  nombres?: string
+  nombre?: string
+  documento?: string
+  identificador_nacional?: string
+  identificador_fiscal?: string
   ruc?: string
   email?: string
   telefono?: string
   direccion?: string
+  tipo?: string
   id_empresa: number
 }
 
@@ -82,6 +94,8 @@ export interface DetalleVenta extends BaseEntity {
 export interface Usuario extends BaseEntity {
   nombres: string
   correo: string
+  usuario?: string
+  email?: string
   id_rol?: number
   id_empresa: number
   estado?: boolean
@@ -118,12 +132,20 @@ export interface Empresa extends BaseEntity {
   nombre: string
   ruc?: string
   direccion?: string
+  direccion_fiscal?: string
   telefono?: string
   email?: string
   logo?: string
   id_moneda?: number
   nombre_moneda?: string
   simbolo_moneda?: string
+  impuesto?: string
+  valor_impuesto?: number
+  iso?: string
+  currency?: string
+  symbol?: string
+  countryName?: string
+  pais?: string
   id_fiscal?: string
   pie_pagina_ticket?: string
 }
@@ -140,8 +162,10 @@ export interface Caja extends BaseEntity {
   nombre: string
   descripcion?: string
   id_empresa: number
+  id_sucursal?: number
   estado?: boolean
   saldo_inicial?: number
+  fecha_creacion?: string
 }
 
 export interface AsignacionCajaSucursal extends BaseEntity {
@@ -167,6 +191,9 @@ export interface Stock extends BaseEntity {
   id_producto: number
   id_almacen: number
   cantidad: number
+  stock?: number
+  stock_minimo?: number
+  ubicacion?: string
   id_empresa: number
 }
 
@@ -186,19 +213,25 @@ export interface MovimientoStock extends BaseEntity {
 
 export interface MovimientoCaja extends BaseEntity {
   tipo: 'ingreso' | 'egreso'
+  tipo_movimiento?: string
   monto: number
   descripcion?: string
   id_caja: number
+  id_metodo_pago?: number
   id_usuario: number
   id_empresa: number
+  id_cierre_caja?: number
+  id_ventas?: number
   fecha: string
   id_venta?: number
+  vuelto?: number
 }
 
 export interface CierreCaja extends BaseEntity {
   id_caja: number
   id_usuario: number
   fecha_apertura: string
+  fechainicio?: string
   fecha_cierre?: string
   saldo_inicial: number
   total_ingresos: number
@@ -223,6 +256,10 @@ export interface Moneda extends BaseEntity {
   nombre: string
   codigo: string
   simbolo: string
+  symbol?: string
+  iso?: string
+  countryName?: string
+  currency?: string
   tasa_cambio?: number
 }
 
@@ -236,20 +273,25 @@ export interface Serializacion extends BaseEntity {
   serie: string
   correlativo: number
   tipo_comprobante: string
+  id_tipo_comprobante?: number
   id_empresa: number
   activo?: boolean
+  cantidad_numeros?: number
+  sucursal_id?: number
 }
 
 // ============== PRINTERS ==============
 
 export interface Impresora extends BaseEntity {
   nombre: string
+  name?: string
   ip?: string
   puerto?: number
   tipo: string
   id_empresa: number
   id_caja?: number
   estado?: boolean
+  state?: boolean
   modelo?: string
 }
 
@@ -268,6 +310,35 @@ export interface ProductoTopVentas {
   nombre_producto: string
   cantidad_vendida: number
   monto_total: number
+}
+
+// Dashboard specific types
+export interface Top5ProductData {
+  id_producto: number
+  nombre_producto: string
+  cantidad_vendida: number
+  monto_total: number
+}
+
+export interface Top10Product {
+  id_producto: number
+  nombre_producto: string
+  cantidad_vendida: number
+  monto_total: number
+  total_vendido: number
+  porcentaje: number
+}
+
+export interface CashMovement {
+  id: number
+  tipo: 'ingreso' | 'egreso'
+  monto: number
+  descripcion: string
+  id_caja: number
+  id_usuario: number
+  id_empresa: number
+  fecha: string
+  id_venta?: number
 }
 
 // ============== UTILITY TYPES ==============

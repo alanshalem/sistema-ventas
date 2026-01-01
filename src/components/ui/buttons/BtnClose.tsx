@@ -1,6 +1,11 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import styled from 'styled-components'
-export function BtnClose({ funcion }) {
+
+interface BtnCloseProps {
+  funcion: () => void
+}
+
+export function BtnClose({ funcion }: BtnCloseProps) {
   return (
     <Container onClick={funcion}>
       <Icon icon="ep:close-bold" />

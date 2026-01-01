@@ -10,20 +10,24 @@ export const useUpdateEmpresaMutation = () => {
   const { file } = useGlobalStore()
   return useMutation({
     mutationKey: ['editar empresa'],
-    mutationFn: async (data) => {
+    mutationFn: async (data: any) => {
       const p = {
-        id: dataempresa?.id,
+        id: dataempresa?.id ?? 0,
         nombre: data.nombre,
         direccion_fiscal: data.direccion,
         impuesto: data.impuesto,
         valor_impuesto: parseFloat(data.valor_impuesto),
       }
-      await editarEmpresa(p, dataempresa?.logo, file)
+      await editarEmpresa(
+        p,
+        dataempresa?.logo ?? '',
+        (file && file[0]) ?? new File([], '')
+      )
     },
     onError: (error) => toast.error(error.message),
     onSuccess: () => {
       toast.success('Datos guardados')
-      queyClient.invalidateQueries(['mostrar empresa'])
+      queyClient.invalidateQueries({ queryKey: ['mostrar empresa'] })
     },
   })
 }
@@ -33,9 +37,9 @@ export const useUpdateEmpresaTicketMutation = () => {
   const { dataempresa, editarEmpresa } = useEmpresaStore()
   return useMutation({
     mutationKey: ['editar empresa'],
-    mutationFn: async (data) => {
+    mutationFn: async (data: any) => {
       const p = {
-        id: dataempresa?.id,
+        id: dataempresa?.id ?? 0,
         nombre: data?.nombre,
         id_fiscal: data?.id_fiscal,
         direccion_fiscal: data?.direccion_fiscal,
@@ -43,12 +47,12 @@ export const useUpdateEmpresaTicketMutation = () => {
         pie_pagina_ticket: data?.pie_pagina_ticket,
       }
 
-      await editarEmpresa(p, dataempresa?.logo, file)
+      await editarEmpresa(p, dataempresa?.logo ?? '', file)
     },
     onError: (error) => toast.error(error.message),
     onSuccess: () => {
       toast.success('Datos guardados')
-      queyClient.invalidateQueries(['mostrar empresa'])
+      queyClient.invalidateQueries({ queryKey: ['mostrar empresa'] })
     },
   })
 }

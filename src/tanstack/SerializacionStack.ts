@@ -6,6 +6,12 @@ import { useCierreCajaStore } from '../store/CierreCajaStore'
 import { useGlobalStore } from '../store/GlobalStore'
 import { useSerializacionStore } from '../store/SerializacionStore'
 
+interface EditarSerializacionData {
+  cantidad_numeros: number
+  correlativo: number
+  serie: string
+}
+
 export const useMostrarSerializacionesQuery = () => {
   const { mostrarSerializaciones } = useSerializacionStore()
   const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
@@ -48,7 +54,7 @@ export const useEditarSerializacionDefaultMutation = () => {
     },
     onSuccess: () => {
       toast.success('Datos guardados')
-      queryClient.invalidateQueries(['mostrar serializaciones'])
+      queryClient.invalidateQueries({ queryKey: ['mostrar serializaciones'] })
     },
   })
 }
@@ -58,12 +64,12 @@ export const useEditarSerializacionMutation = () => {
   const { editarSerializacion } = useSerializacionStore()
   return useMutation({
     mutationKey: ['editar serializacion'],
-    mutationFn: async (data) => {
+    mutationFn: async (data: EditarSerializacionData) => {
       const p = {
         id: itemSelect?.id,
-        cantidad_numeros: data?.cantidad_numeros,
-        correlativo: data?.correlativo,
-        serie: data?.serie,
+        cantidad_numeros: data.cantidad_numeros,
+        correlativo: data.correlativo,
+        serie: data.serie,
       }
       await editarSerializacion(p)
     },
@@ -72,7 +78,7 @@ export const useEditarSerializacionMutation = () => {
     },
     onSuccess: () => {
       toast.success('Datos guardados')
-      queryClient.invalidateQueries(['mostrar serializaciones'])
+      queryClient.invalidateQueries({ queryKey: ['mostrar serializaciones'] })
       setStateClose(false)
     },
   })

@@ -18,9 +18,9 @@ export async function InsertarEmpresa(p: InsertarEmpresaParams): Promise<Empresa
 
 export async function MostrarEmpresaXidsuario(
   p: MostrarEmpresaXIdUsuarioParams
-): Promise<any> {
+): Promise<Empresa | null> {
   const { data } = await supabase.rpc('mostrarempresaxiduser', p).maybeSingle()
-  return data
+  return data as Empresa | null
 }
 
 export async function EditarMonedaEmpresa(p: EditarEmpresaParams): Promise<void> {

@@ -4,17 +4,14 @@ import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import {
-  Btn1,
-  Buscador,
-  RegistrarCategorias,
-  RegistrarClientesProveedores,
-  useCategoriasStore,
+  Button,
+  RegisterClientsSuppliers,
+  SearchBox,
   useClientesProveedoresStore,
 } from '../../index'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
-import { TablaCategorias } from '../organismos/tablas/TablaCategorias'
-import { TablaClientesProveedores } from '../organismos/tablas/TablaClientesProveedores'
+import { ClientsSuppliersTable } from '../organisms/tables/ClientsSuppliersTable'
 export function ClientesProveedoresTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const { dataclipro, setBuscador } = useClientesProveedoresStore()
@@ -34,7 +31,7 @@ export function ClientesProveedoresTemplate() {
   return (
     <Container>
       {openRegistro && (
-        <RegistrarClientesProveedores
+        <RegisterClientsSuppliers
           setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
@@ -45,20 +42,20 @@ export function ClientesProveedoresTemplate() {
         <PageTitle>
           {location.pathname === '/configuracion/clientes' ? 'Clientes' : 'Proveedores'}
         </PageTitle>
-        <Btn1
-          funcion={nuevoRegistro}
-          bgcolor={v.colorPrincipal}
-          titulo="nuevo"
-          icono={<v.iconoagregar />}
+        <Button
+          onClick={nuevoRegistro}
+          bgColor={v.colorPrincipal}
+          title="nuevo"
+          icon={<v.iconoagregar />}
         />
       </section>
       <section className="area2">
-        <Buscador setBuscador={setBuscador} />
+        <SearchBox setBuscador={setBuscador} />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaClientesProveedores
+        <ClientsSuppliersTable
           setdataSelect={setdataSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}

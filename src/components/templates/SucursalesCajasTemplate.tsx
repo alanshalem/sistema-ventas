@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { useCajasStore } from '../../store/CajasStore'
 import { useSucursalesStore } from '../../store/SucursalesStore'
-import { RegistrarCaja } from '../organismos/formularios/RegistrarCaja'
-import { RegistrarSucursal } from '../organismos/formularios/RegistrarSucursal'
-import { ListSucursales } from '../organismos/SucursalesDesign/ListSucursales'
+import { BranchesList } from '../organisms/BranchesDesign/BranchesList'
+import { RegisterBranch } from '../organisms/forms/RegisterBranch'
+import { RegisterCashRegister } from '../organisms/forms/RegisterCashRegister'
 import { AnimatedGrid } from '../ui/animated/AnimatedGrid'
 import { ButtonDashed } from '../ui/buttons/ButtonDashed'
 export const SucursalesCajasTemplate = () => {
@@ -15,8 +15,8 @@ export const SucursalesCajasTemplate = () => {
   return (
     <Container>
       <Toaster position="top-right" />
-      {stateSucursal && <RegistrarSucursal />}
-      {stateCaja && <RegistrarCaja />}
+      {stateSucursal && <RegisterBranch />}
+      {stateCaja && <RegisterCashRegister />}
 
       <section className="area1">
         <Header>
@@ -26,7 +26,7 @@ export const SucursalesCajasTemplate = () => {
         </Header>
       </section>
       <section className="area2">
-        <ListSucursales />
+        <BranchesList />
       </section>
       {/* <AnimatedGrid/> */}
     </Container>

@@ -1,7 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const Check = ({ checked, onChange }) => {
+interface CheckProps {
+  checked: boolean
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export const Check: React.FC<CheckProps> = ({ checked, onChange }) => {
   return (
     <Container>
       <Input type="checkbox" checked={checked} onChange={onChange} />

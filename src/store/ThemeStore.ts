@@ -8,7 +8,7 @@ interface ThemeState {
   setTheme: (p: { tema: 'light' | 'dark'; style: typeof Light | typeof Dark }) => void
 }
 
-export const useThemeStore = create<ThemeState>((set, get) => ({
+export const useThemeStore = create<ThemeState>((set) => ({
   theme: 'light',
   themeStyle: Light,
   setTheme: (p) => {

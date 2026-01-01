@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
 import { BarLoader } from 'react-spinners'
 import { toast, Toaster } from 'sonner'
 import styled from 'styled-components'
@@ -9,12 +8,12 @@ import ticket from '../../reports/TicketPrueba'
 import { useAsignacionCajaSucursalStore } from '../../store/AsignacionCajaSucursalStore'
 import { useImpresorasStore } from '../../store/ImpresorasStore'
 import { slideBackground } from '../../styles/keyframes'
+import type { Impresora } from '../../types'
 import { Button } from '../molecules/Button'
-import { HeaderImpresoras } from '../organismos/ImpresorasDesign/HeaderImpresoras'
+import { PrintersHeader } from '../organisms/PrintersDesign/PrintersHeader'
 import { SelectList } from '../ui/lists/SelectList'
 import { Switch } from '../ui/toggles/Switch'
 export const ImpresorasTemplate = () => {
-  const [selectedFile, setSelectedFile] = useState(null)
   const {
     mostrarDatosPc,
     statePrintDirecto,
@@ -28,11 +27,7 @@ export const ImpresorasTemplate = () => {
   const { sucursalesItemSelectAsignadas } = useAsignacionCajaSucursalStore()
   const queryClient = useQueryClient()
   //mostrar impresoras por caja
-  const {
-    data: dataImpresorasPorCaja,
-    isLoading: isLoadingImpresoras,
-    error: errorImpresoras,
-  } = useQuery({
+  const { data: dataImpresorasPorCaja } = useQuery({
     queryKey: [
       'mostrar impresora por caja',
       {
@@ -41,24 +36,17 @@ export const ImpresorasTemplate = () => {
     ],
     queryFn: () =>
       mostrarImpresoraXCaja({
-        id_caja: sucursalesItemSelectAsignadas?.id_caja,
+        id_caja: sucursalesItemSelectAsignadas?.id_caja ?? 0,
       }),
+    enabled: !!sucursalesItemSelectAsignadas?.id_caja,
   })
   //mostrar datos de Pc local
-  const {
-    data: dataPcLocal,
-    isLoading: isLocadingDatosPc,
-    error: errorDatosPc,
-  } = useQuery({
+  const { data: dataPcLocal, isLoading: isLocadingDatosPc } = useQuery({
     queryKey: ['mostrar datos de PC'],
     queryFn: mostrarDatosPc,
   })
   //mostrar las impresoras locales
-  const {
-    data: dataImpresorasLocales,
-    isLoading: isloadingImpresorasLocales,
-    error: errorImpresorasLocales,
-  } = useQuery({
+  const { data: dataImpresorasLocales } = useQuery({
     queryKey: ['mostrar lista impresoras locales'],
     queryFn: mostrarListaImpresoraLocales,
     enabled: !!dataPcLocal,
@@ -67,27 +55,27 @@ export const ImpresorasTemplate = () => {
   const { mutate: doEditar, isPending } = useMutation({
     mutationKey: ['editar impresoras'],
     mutationFn: editar,
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error('Error al editar impresoras' + error.message)
     },
     onSuccess: () => {
       toast.success('Datos guardados')
-      queryClient.invalidateQueries(['mostrar impresora por caja'])
+      queryClient.invalidateQueries({ queryKey: ['mostrar impresora por caja'] })
     },
   })
   async function editar() {
     const p = {
-      id: dataImpresorasPorCaja?.id,
+      id: dataImpresorasPorCaja?.id ?? 0,
       state: statePrintDirecto,
-      pc_name: dataPcLocal?.machineName,
-      ip_local: dataPcLocal?.localIPs[0],
-      name: selectImpresora?.name,
+      pc_name: (dataPcLocal as any)?.machineName ?? '',
+      ip_local: (dataPcLocal as any)?.localIPs?.[0] ?? '',
+      name: selectImpresora?.name ?? '',
     }
     console.log('editar', p)
     await editarImpresoras(p)
   }
   const probarTicket = async () => {
-    const response = await ticket('b64')
+    const response = (await ticket('b64')) as { content: string }
     // Convertir el contenido base64 en un archivo Blob
     const binaryString = atob(response.content)
     const binaryLen = binaryString.length
@@ -103,7 +91,7 @@ export const ImpresorasTemplate = () => {
 
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('printerName', selectImpresora?.name)
+    formData.append('printerName', selectImpresora?.name ?? '')
     const responseApi = await fetch('http://localhost:5075/api/print-ticket', {
       method: 'POST',
       body: formData,
@@ -111,11 +99,11 @@ export const ImpresorasTemplate = () => {
     if (responseApi.ok) {
       toast.success('El PDF se envió a imprimir correctamente.')
     } else {
-      const error = await responseApi.text()
-      toast.error('Error al imprimir' + error)
+      const errorMessage = await responseApi.text()
+      toast.error('Error al imprimir' + errorMessage)
     }
   }
-  const descargarArchivo = (ruta) => {
+  const descargarArchivo = (ruta: string) => {
     const link = document.createElement('a')
     link.href = ruta
     link.target = '_blank'
@@ -124,9 +112,7 @@ export const ImpresorasTemplate = () => {
     link.click()
     document.body.removeChild(link)
   }
-  const isLoading = isLocadingDatosPc
-  const error = errorDatosPc
-  if (isLoading) {
+  if (isLocadingDatosPc) {
     return <BarLoader color="#b7b7b7" />
   }
   return (
@@ -134,7 +120,7 @@ export const ImpresorasTemplate = () => {
       <Toaster />
       {dataPcLocal ? (
         <SubContainer>
-          <HeaderImpresoras />
+          <PrintersHeader />
           <Title>IMPRESORAS</Title>
           <ContentSwich>
             <SubTitle>Imprimir directo</SubTitle>
@@ -147,7 +133,7 @@ export const ImpresorasTemplate = () => {
             />
           </ContentSwich>
 
-          <Avatar $bg="#d70e79">
+          <Avatar>
             {statePrintDirecto ? (
               <>
                 <Button
@@ -159,11 +145,11 @@ export const ImpresorasTemplate = () => {
                 <SelectList
                   itemSelect={selectImpresora}
                   onSelect={setSelectImpresora}
-                  data={dataImpresorasLocales}
+                  data={dataImpresorasLocales as (Impresora | { name: string })[]}
                   displayField="name"
                 />
                 <Button
-                  onClick={doEditar}
+                  onClick={() => doEditar()}
                   disabled={isPending}
                   bgColor={'#fff'}
                   title={'Guardar'}
@@ -251,7 +237,7 @@ const Title = styled.span`
 const SubTitle = styled.span`
   font-size: 20px;
 `
-const Avatar = styled.div`
+const Avatar = styled.div<{ $bg?: string }>`
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -261,6 +247,7 @@ const Avatar = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+  background-color: ${(props) => props.$bg || '#f0f0f0'};
 
   .nombre {
     font-size: 30px;

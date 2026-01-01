@@ -1,16 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const AnimatedGrid = () => {
+interface AnimatedGridProps {}
+
+export const AnimatedGrid: React.FC<AnimatedGridProps> = () => {
   return (
     <GridContainer>
-      {Array.from({ length: 4 }).map((_, rowIndex) => (
+      {Array.from({ length: 4 }).map((_, rowIndex: number) => (
         <HorizontalLine
           key={`h-line-${rowIndex}`}
           style={{ top: `${25 * (rowIndex + 1)}%` }}
         />
       ))}
-      {Array.from({ length: 4 }).map((_, colIndex) => (
+      {Array.from({ length: 4 }).map((_, colIndex: number) => (
         <VerticalLine
           key={`v-line-${colIndex}`}
           style={{ left: `${25 * (colIndex + 1)}%` }}

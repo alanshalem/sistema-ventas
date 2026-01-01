@@ -1,4 +1,4 @@
-import { PantallaAperturaCaja } from '../components/organismos/POSDesign/CajaDesign/PantallaAperturaCaja'
+import { CashRegisterOpeningScreen } from '../components/organisms/POSDesign/CashRegisterDesign/CashRegisterOpeningScreen'
 import { POSTemplate, SecondarySpinner } from '../index'
 import { useMostrarAperturasCajaPorUsuarioQuery } from '../tanstack/CierresCajaStack'
 import { useMostrarMetodosPagoQuery } from '../tanstack/MetodosPagoStack'
@@ -19,5 +19,5 @@ export function POS() {
     return <span>Error caja: {error.message}</span>
   }
 
-  return dataCierreCaja ? <POSTemplate /> : <PantallaAperturaCaja />
+  return dataCierreCaja ? <POSTemplate /> : <CashRegisterOpeningScreen />
 }

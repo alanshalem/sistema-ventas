@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 
 import { EditarImpresoras, MostrarImpresoraXCaja } from '../supabase/crudImpresoras'
-const fetchWithTimeout = (url, timeout = 5000) => {
+import type { EditarImpresoraParams, IdCajaParam, Impresora } from '../types'
+
+const fetchWithTimeout = (url: string, timeout = 5000): Promise<Response> => {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error('Timeout')), timeout)
     fetch(url)
@@ -15,18 +17,41 @@ const fetchWithTimeout = (url, timeout = 5000) => {
       })
   })
 }
-export const useImpresorasStore = create((set, get) => ({
+
+interface ImpresorasState {
+  dataImpresorasPorCaja: Impresora | null
+  selectImpresora: { name: string } | Impresora
+  statePrintDirecto: boolean
+}
+
+interface ImpresorasActions {
+  setSelectImpresora: (printer: { name: string } | Impresora) => void
+  setStatePrintDirecto: () => void
+  mostrarDatosPc: () => Promise<unknown | null>
+  mostrarListaImpresoraLocales: () => Promise<unknown | undefined>
+  editarImpresoras: (params: EditarImpresoraParams) => Promise<void>
+  mostrarImpresoraXCaja: (params: IdCajaParam) => Promise<Impresora | null>
+}
+
+type ImpresorasStore = ImpresorasState & ImpresorasActions
+
+export const useImpresorasStore = create<ImpresorasStore>((set) => ({
+  // State
   dataImpresorasPorCaja: null,
   selectImpresora: {
     name: 'seleccione una impresora',
   },
+  statePrintDirecto: false,
+
+  // Actions
   setSelectImpresora: (p) => {
     set({ selectImpresora: p })
   },
-  statePrintDirecto: false,
+
   setStatePrintDirecto: () => {
     set((state) => ({ statePrintDirecto: !state.statePrintDirecto }))
   },
+
   mostrarDatosPc: async () => {
     try {
       const response = await fetchWithTimeout(
@@ -42,28 +67,37 @@ export const useImpresorasStore = create((set, get) => ({
       return null
     }
   },
+
   mostrarListaImpresoraLocales: async () => {
-    const response = await fetch('http://localhost:5075/api/list')
-    if (!response.ok) {
-      return
+    try {
+      const response = await fetch('http://localhost:5075/api/list')
+      if (!response.ok) {
+        return undefined
+      }
+      const data = await response.json()
+      return data
+    } catch {
+      return undefined
     }
-    const data = await response.json()
-    return data
   },
+
   editarImpresoras: async (p) => {
     await EditarImpresoras(p)
   },
+
   mostrarImpresoraXCaja: async (p) => {
     const response = await MostrarImpresoraXCaja(p)
     set(() => ({
       dataImpresorasPorCaja: response,
-      statePrintDirecto: response?.state,
+      statePrintDirecto: (response as any)?.state ?? false,
       selectImpresora:
-        response?.name === '-'
+        (response as any)?.name === '-'
           ? {
-              name: 'seleccione una impresora',
-            }
-          : response,
+            name: 'seleccione una impresora',
+          }
+          : (response ?? {
+            name: 'seleccione una impresora',
+          }),
     }))
     return response
   },

@@ -1,5 +1,3 @@
-import Swal from 'sweetalert2'
-
 import { supabase } from '../index'
 import type {
   Caja,
@@ -27,11 +25,24 @@ export async function MostrarSucursales(
   return data as Sucursal[] | null
 }
 
-export async function MostrarSucursalesAsignadasXuser(p: IdUsuarioParam): Promise<any> {
+interface SucursalAsignada {
+  id: number
+  nombre: string
+  direccion?: string
+  telefono?: string
+  id_empresa: number
+  estado?: boolean
+  id_caja?: number
+  nombre_caja?: string
+}
+
+export async function MostrarSucursalesAsignadasXuser(
+  p: IdUsuarioParam
+): Promise<SucursalAsignada[] | null> {
   const { data } = await supabase.rpc('mostrarsucursalesasignadas', {
     _id_usuario: p.id_usuario,
   })
-  return data
+  return data as SucursalAsignada[] | null
 }
 
 export async function MostrarCajasXSucursal(

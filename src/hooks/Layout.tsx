@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import {
   HamburgerSwitch,
-  MenuMovil,
+  MobileMenu,
   Sidebar,
   Spinner,
   useAuthStore,
@@ -76,7 +76,7 @@ export function Layout({ children }) {
       </section>
       <section className="contentMenuhambur">
         <HamburgerSwitch isActive={stateMenu} onClick={() => setStateMenu(!stateMenu)} />
-        {stateMenu ? <MenuMovil setState={() => setStateMenu(false)} /> : null}
+        {stateMenu ? <MobileMenu setState={() => setStateMenu(false)} /> : null}
       </section>
 
       <Containerbody>{children}</Containerbody>

@@ -1,19 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { useFormattedDate } from '../hooks/useFormattedDate'
 import { useAlmacenesStore } from '../store/AlmacenesStore'
-import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
-import { useCategoriasStore } from '../store/CategoriasStore'
 import { useEmpresaStore } from '../store/EmpresaStore'
 import { useGlobalStore } from '../store/GlobalStore'
-import { useImpresorasStore } from '../store/ImpresorasStore'
 import { useMovStockStore } from '../store/MovStockStore'
 import { useProductosStore } from '../store/ProductosStore'
 import { useStockStore } from '../store/StockStore'
-import { useSucursalesStore } from '../store/SucursalesStore'
-import { useUsuariosStore } from '../store/UsuariosStore'
-import { ConvertirMinusculas } from '../utils/Conversiones'
 
 // export const useBuscarProductosQuery = () => {
 //   const { buscador, buscarProductos } = useProductosStore();
@@ -29,59 +23,66 @@ import { ConvertirMinusculas } from '../utils/Conversiones'
 //     enabled: !!dataempresa,
 //   });
 // };
+
+interface InsertarMovStockFormData {
+  cantidad: string
+  precio_compra: number
+  precio_venta: number
+}
+
 export const useInsertarMovStockMutation = () => {
   const queryClient = useQueryClient()
-  const { productosItemSelect, resetProductosItemSelect } = useProductosStore()
-  const { itemSelect, setStateClose } = useGlobalStore()
+  const { productosItemSelect, editarPreciosProductos } = useProductosStore()
+  const { setStateClose } = useGlobalStore()
   const { tipo, insertarMovStock } = useMovStockStore()
-  const { editarStock, dataStockXAlmacenYProducto: dataStock } = useStockStore()
+  const { editarStock } = useStockStore()
   const { almacenSelectItem } = useAlmacenesStore()
-
-  const { editarPreciosProductos } = useProductosStore()
+  const { dataempresa } = useEmpresaStore()
   const fechaActual = useFormattedDate()
-  console.log('dataStock', dataStock)
+
   return useMutation({
     mutationKey: ['insertar movimiento stock'],
-    mutationFn: async (data) => {
+    mutationFn: async (data: InsertarMovStockFormData) => {
       const pMovimientoStock = {
-        id_almacen: almacenSelectItem?.id,
-        id_producto: productosItemSelect?.id,
-        tipo_movimiento: tipo,
+        id_empresa: dataempresa?.id ?? 0,
+        id_almacen: almacenSelectItem?.id ?? 0,
+        id_producto: productosItemSelect?.id ?? 0,
+        id_usuario: 1, // This should come from auth context
+        tipo: tipo,
         cantidad: parseFloat(data.cantidad),
         fecha: fechaActual,
-        detalle: 'registro de inventario manual',
-        origen: 'inventario',
+        motivo: 'registro de inventario manual',
       }
+
+      const stockTipo = tipo === 'entrada' ? 'ingreso' : 'egreso'
+
       const pStock = {
-        _id: dataStock?.id,
-        cantidad: parseFloat(data.cantidad),
+        _id_producto: productosItemSelect?.id ?? 0,
+        _id_almacen: almacenSelectItem?.id ?? 0,
+        _cantidad: parseFloat(data.cantidad),
       }
+
       const pProductos = {
-        id: productosItemSelect?.id,
+        id: productosItemSelect?.id ?? 0,
         precio_compra: parseFloat(
-          (productosItemSelect?.precio_compra + data.precio_compra) / 2
+          String(((productosItemSelect?.precio_compra ?? 0) + data.precio_compra) / 2)
         ),
         precio_venta: parseFloat(
-          (productosItemSelect?.precio_venta + data.precio_venta) / 2
+          String(((productosItemSelect?.precio_venta ?? 0) + data.precio_venta) / 2)
         ),
       }
-      console.log('pMovimientoStock', pMovimientoStock)
-      console.log('pStock', pStock)
-      console.log('pProductos', pProductos)
-      console.log('tipo', tipo)
 
       await insertarMovStock(pMovimientoStock)
-      await editarStock(pStock, tipo)
+      await editarStock(pStock, stockTipo)
       await editarPreciosProductos(pProductos)
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error('Error:' + error.message)
     },
     onSuccess: () => {
       toast.success('Registro guardado correctamente')
-      queryClient.invalidateQueries(['buscar productos'])
+      queryClient.invalidateQueries({ queryKey: ['buscar productos'] })
       setStateClose(false)
-      resetProductosItemSelect()
     },
   })
 }

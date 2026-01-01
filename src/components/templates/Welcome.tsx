@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 import { useAuthStore } from '../../index'
-import { NieveComponente } from '../organismos/NieveComponente'
+import { NieveComponente } from '../organisms/NieveComponente'
 export function Welcome() {
   const { cerrarSesion } = useAuthStore()
   function cerrar() {
@@ -106,11 +106,11 @@ const Container = styled.div`
     grid-template-columns: 45% 50%;
     place-items: center;
     gap: 50px;
-    background: ${({ theme }) => theme.bgtotal};
+    background: ${({ theme }) => theme.backgroundSecondarytotal};
     background: radial-gradient(
       circle,
-      ${({ theme }) => theme.rgbafondoanimado} 3%,
-      ${({ theme }) => theme.bgtotal} 60%
+      ${({ theme }) => theme.overlayAlpha} 3%,
+      ${({ theme }) => theme.backgroundSecondarytotal} 60%
     );
     overflow: hidden;
     padding: 130px 80px;

@@ -1,5 +1,3 @@
-import Swal from 'sweetalert2'
-
 import { supabase } from '../index'
 import type {
   DetalleVenta,

@@ -8,47 +8,91 @@ import {
   MostrarAlmacenesXSucursal,
   MostrarAlmacenXSucursal,
 } from '../index'
+import type {
+  EditarAlmacenParams,
+  EliminarAlmacenParams,
+  InsertarAlmacenParams,
+  MostrarAlmacenesXEmpresaParams,
+  MostrarAlmacenesXSucursalParams,
+  MostrarAlmacenXSucursalParams,
+} from '../types/crud'
+import type { Almacen, Sucursal } from '../types/database'
 
-export const useAlmacenesStore = create((set, get) => ({
+interface AlmacenesState {
+  stateAlmacen: boolean
+  accion: string
+  almacenSelectItem: Almacen | null
+  dataalmacen: Almacen[]
+  dataalmacenxsucursalxproducto: (Sucursal & { almacen: Almacen[] })[] | null
+  dataAlmacenesXempresa: (Sucursal & { almacen: Almacen[] })[] | null
+  dataAlmacenesXsucursal: Almacen[] | null
+}
+
+interface AlmacenesActions {
+  setStateAlmacen: (state: boolean) => void
+  setAccion: (accion: string) => void
+  setAlmacenSelectItem: (item: Almacen | null) => void
+  mostrarAlmacenXsucursal: (
+    params: MostrarAlmacenXSucursalParams
+  ) => Promise<Almacen | null>
+  mostrarAlmacenesXEmpresa: (
+    params: MostrarAlmacenesXEmpresaParams
+  ) => Promise<(Sucursal & { almacen: Almacen[] })[] | null>
+  mostrarAlmacenesXSucursal: (
+    params: MostrarAlmacenesXSucursalParams
+  ) => Promise<Almacen[] | null>
+  insertarAlmacen: (params: InsertarAlmacenParams) => Promise<void>
+  eliminarAlmacen: (params: EliminarAlmacenParams) => Promise<void>
+  editarAlmacen: (params: EditarAlmacenParams) => Promise<void>
+}
+
+type AlmacenesStore = AlmacenesState & AlmacenesActions
+
+export const useAlmacenesStore = create<AlmacenesStore>((set) => ({
   stateAlmacen: false,
-  setStateAlmacen: (p) => set({ stateAlmacen: p }),
+  setStateAlmacen: (state: boolean): void => set({ stateAlmacen: state }),
   accion: '',
-  setAccion: (p) => set({ accion: p }),
-  almacenSelectItem: [],
-  setAlmacenSelectItem: (p) => {
-    set({ almacenSelectItem: p })
+  setAccion: (accion: string): void => set({ accion: accion }),
+  almacenSelectItem: null,
+  setAlmacenSelectItem: (item: Almacen | null): void => {
+    set({ almacenSelectItem: item })
   },
 
   dataalmacen: [],
-  dataalmacenxsucursalxproducto: [],
+  dataalmacenxsucursalxproducto: null,
 
-  mostrarAlmacenXsucursal: async (p) => {
-    const response = await MostrarAlmacenXSucursal(p)
-    set({ dataalmacenxsucursalxproducto: response })
-    const { dataalmacenxsucursalxproducto } = get()
-    return dataalmacenxsucursalxproducto
+  mostrarAlmacenXsucursal: async (
+    params: MostrarAlmacenXSucursalParams
+  ): Promise<Almacen | null> => {
+    const response = await MostrarAlmacenXSucursal(params)
+    set({ almacenSelectItem: response })
+    return response
   },
   dataAlmacenesXempresa: null,
-  mostrarAlmacenesXEmpresa: async (p) => {
-    const response = await MostrarAlmacenesXEmpresa(p)
-    set({ dataAlmacenesXsucursal: response })
+  mostrarAlmacenesXEmpresa: async (
+    params: MostrarAlmacenesXEmpresaParams
+  ): Promise<(Sucursal & { almacen: Almacen[] })[] | null> => {
+    const response = await MostrarAlmacenesXEmpresa(params)
+    set({ dataAlmacenesXempresa: response })
     return response
   },
   dataAlmacenesXsucursal: null,
-  mostrarAlmacenesXSucursal: async (p) => {
-    const response = await MostrarAlmacenesXSucursal(p)
-    set({ almacenSelectItem: response[0] })
+  mostrarAlmacenesXSucursal: async (
+    params: MostrarAlmacenesXSucursalParams
+  ): Promise<Almacen[] | null> => {
+    const response = await MostrarAlmacenesXSucursal(params)
     set({ dataAlmacenesXsucursal: response })
+    set({ almacenSelectItem: response?.[0] ?? null })
     return response
   },
 
-  insertarAlmacen: async (p) => {
-    await InsertarAlmacen(p)
+  insertarAlmacen: async (params: InsertarAlmacenParams): Promise<void> => {
+    await InsertarAlmacen(params)
   },
-  eliminarAlmacen: async (p) => {
-    await EliminarAlmacen(p)
+  eliminarAlmacen: async (params: EliminarAlmacenParams): Promise<void> => {
+    await EliminarAlmacen(params)
   },
-  editarAlmacen: async (p) => {
-    await EditarAlmacen(p)
+  editarAlmacen: async (params: EditarAlmacenParams): Promise<void> => {
+    await EditarAlmacen(params)
   },
 }))

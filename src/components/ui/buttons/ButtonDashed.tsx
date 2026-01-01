@@ -1,7 +1,12 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
 import styled from 'styled-components'
 
-export const ButtonDashed = ({ title, funcion }) => {
+interface ButtonDashedProps {
+  title: string
+  funcion: () => void
+}
+
+export const ButtonDashed = ({ title, funcion }: ButtonDashedProps) => {
   return (
     <Container onClick={funcion}>
       <Icon className="icon" icon="ic:baseline-add-circle-outline" />
@@ -15,7 +20,7 @@ const Container = styled.button`
   justify-content: center;
   padding: 15px 20px;
   width: 100%;
-  background-color: ${(props) => props.theme.body};
+  background-color: ${(props) => props.theme.background};
   border: 2px dashed ${(props) => props.theme.text};
   border-radius: 10px;
   color: ${(props) => props.theme.text};
@@ -28,6 +33,6 @@ const Container = styled.button`
   }
   &:hover {
     background-color: ${(props) => props.theme.text};
-    color: ${(props) => props.theme.body};
+    color: ${(props) => props.theme.background};
   }
 `

@@ -1,5 +1,3 @@
-import Swal from 'sweetalert2'
-
 import { supabase } from '../index'
 import { usePermisosStore } from '../store/PermisosStore'
 import type {
@@ -47,14 +45,19 @@ export async function InsertarUsuarios(
   return data as Usuario | null
 }
 
+interface CredencialesUserResponse {
+  id_auth: string
+  email: string
+}
+
 export async function InsertarCredencialesUser(
   p: InsertarCredencialesUserParams
-): Promise<any> {
+): Promise<CredencialesUserResponse | null> {
   const { data, error } = await supabase.rpc('crearcredencialesuser', p)
   if (error) {
     throw new Error(error.message)
   }
-  return data
+  return data as CredencialesUserResponse | null
 }
 
 export async function ObtenerIdAuthSupabase(): Promise<string | undefined> {
@@ -63,9 +66,9 @@ export async function ObtenerIdAuthSupabase(): Promise<string | undefined> {
   } = await supabase.auth.getSession()
   if (session != null) {
     const { user } = session
-    const idauth = user.id
-    return idauth
+    return user.id
   }
+  return undefined
 }
 
 export async function EliminarUsuarioAsignado(

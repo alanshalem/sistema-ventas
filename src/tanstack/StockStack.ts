@@ -1,22 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { useFormattedDate } from '../hooks/useFormattedDate'
 import { useAlmacenesStore } from '../store/AlmacenesStore'
-import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
-import { useCategoriasStore } from '../store/CategoriasStore'
 import { useEmpresaStore } from '../store/EmpresaStore'
-import { useImpresorasStore } from '../store/ImpresorasStore'
-import { useMovStockStore } from '../store/MovStockStore'
+import { useGlobalStore } from '../store/GlobalStore'
 import { useProductosStore } from '../store/ProductosStore'
 import { useStockStore } from '../store/StockStore'
-import { useSucursalesStore } from '../store/SucursalesStore'
-import { useUsuariosStore } from '../store/UsuariosStore'
-import { ConvertirMinusculas } from '../utils/Conversiones'
 export const useMostrarStockXAlmacenesYProductoQuery = () => {
   const { mostrarStockXAlmacenesYProducto } = useStockStore()
   const { almacenSelectItem } = useAlmacenesStore()
   const { productosItemSelect } = useProductosStore()
+  const { dataempresa } = useEmpresaStore()
+
   return useQuery({
     queryKey: [
       'mostrar Stock XAlmacenes YProducto',
@@ -27,20 +22,20 @@ export const useMostrarStockXAlmacenesYProductoQuery = () => {
     ],
     queryFn: () =>
       mostrarStockXAlmacenesYProducto({
-        id_producto: productosItemSelect?.id,
-        id_almacen: almacenSelectItem?.id,
+        id_empresa: dataempresa?.id ?? 0,
+        id_producto: productosItemSelect?.id ?? 0,
+        id_almacen: almacenSelectItem?.id ?? 0,
       }),
-    enabled: !!almacenSelectItem,
+    enabled: !!almacenSelectItem && !!productosItemSelect,
     refetchOnWindowFocus: false,
   })
 }
 export const useMostrarStockXAlmacenYProductoQuery = () => {
   const { mostrarStockXAlmacenYProducto } = useStockStore()
   const { dataempresa } = useEmpresaStore()
-  const { mostrarAlmacenesXSucursal, setAlmacenSelectItem, almacenSelectItem } =
-    useAlmacenesStore()
-  const { dataSucursales } = useSucursalesStore()
+  const { almacenSelectItem } = useAlmacenesStore()
   const { productosItemSelect } = useProductosStore()
+
   return useQuery({
     queryKey: [
       'mostrar StockXAlmacenYProducto',
@@ -51,10 +46,11 @@ export const useMostrarStockXAlmacenYProductoQuery = () => {
     ],
     queryFn: () =>
       mostrarStockXAlmacenYProducto({
-        id_almacen: almacenSelectItem?.id,
-        id_producto: productosItemSelect?.id,
+        id_empresa: dataempresa?.id ?? 0,
+        id_almacen: almacenSelectItem?.id ?? 0,
+        id_producto: productosItemSelect?.id ?? 0,
       }),
-    enabled: !!dataSucursales,
+    enabled: !!almacenSelectItem && !!productosItemSelect,
   })
 }
 export const useMostrarStockPorProductoQuery = () => {
@@ -69,27 +65,31 @@ export const useMostrarStockPorProductoQuery = () => {
     ],
     queryFn: () =>
       mostrarStockPorProducto({
-        id_producto: productosItemSelect?.id,
+        id_producto: productosItemSelect?.id ?? 0,
       }),
     enabled: !!productosItemSelect,
   })
 }
 export const useInsertarStockMutation = () => {
-  const { itemSelect, setStateClose } = useGlobalStore()
+  const { setStateClose } = useGlobalStore()
   const queryClient = useQueryClient()
-  const { insertarProductos, productosItemSelect } = useProductosStore()
-  const { categoriaItemSelect } = useCategoriasStore()
-  const { tipo, insertarMovStock, setTipo } = useMovStockStore()
-  const { mostrarStockXAlmacenYProducto, editarStock, insertarStock } = useStockStore()
-  const { mostrarAlmacenesXSucursal, setAlmacenSelectItem, almacenSelectItem } =
-    useAlmacenesStore()
-  const fechaActual = useFormattedDate()
+  const { productosItemSelect } = useProductosStore()
+  const { insertarStock } = useStockStore()
+  const { almacenSelectItem } = useAlmacenesStore()
+  const { dataempresa } = useEmpresaStore()
+
   return useMutation({
-    mutationKey: ['insertar movimiento stock'],
-    mutationFn: async (data) => {
+    mutationKey: ['insertar stock'],
+    mutationFn: async (data: {
+      stock: string
+      stock_minimo: string
+      ubicacion: string
+    }) => {
       const pStock = {
-        id_almacen: almacenSelectItem?.id,
-        id_producto: productosItemSelect?.id,
+        id_empresa: dataempresa?.id ?? 0,
+        id_almacen: almacenSelectItem?.id ?? 0,
+        id_producto: productosItemSelect?.id ?? 0,
+        cantidad: parseFloat(data.stock),
         stock: parseFloat(data.stock),
         stock_minimo: parseFloat(data.stock_minimo),
         ubicacion: data.ubicacion,
@@ -97,12 +97,15 @@ export const useInsertarStockMutation = () => {
 
       await insertarStock(pStock)
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast.error('Error: ' + error.message)
     },
     onSuccess: () => {
       toast.success('Registro guardado correctamente')
-      queryClient.invalidateQueries(['buscar productos'])
+      setStateClose(true)
+      queryClient.invalidateQueries({ queryKey: ['mostrar stock por producto'] })
+      queryClient.invalidateQueries({ queryKey: ['mostrar StockXAlmacenYProducto'] })
+      queryClient.invalidateQueries({ queryKey: ['mostrar Stock XAlmacenes YProducto'] })
     },
   })
 }

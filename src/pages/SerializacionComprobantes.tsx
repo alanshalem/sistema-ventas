@@ -1,6 +1,6 @@
 import { Spinner } from '../components/molecules/Spinner'
-import { RegistrarSerializacion } from '../components/organismos/formularios/RegistrarSerializacion'
-import { TablaSerializaciones } from '../components/organismos/tablas/TablaSerializaciones'
+import { RegisterSerialization } from '../components/organisms/forms/RegisterSerialization'
+import { SerializationsTable } from '../components/organisms/tables/SerializationsTable'
 import { CrudTemplate } from '../components/templates/CrudTemplate'
 import { useGlobalStore } from '../store/GlobalStore'
 import {
@@ -20,9 +20,9 @@ export const SerializacionComprobantes = () => {
   return (
     <CrudTemplate
       data={data}
-      FormularioRegistro={RegistrarSerializacion}
+      FormularioRegistro={RegisterSerialization}
       title="Comprobantes"
-      Tabla={<TablaSerializaciones data={data} />}
+      Tabla={<SerializationsTable data={data} />}
     />
   )
 }

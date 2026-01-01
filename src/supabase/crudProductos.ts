@@ -11,23 +11,36 @@ import type {
 
 const tabla = 'productos'
 
-export async function InsertarProductos(p: InsertarProductoParams): Promise<any> {
+interface ProductoExtendido extends Producto {
+  categorias?: {
+    id: number
+    nombre: string
+    icono?: string
+  } | null
+  stock_info?: unknown
+  maneja_inventarios?: boolean
+}
+
+export async function InsertarProductos(p: InsertarProductoParams): Promise<number> {
   const { error, data } = await supabase.rpc('insertarproductos', p)
   if (error) {
     throw new Error(error.message)
   }
-  console.log(data)
-  return data
+  return data as number
 }
 
-export async function MostrarProductos(p: MostrarProductosParams): Promise<any> {
+export async function MostrarProductos(
+  p: MostrarProductosParams
+): Promise<ProductoExtendido[] | null> {
   const { data } = await supabase.rpc('mostrarproductos', {
     _id_empresa: p.id_empresa,
   })
-  return data
+  return data as ProductoExtendido[] | null
 }
 
-export async function BuscarProductos(p: BuscarProductoParams): Promise<any> {
+export async function BuscarProductos(
+  p: BuscarProductoParams
+): Promise<ProductoExtendido[] | null> {
   const { data, error } = await supabase.rpc('buscarproductos', {
     _id_empresa: p.id_empresa,
     buscador: p.busqueda,
@@ -36,7 +49,7 @@ export async function BuscarProductos(p: BuscarProductoParams): Promise<any> {
   if (error) {
     throw new Error(error.message)
   }
-  return data
+  return data as ProductoExtendido[] | null
 }
 
 export async function EliminarProductos(p: IdParam): Promise<void> {

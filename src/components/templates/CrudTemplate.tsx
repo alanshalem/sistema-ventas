@@ -1,13 +1,26 @@
-import { useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import { Btn1, Buscador } from '../../index'
+import { Button,SearchBox } from '../../index'
 import { useGlobalStore } from '../../store/GlobalStore'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
 import { BuscadorList } from '../ui/lists/BuscadorList'
+interface CrudTemplateProps {
+  FormularioRegistro?: React.ComponentType<any>
+  title: string
+  Tabla?: React.ComponentType<any>
+  data?: any[]
+  setBuscador?: (value: string) => void
+  tipoBuscador?: 'list' | 'simple'
+  dataBuscadorList?: any[]
+  selectBuscadorList?: (item: any) => void
+  setBuscadorList?: (item: any) => void
+  stateBtnAdd?: boolean
+  stateBuscador?: boolean
+}
+
 export function CrudTemplate({
   FormularioRegistro,
   title,
@@ -20,7 +33,7 @@ export function CrudTemplate({
   setBuscadorList,
   stateBtnAdd,
   stateBuscador,
-}) {
+}: CrudTemplateProps) {
   const {
     stateClose,
     isExploding,
@@ -43,11 +56,11 @@ export function CrudTemplate({
       <section className="area1">
         <PageTitle>{title} </PageTitle>
         {stateBtnAdd && (
-          <Btn1
-            funcion={nuevoRegistro}
-            bgcolor={v.colorPrincipal}
-            titulo="nuevo"
-            icono={<v.iconoagregar />}
+          <Button
+            onClick={nuevoRegistro}
+            bgColor={v.colorPrincipal}
+            title="nuevo"
+            icon={<v.iconoagregar />}
           />
         )}
       </section>
@@ -60,14 +73,14 @@ export function CrudTemplate({
               setBuscador={setBuscadorList}
             />
           ) : (
-            <Buscador setBuscador={setBuscador} />
+            <SearchBox setSearchTerm={setBuscador} />
           )}
         </section>
       )}
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        {data?.length > 0 && Tabla}
+        {data && data.length > 0 && Tabla}
       </section>
     </Container>
   )

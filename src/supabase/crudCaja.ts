@@ -2,6 +2,7 @@ import type {
   Caja,
   EditarCajaParams,
   EliminarCajaParams,
+  InsertarCajaParams,
   MostrarCajaXSucursalParams,
 } from '../types'
 import { supabase } from './supabase.config'
@@ -14,6 +15,13 @@ export async function MostrarCajaXSucursal(
   const { data } = await supabase.from(tabla).select().eq('id_sucursal', p.id_sucursal)
 
   return data as Caja[] | null
+}
+
+export async function InsertarCaja(p: InsertarCajaParams): Promise<void> {
+  const { error } = await supabase.from(tabla).insert(p)
+  if (error) {
+    throw new Error(error.message)
+  }
 }
 
 export async function EditarCaja(p: EditarCajaParams): Promise<void> {

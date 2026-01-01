@@ -86,12 +86,12 @@ const SidebarItem = styled(NavLink)`
   height: 60px;
 
   &:hover {
-    color: ${(props) => props.theme.colorSubtitle};
+    color: ${(props) => props.theme.textSecondary};
   }
   &.active {
-    background: ${(props) => props.theme.bg6};
-    border: 2px solid ${(props) => props.theme.bg5};
-    color: ${(props) => props.theme.color1};
+    background: ${(props) => props.theme.backgroundSecondary6};
+    border: 2px solid ${(props) => props.theme.backgroundSecondary5};
+    color: ${(props) => props.theme.accent};
     font-weight: 600;
   }
 `
@@ -111,6 +111,6 @@ const SidebarTitle = styled.h3`
 const SidebarSection = styled.div`
   margin-bottom: 20px;
   border-radius: 10px;
-  border: 2px solid ${({ theme }) => theme.color2};
+  border: 2px solid ${({ theme }) => theme.neutral};
   padding: 12px;
 `

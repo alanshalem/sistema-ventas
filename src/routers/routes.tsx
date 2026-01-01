@@ -1,10 +1,11 @@
-import { Navigate,Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { BasicosConfig } from '../components/organismos/EmpresaConfigDesign/BasicosConfig'
-import { MonedaConfig } from '../components/organismos/EmpresaConfigDesign/MonedaConfig'
-import { ReportInventarios } from '../components/organismos/reports/ReportInventarios'
-import ReportStockBajoMinimo from '../components/organismos/reports/ReportStockBajoMinimo'
-import ReportVentas from '../components/organismos/reports/ReportVentas'
+import { LowStockReport } from '@/components/organisms/reports/LowStockReport'
+import { SalesReport } from '@/components/organisms/reports/SalesReport'
+
+import { BasicConfig } from '../components/organisms/CompanyConfigDesign/BasicConfig'
+import { CurrencyConfig } from '../components/organisms/CompanyConfigDesign/CurrencyConfig'
+import { InventoriesReport } from '../components/organisms/reports/InventoriesReport'
 import {
   Categorias,
   ClientesProveedores,
@@ -83,9 +84,9 @@ export function MyRoutes() {
           </Layout>
         }
       >
-        <Route path="inventario_valorado" element={<ReportInventarios />} />
-        <Route path="report_ventas" element={<ReportVentas />} />
-        <Route path="report_stock_bajo_minimo" element={<ReportStockBajoMinimo />} />
+        <Route path="inventario_valorado" element={<InventoriesReport />} />
+        <Route path="report_ventas" element={<SalesReport />} />
+        <Route path="report_stock_bajo_minimo" element={<LowStockReport />} />
       </Route>
       <Route
         path="/configuracion/categorias"
@@ -138,8 +139,8 @@ export function MyRoutes() {
         }
       >
         <Route index element={<Navigate to="empresabasicos" />} />
-        <Route path="empresabasicos" element={<BasicosConfig />} />
-        <Route path="monedaconfig" element={<MonedaConfig />} />
+        <Route path="empresabasicos" element={<BasicConfig />} />
+        <Route path="monedaconfig" element={<CurrencyConfig />} />
       </Route>
       <Route
         path="/pos"

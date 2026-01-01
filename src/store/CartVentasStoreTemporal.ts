@@ -3,17 +3,55 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { useClientesProveedoresStore } from './ClientesProveedoresStore'
+
+// Cart item interface
+interface CartItem {
+  _id_producto: number
+  _cantidad: number
+  _precio_venta: number
+  _total: number
+  [key: string]: unknown // Allow additional properties
+}
+
+interface CobroParams {
+  tipocobro: string
+}
+
 const initialState = {
-  items: [],
+  items: [] as CartItem[],
   total: 0,
   statePantallaCobro: false,
   tipocobro: '',
   stateMetodosPago: false,
 }
-function calcularTotal(items) {
+
+function calcularTotal(items: CartItem[]): number {
   return items.reduce((total, item) => total + item._precio_venta * item._cantidad, 0)
 }
-export const useCartVentasStoreTemporal = create(
+
+interface CartVentasStoreTemporalState {
+  items: CartItem[]
+  total: number
+  statePantallaCobro: boolean
+  tipocobro: string
+  stateMetodosPago: boolean
+}
+
+interface CartVentasStoreTemporalActions {
+  addItem: (item: CartItem) => void
+  removeItem: (item: CartItem) => void
+  resetState: () => void
+  addcantidadItem: (item: CartItem) => void
+  restarcantidadItem: (item: CartItem) => void
+  updateCantidadItem: (item: CartItem, cantidad: number) => void
+  setStatePantallaCobro: (params: CobroParams) => void
+  setStateMetodosPago: () => void
+}
+
+type CartVentasStoreTemporal = CartVentasStoreTemporalState &
+  CartVentasStoreTemporalActions
+
+export const useCartVentasStoreTemporal = create<CartVentasStoreTemporal>()(
   persist(
     (set) => ({
       ...initialState,
@@ -46,6 +84,7 @@ export const useCartVentasStoreTemporal = create(
             }
           }
         }),
+
       removeItem: (p) =>
         set((state) => {
           const updatedItems = state.items.filter((item) => item !== p)
@@ -54,11 +93,15 @@ export const useCartVentasStoreTemporal = create(
             total: calcularTotal(updatedItems),
           }
         }),
+
       resetState: () => {
-        const { selectCliPro } = useClientesProveedoresStore.getState()
-        selectCliPro([])
+        const clientStore = useClientesProveedoresStore.getState() as unknown as {
+          selectCliPro: (data: unknown[]) => void
+        }
+        clientStore.selectCliPro([])
         set(initialState)
       },
+
       addcantidadItem: (p) =>
         set((state) => {
           const updatedItems = state.items.map((item) => {
@@ -71,6 +114,7 @@ export const useCartVentasStoreTemporal = create(
           })
           return { items: updatedItems, total: calcularTotal(updatedItems) }
         }),
+
       restarcantidadItem: (p) =>
         set((state) => {
           const updatedItems = state.items
@@ -90,9 +134,10 @@ export const useCartVentasStoreTemporal = create(
               }
               return item
             })
-            .filter(Boolean) //Filtlar elementos nulos
+            .filter((item): item is CartItem => item !== null) // Filter null elements
           return { items: updatedItems, total: calcularTotal(updatedItems) }
         }),
+
       updateCantidadItem: (p, cantidad) =>
         set((state) => {
           const updatedItems = state.items.map((item) => {
@@ -108,6 +153,7 @@ export const useCartVentasStoreTemporal = create(
           })
           return { items: updatedItems, total: calcularTotal(updatedItems) }
         }),
+
       setStatePantallaCobro: (p) =>
         set((state) => {
           if (state.items.length === 0) {
@@ -122,6 +168,7 @@ export const useCartVentasStoreTemporal = create(
             }
           }
         }),
+
       setStateMetodosPago: () =>
         set((state) => ({ stateMetodosPago: !state.stateMetodosPago })),
     }),

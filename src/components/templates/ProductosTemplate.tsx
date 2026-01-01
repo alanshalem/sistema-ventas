@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
 import {
-  Btn1,
-  Buscador,
-  RegistrarProductos,
-  TablaProductos,
+  Button,
+  ProductsTable,
+  RegisterProducts,
+  SearchBox,
   useProductosStore,
 } from '../../index'
 import { v } from '../../styles/variables'
@@ -30,7 +30,7 @@ export function ProductosTemplate() {
     <Container>
       <Toaster />
       {openRegistro && (
-        <RegistrarProductos
+        <RegisterProducts
           setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
@@ -41,20 +41,20 @@ export function ProductosTemplate() {
 
       <section className="area1">
         <PageTitle>Productos</PageTitle>
-        <Btn1
-          funcion={nuevoRegistro}
-          bgcolor={v.colorPrincipal}
-          titulo="nuevo"
-          icono={<v.iconoagregar />}
+        <Button
+          onClick={nuevoRegistro}
+          bgColor={v.colorPrincipal}
+          title="nuevo"
+          icon={<v.iconoagregar />}
         />
       </section>
       <section className="area2">
-        <Buscador setBuscador={setBuscador} />
+        <SearchBox setBuscador={setBuscador} />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaProductos
+        <ProductsTable
           setdataSelect={setdataSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}

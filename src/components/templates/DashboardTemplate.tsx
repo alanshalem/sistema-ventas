@@ -2,12 +2,14 @@ import styled from 'styled-components'
 
 import { useReportesStore } from '../../store/ReportesStore'
 import { Device } from '../../styles/breakpoints'
-import { CardMovimientosCajaLive } from '../organismos/DashboardDesign/CardMovimientosCajaLive'
-import { CardProductosTopMonto } from '../organismos/DashboardDesign/CardProductosTopMonto'
-import { CardTotales } from '../organismos/DashboardDesign/CardTotales'
-import { ChartProductosTop5 } from '../organismos/DashboardDesign/ChartProductosTop5'
-import { ChartVentas } from '../organismos/DashboardDesign/ChartVentas'
-import { DashboardHeader } from '../organismos/DashboardDesign/DashboardHeader'
+import {
+  DashboardHeader,
+  LiveCashMovementsCard,
+  SalesChart,
+  Top5ProductsChart,
+  TopProductsByAmountCard,
+  TotalsCard,
+} from '../organisms/DashboardDesign'
 export const DashboardTemplate = () => {
   const { totalventas, porcentajeCambio, totalCantidadDetalleVentas, totalGanancias } =
     useReportesStore()
@@ -17,7 +19,7 @@ export const DashboardTemplate = () => {
       <MainContent>
         <Area1>
           <ContentTotales>
-            <CardTotales
+            <TotalsCard
               percentage={porcentajeCambio}
               value={totalventas}
               title="Ventas"
@@ -25,14 +27,14 @@ export const DashboardTemplate = () => {
             />
           </ContentTotales>
           <ContentTotales>
-            <CardTotales
+            <TotalsCard
               value={totalCantidadDetalleVentas}
               title="Cant. Productos vendidos"
               icon={'fluent-mdl2:product-variant'}
             />
           </ContentTotales>
           <ContentTotales>
-            <CardTotales
+            <TotalsCard
               value={totalGanancias}
               title="Ganancias"
               icon={'hugeicons:money-send-circle'}
@@ -40,14 +42,14 @@ export const DashboardTemplate = () => {
           </ContentTotales>
         </Area1>
         <Area2>
-          <ChartVentas />
+          <SalesChart />
         </Area2>
         <Area3>
-          <ChartProductosTop5 />
+          <Top5ProductsChart />
         </Area3>
         <Area4>
-          <CardMovimientosCajaLive />
-          <CardProductosTopMonto />
+          <LiveCashMovementsCard />
+          <TopProductsByAmountCard />
         </Area4>
       </MainContent>
     </Container>
@@ -96,11 +98,11 @@ const Area2 = styled.section`
   border: 2px solid ${({ theme }) => theme.bordercolorDash};
   box-shadow: ${({ theme }) => theme.boxshadow};
   border-radius: 20px;
-  background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.background};
 `
 const Area3 = styled.section`
   grid-area: area3;
-  background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.background};
   border: 2px solid ${({ theme }) => theme.bordercolorDash};
   border-radius: 20px;
   /* background-color: rgba(21, 56, 231, 0.2); */
@@ -116,7 +118,7 @@ const Area4 = styled.section`
   }
 `
 const ContentTotales = styled.div`
-  background-color: ${({ theme }) => theme.body};
+  background-color: ${({ theme }) => theme.background};
   padding: 10px;
   border-radius: 20px;
   text-align: center;

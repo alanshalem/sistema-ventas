@@ -3,19 +3,13 @@ import ConfettiExplosion from 'react-confetti-explosion'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import {
-  Btn1,
-  Buscador,
-  RegistrarCategorias,
-  useCategoriasStore,
-  useUsuariosStore,
-} from '../../index'
+import { Button, SearchBox, useUsuariosStore } from '../../index'
 import { useAsignacionCajaSucursalStore } from '../../store/AsignacionCajaSucursalStore'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
-import { RegistrarUsuarios } from '../organismos/formularios/RegistrarUsuarios'
-import { TablaCategorias } from '../organismos/tablas/TablaCategorias'
-import { TablaUsuarios } from '../organismos/tablas/TablaUsuarios'
+import { RegisterUsers } from '../organisms/forms/RegisterUsers'
+import { UsersTable } from '../organisms/tables/UsersTable'
+
 export function UsuariosTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const [dataSelect, setdataSelect] = useState([])
@@ -34,7 +28,7 @@ export function UsuariosTemplate() {
     <Container>
       <Toaster />
       {openRegistro && (
-        <RegistrarUsuarios
+        <RegisterUsers
           setIsExploding={setIsExploding}
           onClose={() => SetopenRegistro(!openRegistro)}
           dataSelect={dataSelect}
@@ -44,20 +38,20 @@ export function UsuariosTemplate() {
 
       <section className="area1">
         <PageTitle>Usuarios</PageTitle>
-        <Btn1
-          funcion={nuevoRegistro}
-          bgcolor={v.colorPrincipal}
-          titulo="nuevo"
-          icono={<v.iconoagregar />}
+        <Button
+          onClick={nuevoRegistro}
+          bgColor={v.colorPrincipal}
+          title="nuevo"
+          icon={<v.iconoagregar />}
         />
       </section>
       <section className="area2">
-        <Buscador setBuscador={setBuscador} />
+        <SearchBox setBuscador={setBuscador} />
       </section>
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        <TablaUsuarios
+        <UsersTable
           setdataSelect={setItemSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}

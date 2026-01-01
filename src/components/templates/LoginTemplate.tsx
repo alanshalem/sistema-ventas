@@ -4,16 +4,13 @@ import { useForm } from 'react-hook-form'
 import { toast, Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import animacionlottie from '../../assets/navidad.json'
-import { Button, Footer, GenerateCodeButton, InputText2, useAuthStore } from '../../index'
+import { Button, Footer, GenerateCodeButton, TextInput2, useAuthStore } from '../../index'
 import { Device } from '../../styles/breakpoints'
 import { v } from '../../styles/variables'
 import { Divider } from '../atoms/Divider'
-import { LottieAnimation } from '../atoms/LottieAnimation'
 import { PageTitle } from '../atoms/PageTitle'
 import { BackButton } from '../molecules/BackButton'
-import { CardModos } from '../organismos/LoginDesign/CardModos'
-import { NieveComponente } from '../organismos/NieveComponente'
+import { ModesCard } from '../organisms/LoginDesign/ModesCard'
 export function LoginTemplate() {
   const [stateModos, setStateModos] = useState(true)
   const [stateModo, setStateModo] = useState('empleado')
@@ -62,7 +59,7 @@ export function LoginTemplate() {
         <PageTitle $paddingbottom="40px">Ingresar Modo</PageTitle>
         {stateModos && (
           <ContentModos>
-            <CardModos
+            <ModesCard
               title={'Super admin'}
               subtitle={'crea y gestiona tu empresa'}
               bgColor={'#ed7323'}
@@ -72,7 +69,7 @@ export function LoginTemplate() {
                 setStateModos(!stateModos)
               }}
             />
-            <CardModos
+            <ModesCard
               title={'Empleado'}
               subtitle={'vende y crece'}
               bgColor={'#542a1b'}
@@ -90,22 +87,22 @@ export function LoginTemplate() {
                 <BackButton onClick={() => setStateModos(!stateModos)} />
                 <span>Modo empleado</span>
                 <form onSubmit={handleSubmit(manejadorEmailSesion)}>
-                  <InputText2>
+                  <TextInput2>
                     <input
                       className="form__field"
                       placeholder="email"
                       type="text"
                       {...register('email', { required: true })}
                     />
-                  </InputText2>
-                  <InputText2>
+                  </TextInput2>
+                  <TextInput2>
                     <input
                       className="form__field"
                       placeholder="contraseña"
                       type="password"
                       {...register('password', { required: true })}
                     />
-                  </InputText2>
+                  </TextInput2>
                   <Button
                     border="2px"
                     title="INGRESAR"

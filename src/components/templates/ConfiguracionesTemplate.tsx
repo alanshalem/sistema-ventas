@@ -2,19 +2,20 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+// @ts-ignore
 import fondocuadros from '../../assets/fondocuadros.svg'
-import { useModulosStore } from '../../index'
 import { usePermisosStore } from '../../store/PermisosStore'
 export function ConfiguracionesTemplate() {
   const { dataPermisosConfiguracion } = usePermisosStore()
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       document.querySelectorAll('.card').forEach((card) => {
-        const rect = card.getBoundingClientRect()
+        const htmlElement = card as HTMLElement
+        const rect = htmlElement.getBoundingClientRect()
         const x = e.clientX - rect.left
         const y = e.clientY - rect.top
-        card.style.setProperty('--mouse-x', `${x}px`)
-        card.style.setProperty('--mouse-y', `${y}px`)
+        htmlElement.style.setProperty('--mouse-x', `${x}px`)
+        htmlElement.style.setProperty('--mouse-y', `${y}px`)
       })
     }
     const cardsContainer = document.getElementById('cards')
@@ -24,20 +25,18 @@ export function ConfiguracionesTemplate() {
         cardsContainer.removeEventListener('mousemove', handleMouseMove)
       }
     }
+    return undefined
   }, [])
   return (
     <Container>
       <div id="cards">
         {dataPermisosConfiguracion.map((item, index) => {
+          if (!item.modulos) return null
           return (
-            <Link
-              to={item.modulos.link}
-              className={item.modulos.state ? 'card' : 'card false'}
-              key={index}
-            >
+            <Link to={item.modulos.ruta ?? '#'} className="card" key={index}>
               <div className="card-content">
                 <div className="card-image">
-                  <img src={item.modulos.icono} />
+                  {item.modulos.icono && <img src={item.modulos.icono} />}
                 </div>
 
                 <div className="card-info-wrapper">
@@ -57,28 +56,69 @@ export function ConfiguracionesTemplate() {
     </Container>
   )
 }
-const Container = styled.div`
+const Container = styled.div<{ $color0?: string }>`
   background-image: url(${fondocuadros});
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat, repeat;
   align-items: center;
-  background-color: ${({ theme }) => theme.bgtotal};
+  background-color: ${({ theme }) => theme.backgroundSecondarytotal};
   display: flex;
   height: calc(100vh - 50px);
-  margin-top: 50px;
-  justify-content: center;
+  padding: 20px;
+  gap: 20px;
   width: 100%;
-  align-items: flex-start;
 
   #cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    max-width: 916px;
-    width: calc(100% - 20px);
-    padding: 10px;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
   }
+
+  .card {
+    background-color: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 220px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+
+    &.false {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    &::before {
+      background: radial-gradient(
+        800px circle at var(--mouse-x) var(--mouse-y),
+        rgba(255, 255, 255, 0.06),
+        transparent 40%
+      );
+      z-index: 3;
+    }
+
+    &::after {
+      background: radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y),
+        ${(props) => props.$color0 ?? '#ffffff'},
+        transparent 40%
+      );
+      z-index: 1;
+    }
 
   #cards:hover > .card::after {
     opacity: 1;
@@ -138,7 +178,7 @@ const Container = styled.div`
   }
 
   .card > .card-content {
-    background-color: ${({ theme }) => theme.bgcards};
+    background-color: ${({ theme }) => theme.backgroundSecondarycards};
     border-radius: inherit;
     display: flex;
     flex-direction: column;
@@ -154,14 +194,14 @@ const Container = styled.div`
   h3,
   h4,
   span {
-    color: ${({ theme }) => theme.colorsubtitlecard};
+    color: ${({ theme }) => theme.textSecondarycard};
     font-family: 'Rubik', sans-serif;
     font-weight: 600;
     margin: 0px;
   }
 
   i {
-    color: ${({ theme }) => theme.colorsubtitlecard};
+    color: ${({ theme }) => theme.textSecondarycard};
   }
 
   .card-image {
@@ -203,7 +243,7 @@ const Container = styled.div`
   }
 
   .card-info-title > h4 {
-    color: ${({ theme }) => theme.colortitlecard};
+    color: ${({ theme }) => theme.textOnCard};
     font-size: 0.85em;
     margin-top: 8px;
     font-weight: 500;

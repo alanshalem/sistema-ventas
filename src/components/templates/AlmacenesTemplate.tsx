@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { useAlmacenesStore } from '../../store/AlmacenesStore'
 import { useCajasStore } from '../../store/CajasStore'
 import { useSucursalesStore } from '../../store/SucursalesStore'
-import { ListAlmacenes } from '../organismos/AlmacenesDesign/ListAlmacenes'
-import { RegistrarAlmacen } from '../organismos/formularios/RegistrarAlmacen'
-import { RegistrarCaja } from '../organismos/formularios/RegistrarCaja'
-import { RegistrarSucursal } from '../organismos/formularios/RegistrarSucursal'
-import { ListSucursales } from '../organismos/SucursalesDesign/ListSucursales'
+import { BranchesList } from '../organisms/BranchesDesign/BranchesList'
+import { RegisterBranch } from '../organisms/forms/RegisterBranch'
+import { RegisterCashRegister } from '../organisms/forms/RegisterCashRegister'
+import { RegisterWarehouse } from '../organisms/forms/RegisterWarehouse'
+import { WarehousesList } from '../organisms/WarehousesDesign/WarehousesList'
 import { AnimatedGrid } from '../ui/animated/AnimatedGrid'
 import { ButtonDashed } from '../ui/buttons/ButtonDashed'
 export const AlmacenesTemplate = () => {
@@ -18,8 +18,8 @@ export const AlmacenesTemplate = () => {
   return (
     <Container>
       <Toaster position="top-right" />
-      {stateSucursal && <RegistrarSucursal />}
-      {stateAlmacen && <RegistrarAlmacen />}
+      {stateSucursal && <RegisterBranch />}
+      {stateAlmacen && <RegisterWarehouse />}
 
       <section className="area1">
         <Header>
@@ -28,7 +28,7 @@ export const AlmacenesTemplate = () => {
         </Header>
       </section>
       <section className="area2">
-        <ListAlmacenes />
+        <WarehousesList />
       </section>
       {/* <AnimatedGrid/> */}
     </Container>

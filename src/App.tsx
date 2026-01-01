@@ -28,7 +28,7 @@ function App(): ReactElement {
     } else {
       if (datausuarios) {
         const themeStyle = datausuarios?.tema === 'light' ? Light : Dark
-        const tema = datausuarios.tema ?? 'light'
+        const tema: 'light' | 'dark' = (datausuarios.tema as 'light' | 'dark') ?? 'light'
         setTheme({
           tema: tema,
           style: themeStyle,

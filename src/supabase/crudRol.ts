@@ -1,14 +1,24 @@
 import { supabase } from '../index'
+import type { Rol } from '../types'
+
 const tabla = 'roles'
-export async function MostrarRolesXnombre(p) {
+
+interface MostrarRolesXnombreParams {
+  nombre: string
+}
+
+export async function MostrarRolesXnombre(
+  p: MostrarRolesXnombreParams
+): Promise<Rol | null> {
   const { data } = await supabase
     .from(tabla)
     .select()
     .eq('nombre', p.nombre)
     .maybeSingle()
-  return data
+  return data as Rol | null
 }
-export async function MostrarRoles() {
+
+export async function MostrarRoles(): Promise<Rol[] | null> {
   const { data } = await supabase.from(tabla).select().neq('nombre', 'superadmin')
-  return data
+  return data as Rol[] | null
 }
