@@ -9,7 +9,13 @@ import type {
 const tabla = 'empresa'
 
 export async function InsertarEmpresa(p: InsertarEmpresaParams): Promise<Empresa | null> {
-  const { data, error } = await supabase.from(tabla).insert(p).select().maybeSingle()
+  const { data, error } = await supabase
+    .from(tabla)
+    .insert(p)
+    .select(
+      'id, nombre, ruc, direccion, telefono, logo, id_moneda, nombre_moneda, simbolo_moneda, id_fiscal, pie_pagina_ticket, created_at, updated_at'
+    )
+    .maybeSingle()
   if (error) {
     throw new Error(error.message)
   }

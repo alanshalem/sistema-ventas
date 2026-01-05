@@ -3,8 +3,8 @@ import { POSTemplate, SecondarySpinner } from '../index'
 import { useMostrarAperturasCajaPorUsuarioQuery } from '../tanstack/CierresCajaStack'
 import { useMostrarMetodosPagoQuery } from '../tanstack/MetodosPagoStack'
 
-export function POS() {
-  const { isLoading: isLoadingMetodosPago } = useMostrarMetodosPagoQuery()
+export function PointOfSale() {
+  useMostrarMetodosPagoQuery()
   const {
     data: dataCierreCaja,
     isLoading,

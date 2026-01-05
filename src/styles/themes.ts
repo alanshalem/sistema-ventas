@@ -1,7 +1,7 @@
 import type { Theme } from '../types/theme'
 
-export const Light: Theme = {
-  // Surface & Backgrounds
+//#region Light Theme
+export const Light = Object.freeze({
   background: '#fff',
   backgroundSecondary: 'rgb(236, 236, 236)',
   backgroundTertiary: 'rgb(245,245,245)',
@@ -10,19 +10,16 @@ export const Light: Theme = {
   backgroundApp: '#EDF3FB',
   surface: '#ffffff',
 
-  // Text & Content
   textPrimary: '#3C3C3C',
   textSecondary: '#2c2c2c',
   textMuted: '#999',
   textOnCard: '#363637',
   textOnCardSecondary: '#080808',
 
-  // Brand & Action
   primary: 'rgb(52, 131, 235)',
   accent: '#1cb0f6',
   neutral: '#c5c5c5',
 
-  // UI Elements
   navHeight: '5rem',
   toggleActive: '#F9743B',
   toggleTranslate: '-12px',
@@ -30,7 +27,6 @@ export const Light: Theme = {
   shadow: '0px 10px 20px -20px rgba(0,0,0,0.1)',
   border: '#fff',
 
-  // Typography Scale
   fontSizeXS: '0.75em',
   fontSizeSM: '0.875em',
   fontSizeMD: '1em',
@@ -39,12 +35,10 @@ export const Light: Theme = {
   fontSizeXXL: '3em',
   fontSizeXXXL: '4em',
 
-  // RGBA Helpers
   backgroundRgba: '255, 255, 255',
   textRgba: '32,32,32',
   overlayAlpha: 'rgba(102, 102, 102, 0.2)',
 
-  // Legacy aliases (backwards compatibility)
   body: '#fff',
   text: '#3C3C3C',
   bodyRgba: '255, 255, 255',
@@ -92,10 +86,11 @@ export const Light: Theme = {
   bordercolorDash: '#fff',
   boxshadow: '0px 10px 20px -20px rgba(0,0,0,0.1)',
   placeholder: '#999',
-}
+} satisfies Theme)
+//#endregion
 
-export const Dark: Theme = {
-  // Surface & Backgrounds
+//#region Dark Theme
+export const Dark = Object.freeze({
   background: '#000',
   backgroundSecondary: '#272727',
   backgroundTertiary: 'rgb(30,30,30)',
@@ -104,19 +99,16 @@ export const Dark: Theme = {
   backgroundApp: '#000',
   surface: '#171717',
 
-  // Text & Content
   textPrimary: '#fff',
   textSecondary: '#b7b7b7',
   textMuted: '#666',
   textOnCard: '#8C9298',
   textOnCardSecondary: '#F0F0F0',
 
-  // Brand & Action
   primary: 'rgb(52, 131, 235)',
   accent: '#1cb0f6',
   neutral: '#474747',
 
-  // UI Elements
   navHeight: '5rem',
   toggleActive: 'rgb(52, 131, 235)',
   toggleTranslate: '26px',
@@ -124,7 +116,6 @@ export const Dark: Theme = {
   shadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
   border: '#1f1f1f',
 
-  // Typography Scale
   fontSizeXS: '0.75em',
   fontSizeSM: '0.875em',
   fontSizeMD: '1em',
@@ -133,12 +124,10 @@ export const Dark: Theme = {
   fontSizeXXL: '3em',
   fontSizeXXXL: '4em',
 
-  // RGBA Helpers
   backgroundRgba: '32,32,32',
   textRgba: '255, 255, 255',
   overlayAlpha: 'rgba(198, 198, 198, 0.2)',
 
-  // Legacy aliases (backwards compatibility)
   body: '#000',
   text: '#fff',
   bodyRgba: '32,32,32',
@@ -186,4 +175,14 @@ export const Dark: Theme = {
   bordercolorDash: '#1f1f1f',
   boxshadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
   placeholder: '#666',
-}
+} satisfies Theme)
+//#endregion
+
+//#region Theme Map
+export type ThemeName = 'light' | 'dark'
+
+export const Themes = Object.freeze({
+  light: Light,
+  dark: Dark,
+})
+//#endregion

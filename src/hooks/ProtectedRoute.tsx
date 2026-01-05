@@ -1,12 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 
 import { UserAuth } from '../context/AuthContent'
 import { usePermisosStore } from '../store/PermisosStore'
 import { useUsuariosStore } from '../store/UsuariosStore'
 
-export const ProtectedRoute = ({ children, accessBy }) => {
-  const { user } = UserAuth()
+interface ProtectedRouteProps {
+  children: ReactNode
+  accessBy: 'authenticated' | 'non-authenticated'
+}
+
+export const ProtectedRoute = ({ children, accessBy }: ProtectedRouteProps) => {
+  const authContext = UserAuth()
+  const user = authContext?.user
   const { mostrarPermisosGlobales } = usePermisosStore()
   const location = useLocation()
   const { datausuarios } = useUsuariosStore()
@@ -14,17 +21,16 @@ export const ProtectedRoute = ({ children, accessBy }) => {
   const {
     data: dataPermisosGlobales,
     isLoading: isLoadingPermisosGlobales,
-    error: errorPermisosGlobales,
   } = useQuery({
     queryKey: ['mostrar permisos globales', datausuarios?.id],
-    queryFn: () => mostrarPermisosGlobales({ id_usuario: datausuarios?.id }),
+    queryFn: () => mostrarPermisosGlobales({ id_usuario: datausuarios?.id ?? 0 }),
     enabled: !!datausuarios,
   })
   if (isLoadingPermisosGlobales) {
     return <span>cargando permisos...</span>
   }
   const hasPermission = dataPermisosGlobales?.some(
-    (item) => item.modulos?.link === location.pathname
+    (item) => item.modulos?.ruta === location.pathname
   )
 
   if (accessBy === 'non-authenticated') {

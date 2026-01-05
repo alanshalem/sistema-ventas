@@ -10,7 +10,7 @@ export function MetodosPago() {
   const { dataempresa } = useEmpresaStore()
   const { isLoading, error } = useQuery({
     queryKey: ['mostrar metodos pago'],
-    queryFn: () => mostrarMetodosPago({ id_empresa: dataempresa?.id }),
+    queryFn: () => mostrarMetodosPago({ id_empresa: dataempresa?.id ?? 0 }),
     enabled: !!dataempresa,
     refetchOnWindowFocus: false,
   })

@@ -5,17 +5,14 @@ import type {
   AsignacionCajaSucursal,
   Caja,
   Categoria,
-  CierreCaja,
   Cliente,
   DetalleVenta,
   Empresa,
   Impresora,
   MetodoPago,
-  Modulo,
   Moneda,
   MovimientoCaja,
   MovimientoStock,
-  Permiso,
   Producto,
   Proveedor,
   Rol,
@@ -34,7 +31,8 @@ export interface IdParam {
 }
 
 export interface IdEmpresaParam {
-  id_empresa: number
+  id_empresa?: number
+  _id_empresa?: number // RPC functions use underscore prefix
 }
 
 export interface IdSucursalParam {

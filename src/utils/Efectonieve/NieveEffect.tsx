@@ -29,8 +29,6 @@ export const NieveEffect = ({ canvasRef }) => {
       const y2 = flake.y
 
       const dist = Math.sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y))
-      const dx = x2 - x
-      const dy = y2 - y
 
       if (dist < minDist) {
         const force = minDist / (dist * dist)

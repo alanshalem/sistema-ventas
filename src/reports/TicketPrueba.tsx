@@ -1,6 +1,5 @@
-import { urlToBase64 } from '../utils/Conversiones'
 import createPdf from '../utils/CreatePdf'
-const TicketPrueba = async (output) => {
+const TicketPrueba = async (output: 'open' | 'print' | 'download') => {
   const content = [
     {
       text: 'PRUEBA EXITOSA',

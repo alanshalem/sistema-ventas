@@ -27,7 +27,7 @@ export function SearchPanel({
       <div className="subcontent">
         <Icon className="icono" icon="ep:arrow-left-bold" onClick={setStateBuscador} />
         <div>
-          <Button title="Agregar" onClick={funcion} />
+          <Button title="add" onClick={funcion} />
         </div>
 
         <SearchBox setSearchTerm={setBuscador} />

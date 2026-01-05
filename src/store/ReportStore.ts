@@ -1,15 +1,20 @@
 import { create } from 'zustand'
 
 import { supabase } from '../supabase/supabase.config'
-import type { IdEmpresaParam } from '../types'
+import type { InventarioItem, StockBajoMinimoItem } from '../types'
+
+interface ReportStockParams {
+  sucursal_id?: number
+  almacen_id?: number
+}
 
 interface ReportState { }
 
 interface ReportActions {
-  reportStockPorAlmacenSucursal: (params: IdEmpresaParam) => Promise<unknown[]>
-  reportStockBajoMinimo: (params: IdEmpresaParam) => Promise<unknown[]>
+  reportStockPorAlmacenSucursal: (params: ReportStockParams) => Promise<InventarioItem[]>
+  reportStockBajoMinimo: (params: ReportStockParams) => Promise<StockBajoMinimoItem[]>
   reportVentasPorSucursal: (
-    params: IdEmpresaParam & { fecha_inicio?: string; fecha_fin?: string }
+    params: { id_empresa?: number; fecha_inicio?: string; fecha_fin?: string }
   ) => Promise<unknown[]>
 }
 

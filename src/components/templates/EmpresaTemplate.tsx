@@ -2,12 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import { useAuthStore } from '../../store/AuthStore'
-import { useUsuariosStore } from '../../store/UsuariosStore'
-import { Button } from '../molecules/Button'
-
 export const EmpresaTemplate = () => {
-  const { cerrarSesion } = useAuthStore()
   return (
     <Main>
       <Toaster richColors position="bottom-center" />

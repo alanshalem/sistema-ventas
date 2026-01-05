@@ -122,7 +122,7 @@ export function ProductsTable({
       header: 'Inventarios',
       cell: (info) => (
         <td data-title="Inventarios" className="ContentCell">
-          <Checkbox isChecked={info.getValue() as boolean} />
+          <Checkbox isChecked={info.getValue() as boolean} onChange={() => {}} />
         </td>
       ),
       enableColumnFilter: true,
@@ -165,7 +165,7 @@ export function ProductsTable({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.column.columnDef.header}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
                     <span
                       style={{ cursor: 'pointer' }}

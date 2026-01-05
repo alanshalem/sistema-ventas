@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import animacionvacio from '../../../assets/vacioanimacion.json'
 import { useDetalleVentasStore } from '../../../store/DetalleVentasStore'
 import { useEmpresaStore } from '../../../store/EmpresaStore'
-import { useThemeStore } from '../../../store/ThemeStore'
 import { LottieAnimation } from '../../atoms/LottieAnimation'
+import { useThemeStore } from '@/store/ThemeStore'
 
 export function Top5ProductsChart(): ReactNode {
   const { dataempresa } = useEmpresaStore()

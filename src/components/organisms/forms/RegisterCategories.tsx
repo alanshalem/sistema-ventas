@@ -60,21 +60,21 @@ export function RegisterCategories({
               <img src={fileurl} alt="categoria" />
             </div>
           ) : (
-            <Icon>{<v.iconoimagenvacia />}</Icon>
+            <Icon>{<v.emptyImageIcon />}</Icon>
           )}
 
           <Button
             title="+imagen(opcional)"
             color="#5f5f5f"
             bgColor="rgb(183, 183, 182)"
-            icon={<v.iconosupabase />}
+            icon={<v.supabaseIcon />}
           />
         </PictureContainer>
 
         <div className="formulario">
           <section className="form-subcontainer">
             <article>
-              <TextInput icono={<v.iconoflechaderecha />}>
+              <TextInput icono={<v.rightArrowIcon />}>
                 <input
                   className="form__field"
                   defaultValue={dataSelect.nombre}
@@ -87,7 +87,7 @@ export function RegisterCategories({
 
             <article className="colorContainer">
               <ContentTitle>
-                {<v.paletacolores />}
+                {<v.colorPaletteIcon />}
                 <span>Color</span>
               </ContentTitle>
               <div className="colorPickerContent">
@@ -99,7 +99,7 @@ export function RegisterCategories({
               onClick={() => {
                 onClose()
               }}
-              icon={<v.iconoguardar />}
+              icon={<v.saveIcon />}
               title="Guardar"
               bgColor="#F9D70B"
             />

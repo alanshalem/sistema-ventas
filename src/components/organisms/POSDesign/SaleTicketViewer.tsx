@@ -13,7 +13,7 @@ export function SaleTicketViewer({ setState }: Readonly<SaleTicketViewerProps>) 
   const [base64, setBase64] = useState<string>('')
   const { items } = useVentasStore()
 
-  const onGenerateTicket = async (output: string): Promise<void> => {
+  const onGenerateTicket = async (output: Parameters<typeof ticket>[0]): Promise<void> => {
     const dataempresa = {
       logo: 'https://cdn.forbes.com.mx/2020/03/El-sen%CC%83or-de-los-anillos-Golum-.jpg',
       productos: items,

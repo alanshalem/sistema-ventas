@@ -44,7 +44,7 @@ export async function InsertarCategorias(
       icono: urlImagen.publicUrl,
       id: nuevo_id,
     }
-    await EditarIconoCategorias(piconoeditar)
+    await EditarcategoriesIcon(piconoeditar)
   }
 
   return data as number
@@ -70,7 +70,7 @@ async function subirImagen(
   return urlimagen
 }
 
-async function EditarIconoCategorias(p: EditarIconoCategoriaParams): Promise<void> {
+async function EditarcategoriesIcon(p: EditarIconoCategoriaParams): Promise<void> {
   const { error } = await supabase.from('categorias').update(p).eq('id', p.id)
   if (error) {
     throw new Error(error.message)
@@ -140,7 +140,7 @@ export async function EditarCategorias(
         icono: dataImagen.publicUrl,
         id: p._id,
       }
-      await EditarIconoCategorias(piconoeditar)
+      await EditarcategoriesIcon(piconoeditar)
     }
   }
 }

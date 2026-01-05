@@ -22,7 +22,7 @@ export function Sidebar({ state, setState }: Readonly<SidebarProps>): ReactEleme
   return (
     <Main $isopen={state.toString()}>
       <span className="Sidebarbutton" onClick={() => setState(!state)}>
-        {<v.iconoflechaderecha />}
+        {<v.rightArrowIcon />}
       </span>
       <Container $isopen={state.toString()} className={state ? 'active' : ''}>
         <div className="Logocontent">

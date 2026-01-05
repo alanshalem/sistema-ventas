@@ -14,20 +14,7 @@ import styled from 'styled-components'
 import { useAlmacenesStore } from '../../../store/AlmacenesStore'
 import { useReportStore } from '../../../store/ReportStore'
 import { useSucursalesStore } from '../../../store/SucursalesStore'
-
-interface StockBajoMinimoItem {
-  codigo_articulo: string
-  descripcion_articulo: string
-  stock: number
-  stock_minimo: number
-  precio_costo: number | null
-  total: number | null
-}
-
-interface ReportStockBajoMinimoParams {
-  sucursal_id: number | undefined
-  almacen_id: number | undefined
-}
+import type { StockBajoMinimoItem } from '../../../types'
 
 export function LowStockReport(): ReactElement {
   const { reportStockBajoMinimo } = useReportStore()
@@ -46,7 +33,7 @@ export function LowStockReport(): ReactElement {
       reportStockBajoMinimo({
         sucursal_id: sucursalesItemSelect?.id,
         almacen_id: almacenSelectItem?.id,
-      } as ReportStockBajoMinimoParams),
+      }),
     refetchOnWindowFocus: false,
   })
 

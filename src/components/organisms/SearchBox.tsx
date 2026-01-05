@@ -15,7 +15,7 @@ export function SearchBox({ setSearchTerm }: Readonly<SearchBoxProps>) {
   return (
     <Container>
       <section className="content">
-        <v.iconobuscar className="icono" />
+        <v.searchIcon className="icono" />
         <input placeholder="...buscar" onChange={handleSearch} />
       </section>
     </Container>

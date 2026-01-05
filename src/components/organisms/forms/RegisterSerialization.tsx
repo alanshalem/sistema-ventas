@@ -70,7 +70,7 @@ export function RegisterSerialization() {
 
         <form className="form" onSubmit={handleSubmit(handleSubmitForm)}>
           <article>
-            <TextInput icono={<v.iconoflechaderecha />}>
+            <TextInput icono={<v.rightArrowIcon />}>
               <input
                 className="form__field"
                 placeholder="Cantidad de numeros"
@@ -88,7 +88,7 @@ export function RegisterSerialization() {
             </TextInput>
           </article>
           <article>
-            <TextInput icono={<v.iconoflechaderecha />}>
+            <TextInput icono={<v.rightArrowIcon />}>
               <input
                 className="form__field"
                 placeholder="Correlativos"
@@ -107,7 +107,7 @@ export function RegisterSerialization() {
           </article>
 
           <article>
-            <TextInput icono={<v.iconoflechaderecha />}>
+            <TextInput icono={<v.rightArrowIcon />}>
               <input
                 className="form__field"
                 placeholder="Serie"

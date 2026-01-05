@@ -12,18 +12,20 @@ import { UsersTable } from '../organisms/tables/UsersTable'
 
 export function UsuariosTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
-  const [dataSelect, setdataSelect] = useState([])
+  const [dataSelect, setdataSelect] = useState<unknown>(null)
   const { setItemSelect } = useUsuariosStore()
   const [isExploding, setIsExploding] = useState(false)
   const { accion, setAccion, datausuariosAsignados, setBuscador } =
     useAsignacionCajaSucursalStore()
+
   function nuevoRegistro() {
     SetopenRegistro(!openRegistro)
     setAccion('Nuevo')
-    setdataSelect([])
+    setdataSelect(null)
     setIsExploding(false)
     setItemSelect(null)
   }
+
   return (
     <Container>
       <Toaster />
@@ -40,13 +42,13 @@ export function UsuariosTemplate() {
         <PageTitle>Usuarios</PageTitle>
         <Button
           onClick={nuevoRegistro}
-          bgColor={v.colorPrincipal}
+          bgColor={v.primaryColor}
           title="nuevo"
-          icon={<v.iconoagregar />}
+          icon={<v.addIcon />}
         />
       </section>
       <section className="area2">
-        <SearchBox setBuscador={setBuscador} />
+        <SearchBox setSearchTerm={setBuscador} />
       </section>
 
       <section className="main">

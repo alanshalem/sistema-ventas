@@ -90,9 +90,9 @@ export function PaymentMethodsTable({
       cell: (info) => (
         <td data-title="Color" className="ContentCell">
           {info.getValue() !== '-' ? (
-            <ImageContent imagen={info.getValue() as string} />
+            <ImageContent image={info.getValue() as string} />
           ) : (
-            <Icon>{<v.iconoimagenvacia />}</Icon>
+            <Icon>{<v.emptyImageIcon />}</Icon>
           )}
         </td>
       ),
@@ -142,7 +142,7 @@ export function PaymentMethodsTable({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.column.columnDef.header}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
                     <span
                       style={{ cursor: 'pointer' }}

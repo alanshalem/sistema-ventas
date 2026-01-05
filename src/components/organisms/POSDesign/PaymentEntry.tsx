@@ -174,12 +174,12 @@ export const PaymentEntry = forwardRef<PaymentEntryRef>(
       }
     }
 
-    const imprimirConVentanaEmergente = async (p: unknown): Promise<void> => {
+    const imprimirConVentanaEmergente = async (p: Parameters<typeof ticket>[1]): Promise<void> => {
       console.log('pprint', p)
       await ticket('print', p)
     }
 
-    const imprimirDirectoTicket = async (p: unknown): Promise<void> => {
+    const imprimirDirectoTicket = async (p: Parameters<typeof ticket>[1]): Promise<void> => {
       const printerName = dataImpresorasPorCaja?.name ?? dataImpresorasPorCaja?.nombre
       if (printerName === '-') {
         toast.error(

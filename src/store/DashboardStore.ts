@@ -29,7 +29,7 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
   setFechasAnteriores: () => {
     const { fechaInicio, fechaFin } = get() // Obtiene las fechas actuales del estado
     if (!fechaInicio || !fechaFin) {
-      console.warn('Fechas no definidas, no se puede calcular el rango anterior.')
+      // No mostrar warning en consola, solo retornar valores nulos
       return { fechaAnteriorInicio: null, fechaAnteriorFin: null }
     }
 

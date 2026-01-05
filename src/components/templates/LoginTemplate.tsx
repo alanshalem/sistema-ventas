@@ -1,23 +1,32 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast, Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import { Button, Footer, GenerateCodeButton, TextInput2, useAuthStore } from '../../index'
+import { Button, Footer, TextInput2, useAuthStore } from '../../index'
 import { Device } from '../../styles/breakpoints'
 import { v } from '../../styles/variables'
 import { Divider } from '../atoms/Divider'
 import { PageTitle } from '../atoms/PageTitle'
 import { BackButton } from '../molecules/BackButton'
 import { ModesCard } from '../organisms/LoginDesign/ModesCard'
+
+function generateRandomCode(length: number): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+
 export function LoginTemplate() {
   const [stateModos, setStateModos] = useState(true)
   const [stateModo, setStateModo] = useState('empleado')
   const { loginGoogle, loginEmail, crearUserYLogin } = useAuthStore()
 
   const { register, handleSubmit } = useForm()
-  const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationKey: ['iniciar con email'],
     mutationFn: loginEmail,
@@ -31,19 +40,15 @@ export function LoginTemplate() {
     onError: (error) => {
       toast.error(`Error: ${error.message}`)
     },
-    onSuccess: () => {
-      //queryClient.invalidateQueries();
-      // window.location.reload();
-    },
   })
-  const manejadorEmailSesionTester = () => {
-    mutateTester({ email: 'tester1@gmail.com', password: '123456' })
-  }
-  const manejadorEmailSesion = (data) => {
-    mutate({ email: data.email, password: data.password })
+  const manejadorEmailSesion = (data: Record<string, unknown>) => {
+    mutate({
+      email: data.email as string,
+      password: data.password as string,
+    })
   }
   const manejarCrearUSerTester = () => {
-    const response = GenerateCodeButton({ id: 2 })
+    const response = generateRandomCode(8)
     const gmail = '@gmail.com'
     const correoCompleto = response.toLowerCase() + gmail
     mutateTester({ email: correoCompleto, password: '123456' })
@@ -62,9 +67,9 @@ export function LoginTemplate() {
             <ModesCard
               title={'Super admin'}
               subtitle={'crea y gestiona tu empresa'}
-              bgColor={'#ed7323'}
+              bgcolor={'#ed7323'}
               img={'https://i.ibb.co/TDXYj7r9/rey.png'}
-              onClick={() => {
+              funcion={() => {
                 setStateModo('superadmin')
                 setStateModos(!stateModos)
               }}
@@ -72,9 +77,9 @@ export function LoginTemplate() {
             <ModesCard
               title={'Empleado'}
               subtitle={'vende y crece'}
-              bgColor={'#542a1b'}
+              bgcolor={'#542a1b'}
               img={'https://i.ibb.co/ksfCmJyy/casco.png'}
-              onClick={() => {
+              funcion={() => {
                 setStateModo('empleado')
                 setStateModos(!stateModos)
               }}
@@ -134,7 +139,7 @@ export function LoginTemplate() {
                   onClick={loginGoogle}
                   title="Google"
                   bgColor="#fff"
-                  icon={<v.iconogoogle />}
+                  icon={<v.googleIcon />}
                 />
               </PanelModo>
             )}

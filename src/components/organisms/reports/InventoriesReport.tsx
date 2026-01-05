@@ -13,14 +13,7 @@ import styled from 'styled-components'
 import { useAlmacenesStore } from '../../../store/AlmacenesStore'
 import { useSucursalesStore } from '../../../store/SucursalesStore'
 import { useReporteInventarioValoradoQuery } from '../../../tanstack/ReportesStack'
-
-interface InventarioItem {
-  codigo_articulo: string
-  descripcion_articulo: string
-  stock: number
-  precio_costo: number
-  total: number
-}
+import type { InventarioItem } from '../../../types'
 
 export function InventoriesReport(): ReactElement {
   const { data: dataReporteInventarioValorado } = useReporteInventarioValoradoQuery()

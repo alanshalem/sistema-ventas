@@ -147,7 +147,7 @@ export function RegisterInventory() {
             <form className="formulario" onSubmit={handleSubmit(handleFormSubmit)}>
               <section className="form-subcontainer">
                 <article>
-                  <TextInput icono={<v.iconoflechaderecha />}>
+                  <TextInput icono={<v.rightArrowIcon />}>
                     <input
                       className="form__field"
                       type="number"
@@ -160,7 +160,7 @@ export function RegisterInventory() {
                   </TextInput>
                 </article>
                 <article>
-                  <TextInput icono={<v.iconoflechaderecha />}>
+                  <TextInput icono={<v.rightArrowIcon />}>
                     <input
                       className="form__field"
                       type="number"
@@ -173,7 +173,7 @@ export function RegisterInventory() {
                   </TextInput>
                 </article>
                 <article>
-                  <TextInput icono={<v.iconoflechaderecha />}>
+                  <TextInput icono={<v.rightArrowIcon />}>
                     <input
                       className="form__field"
                       type="number"
@@ -188,7 +188,7 @@ export function RegisterInventory() {
 
                 <Button
                   disabled={!productosItemSelect?.nombre}
-                  icon={<v.iconoguardar />}
+                  icon={<v.saveIcon />}
                   title="Guardar"
                   bgColor="#F9D70B"
                 />

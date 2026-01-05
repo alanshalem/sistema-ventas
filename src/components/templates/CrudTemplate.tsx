@@ -2,21 +2,21 @@ import ConfettiExplosion from 'react-confetti-explosion'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
-import { Button,SearchBox } from '../../index'
+import { Button, SearchBox } from '../../index'
 import { useGlobalStore } from '../../store/GlobalStore'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
 import { BuscadorList } from '../ui/lists/BuscadorList'
 interface CrudTemplateProps {
-  FormularioRegistro?: React.ComponentType<any>
+  FormularioRegistro?: React.ComponentType<unknown>
   title: string
-  Tabla?: React.ComponentType<any>
-  data?: any[]
+  Tabla?: React.ComponentType<unknown>
+  data?: unknown[]
   setBuscador?: (value: string) => void
   tipoBuscador?: 'list' | 'simple'
-  dataBuscadorList?: any[]
-  selectBuscadorList?: (item: any) => void
-  setBuscadorList?: (item: any) => void
+  dataBuscadorList?: unknown[]
+  selectBuscadorList?: (item: unknown) => void
+  setBuscadorList?: (value: string) => void
   stateBtnAdd?: boolean
   stateBuscador?: boolean
 }
@@ -58,9 +58,9 @@ export function CrudTemplate({
         {stateBtnAdd && (
           <Button
             onClick={nuevoRegistro}
-            bgColor={v.colorPrincipal}
+            bgColor={v.primaryColor}
             title="nuevo"
-            icon={<v.iconoagregar />}
+            icon={<v.addIcon />}
           />
         )}
       </section>
@@ -68,19 +68,19 @@ export function CrudTemplate({
         <section className="area2">
           {tipoBuscador === 'list' ? (
             <BuscadorList
-              data={dataBuscadorList}
-              onSelect={selectBuscadorList}
-              setBuscador={setBuscadorList}
+              data={(dataBuscadorList as Record<string, unknown>[]) ?? []}
+              onSelect={selectBuscadorList ?? (() => {})}
+              setBuscador={setBuscadorList ?? (() => {})}
             />
           ) : (
-            <SearchBox setSearchTerm={setBuscador} />
+            <SearchBox setSearchTerm={setBuscador ?? (() => {})} />
           )}
         </section>
       )}
 
       <section className="main">
         {isExploding && <ConfettiExplosion />}
-        {data && data.length > 0 && Tabla}
+        {data && data.length > 0 && Tabla && <Tabla />}
       </section>
     </Container>
   )

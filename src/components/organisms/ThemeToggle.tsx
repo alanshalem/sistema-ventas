@@ -1,53 +1,80 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { MouseEvent } from "react"
-import styled from "styled-components"
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import styled from 'styled-components'
 
-import { useThemeStore } from "../../store/ThemeStore"
-import { useUsuariosStore } from "../../store/UsuariosStore"
-import { Dark, Light } from "../../styles/themes"
+import { useUsuariosStore } from '../../store/UsuariosStore'
+import { useThemeStore } from '../../store/ThemeStore'
 
 export function ThemeToggle() {
   const { editarThemeUser, datausuarios } = useUsuariosStore()
-  const { setTheme, theme } = useThemeStore()
   const queryClient = useQueryClient()
+  const { toggleLocalTheme } = useThemeStore()
 
-  const editarTemaUser = async () => {
-    const themeUse = theme === "light" ? "dark" : "light"
-    const themeStyle = datausuarios?.tema === "light" ? Dark : Light
-    setTheme({
-      tema: themeUse,
-      style: themeStyle,
-    })
-    const p = {
-      id: datausuarios?.id,
-      tema: themeUse,
+  // Check if we're in local mode (no backend connection or no user data)
+  const isLocalMode = !datausuarios?.id || process.env.NODE_ENV === 'development'
+
+  // Fallback: Use backend theme if available, otherwise use local theme
+  const currentTheme = datausuarios?.theme || useThemeStore.getState().theme
+
+  const handleThemeChange = async () => {
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light'
+
+    if (isLocalMode) {
+      // Local mode: Just update local state and localStorage
+      toggleLocalTheme()
+      console.log('🌓 Local theme change:', newTheme)
+    } else {
+      // Backend mode: Update database and refresh user data
+      try {
+        // 1. Update backend
+        await editarThemeUser({
+          id: datausuarios.id,
+          theme: newTheme,
+        })
+
+        // 2. Invalidate queries to refresh datausuarios
+        queryClient.invalidateQueries({ queryKey: ['mostrar usuarios'] })
+
+        console.log('✅ Backend theme updated:', newTheme)
+      } catch (error) {
+        console.error('❌ Backend update failed, falling back to local:', error)
+        // Fallback to local if backend fails
+        toggleLocalTheme()
+      }
     }
-
-    await editarThemeUser(p)
   }
 
   const { mutate, isPending } = useMutation({
-    mutationKey: ["editar tema"],
-    mutationFn: editarTemaUser,
+    mutationKey: ['editar theme'],
+    mutationFn: handleThemeChange,
     onError: (error) => {
-      console.log(`Error: ${error.message}`)
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["mostrar usuarios"] })
+      console.error('Error al cambiar theme:', error)
+      // Fallback to local on error
+      toggleLocalTheme()
     },
   })
 
-  const handleToggle = (event: MouseEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    mutate()
+  const handleToggle = () => {
+    if (isLocalMode) {
+      handleThemeChange()
+    } else {
+      mutate()
+    }
   }
 
   return (
     <Container>
       <div className="container">
         {isPending && <span>espera...</span>}
+
         <label className="toggle">
-          <input id="switch" className="input" type="checkbox" onClick={handleToggle} />
+          <input
+            id="switch"
+            className="input"
+            type="checkbox"
+            checked={currentTheme === 'dark'}
+            onChange={handleToggle}
+          />
+
           <div className="icon icon--moon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +121,13 @@ export function ThemeToggle() {
                   fill="#666865"
                   stroke="#5E5E5D"
                 ></circle>
-                <circle cx="151.5" cy="184" r="28" fill="#666865" stroke="#5E5E5D"></circle>
+                <circle
+                  cx="151.5"
+                  cy="184"
+                  r="28"
+                  fill="#666865"
+                  stroke="#5E5E5D"
+                ></circle>
                 <circle
                   cx="297.5"
                   cy="382.501"
@@ -102,7 +135,13 @@ export function ThemeToggle() {
                   fill="#666865"
                   stroke="#5E5E5D"
                 ></circle>
-                <circle cx="395" cy="213" r="18.5" fill="#666865" stroke="#5E5E5D"></circle>
+                <circle
+                  cx="395"
+                  cy="213"
+                  r="18.5"
+                  fill="#666865"
+                  stroke="#5E5E5D"
+                ></circle>
                 <circle cx="317" cy="216" r="8" fill="#666865" stroke="#5E5E5D"></circle>
                 <path
                   fill="#666865"
@@ -131,10 +170,10 @@ export function ThemeToggle() {
     </Container>
   )
 }
-
 const Container = styled.div`
   justify-content: center;
   display: flex;
+
   .toggle {
     width: 46px;
     height: 46px;
@@ -142,14 +181,13 @@ const Container = styled.div`
     display: grid;
     place-items: center;
     cursor: pointer;
-
     line-height: 1;
-
     margin-top: 15px;
   }
 
   .input {
-    display: none;
+    position: absolute;
+    opacity: 0;
   }
 
   .icon {
@@ -176,6 +214,6 @@ const Container = styled.div`
   }
 
   .w-8 {
-    width: 2rem /* 32px */;
+    width: 2rem;
   }
 `

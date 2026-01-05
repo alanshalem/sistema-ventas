@@ -13,7 +13,6 @@ import styled from 'styled-components'
 
 import { useEmpresaStore } from '../../../store/EmpresaStore'
 import { useReportesStore } from '../../../store/ReportesStore'
-import { useThemeStore } from '../../../store/ThemeStore'
 import {
   useGananciasDetalleVentaQuery,
   useMostrarCantidadDetalleVentaDashboardQuery,
@@ -21,6 +20,7 @@ import {
   useMostrarVentasDashboardQuery,
 } from '../../../tanstack/ReportesStack'
 import { FormatearNumeroDinero } from '../../../utils/Conversiones'
+import { useThemeStore } from '@/store/ThemeStore'
 
 export function SalesChart(): ReactNode {
   const { data } = useMostrarVentasDashboardQuery()

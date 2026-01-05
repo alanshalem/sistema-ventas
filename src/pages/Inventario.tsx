@@ -29,7 +29,7 @@ export const Inventario = () => {
     enabled: !!dataempresa,
   })
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'mostrar movimientos de stock',
       {

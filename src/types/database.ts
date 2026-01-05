@@ -102,6 +102,7 @@ export interface Usuario extends BaseEntity {
   telefono?: string
   foto?: string
   usuario_supabase?: string
+  theme?: string | null
 }
 
 export interface Rol extends BaseEntity {
@@ -285,6 +286,7 @@ export interface Serializacion extends BaseEntity {
 export interface Impresora extends BaseEntity {
   nombre: string
   name?: string
+  pc_name?: string
   ip?: string
   puerto?: number
   tipo: string
@@ -318,6 +320,23 @@ export interface Top5ProductData {
   nombre_producto: string
   cantidad_vendida: number
   monto_total: number
+}
+
+export interface InventarioItem {
+  codigo_articulo: string
+  descripcion_articulo: string
+  stock: number
+  precio_costo: number
+  total: number
+}
+
+export interface StockBajoMinimoItem {
+  codigo_articulo: string
+  descripcion_articulo: string
+  stock: number
+  stock_minimo: number
+  precio_costo: number | null
+  total: number | null
 }
 
 export interface Top10Product {

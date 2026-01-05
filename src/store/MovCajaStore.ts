@@ -19,7 +19,7 @@ interface SumarVentasMetodoPagoParams {
 }
 
 interface MostrarMovimientosCajaLiveParams {
-  _id_cierre_caja: number
+  _id_cierre_caja?: number
 }
 
 interface MovCajaState {

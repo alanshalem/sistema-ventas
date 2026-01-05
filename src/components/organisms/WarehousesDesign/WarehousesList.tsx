@@ -10,19 +10,16 @@ import { useAlmacenesStore } from '../../../store/AlmacenesStore'
 import { useEmpresaStore } from '../../../store/EmpresaStore'
 import { useSucursalesStore } from '../../../store/SucursalesStore'
 import { Device } from '../../../styles/breakpoints'
+import type { Almacen as AlmacenBase, Sucursal as SucursalBase } from '../../../types'
 import { ButtonDashed } from '../../ui/buttons/ButtonDashed'
 
-interface Almacen {
-  id: number
-  nombre: string
-  fecha_creacion: string
+interface AlmacenExtended extends AlmacenBase {
+  fecha_creacion?: string
   delete?: boolean
 }
 
-interface Sucursal {
-  id: number
-  nombre: string
-  almacen?: Almacen[]
+interface SucursalExtended extends SucursalBase {
+  almacen?: AlmacenExtended[]
   delete?: boolean
 }
 
@@ -41,27 +38,30 @@ export function WarehousesList(): ReactElement {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['mostrar almacenes X empresa'],
-    queryFn: () => mostrarAlmacenesXEmpresa({ id_empresa: dataempresa?.id }),
+    queryFn: async () => {
+      const result = await mostrarAlmacenesXEmpresa({ id_empresa: dataempresa?.id ?? 0 })
+      return result as unknown as SucursalExtended[]
+    },
     enabled: !!dataempresa,
   })
 
-  const editarSucursal = (p: Sucursal) => {
-    selectSucursal(p)
+  const editarSucursal = (p: SucursalExtended | SucursalBase) => {
+    selectSucursal(p as SucursalBase)
     setStateSucursal(true)
     setAccion('Editar')
   }
 
-  const agregarAlmacen = (p: Sucursal) => {
+  const addAlmacen = (p: SucursalExtended | SucursalBase) => {
     setAccionAlmacen('Nuevo')
     setStateAlmacen(true)
     console.log(p)
-    setAlmacenSelectItem(p)
+    setAlmacenSelectItem(p as AlmacenBase)
   }
 
-  const editarAlmacen = (p: Almacen) => {
+  const editarAlmacen = (p: AlmacenExtended | AlmacenBase) => {
     setStateAlmacen(true)
     setAccionAlmacen('Editar')
-    setAlmacenSelectItem(p)
+    setAlmacenSelectItem(p as AlmacenBase)
   }
 
   const controladorEliminarAlmacen = (id: number) => {
@@ -143,7 +143,7 @@ export function WarehousesList(): ReactElement {
 
   return (
     <Container>
-      {data?.map((sucursal, index) => {
+      {data?.map((sucursal: SucursalExtended, index: number) => {
         return (
           <Sucursal key={index}>
             <SucursalHeader>
@@ -168,7 +168,7 @@ export function WarehousesList(): ReactElement {
               <SucursalTitle>SUCURSAL: {sucursal.nombre}</SucursalTitle>
             </SucursalHeader>
             <AlmacenList>
-              {sucursal.almacen?.map((almacen, index) => {
+              {sucursal.almacen?.map((almacen: AlmacenExtended, index: number) => {
                 return (
                   <AlmacenItem key={index}>
                     <AlmacenInfo>
@@ -196,10 +196,7 @@ export function WarehousesList(): ReactElement {
                 )
               })}
             </AlmacenList>
-            <ButtonDashed
-              title={'agregar almacen'}
-              funcion={() => agregarAlmacen(sucursal)}
-            />
+            <ButtonDashed title={'add almacen'} funcion={() => addAlmacen(sucursal)} />
           </Sucursal>
         )
       })}

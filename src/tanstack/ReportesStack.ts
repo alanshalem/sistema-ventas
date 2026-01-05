@@ -31,8 +31,7 @@ export const useMostrarVentasDashboardQuery = () => {
 export const useMostrarCantidadDetalleVentaDashboardQuery = () => {
   const { dataempresa } = useEmpresaStore()
   const { fechaInicio, fechaFin } = useDashboardStore()
-  const { mostrarVentasDashboard, mostrarCantidadDetalleVentasDashboard } =
-    useReportesStore()
+  const { mostrarCantidadDetalleVentasDashboard } = useReportesStore()
   return useQuery({
     queryKey: [
       'mostrar cantidad detalle Ventas Dashboard',
@@ -76,10 +75,9 @@ export const useMostrarCantidadDetalleVentaPeriodoAnteriorDashboardQuery = () =>
 }
 export const useMostrarVentasDashboardPeriodoAnteriorQuery = () => {
   const { dataempresa } = useEmpresaStore()
-  const { fechaInicio, fechaFin, setFechasAnteriores } = useDashboardStore()
+  const { setFechasAnteriores } = useDashboardStore()
 
-  const { mostrarVentasDashboardPeriodoAnterior, mostrarVentasDashboard } =
-    useReportesStore()
+  const { mostrarVentasDashboardPeriodoAnterior } = useReportesStore()
   const fechasAnteriores = setFechasAnteriores()
   return useQuery({
     queryKey: [

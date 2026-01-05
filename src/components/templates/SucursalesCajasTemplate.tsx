@@ -6,7 +6,6 @@ import { useSucursalesStore } from '../../store/SucursalesStore'
 import { BranchesList } from '../organisms/BranchesDesign/BranchesList'
 import { RegisterBranch } from '../organisms/forms/RegisterBranch'
 import { RegisterCashRegister } from '../organisms/forms/RegisterCashRegister'
-import { AnimatedGrid } from '../ui/animated/AnimatedGrid'
 import { ButtonDashed } from '../ui/buttons/ButtonDashed'
 export const SucursalesCajasTemplate = () => {
   const { stateSucursal, setStateSucursal } = useSucursalesStore()
@@ -22,7 +21,7 @@ export const SucursalesCajasTemplate = () => {
         <Header>
           <Title>Cajas por sucursal</Title>
           <Subtitle>gestiona tus sucursales y cajas</Subtitle>
-          <ButtonDashed title="agregar sucursal" funcion={() => setStateSucursal(true)} />
+          <ButtonDashed title="add sucursal" funcion={() => setStateSucursal(true)} />
         </Header>
       </section>
       <section className="area2">

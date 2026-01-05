@@ -40,8 +40,8 @@ export const ConfiguracionTicket = () => {
             {/* <Button bgColor={"#fad43c"} title={"Guardar"} /> */}
           </Contentguia>
 
-          <ImageSelector fileUrl={fileUrl || dataempresa?.logo} />
-          <form className="receipt-content" onSubmit={handleSubmit(mutate)}>
+          <ImageSelector fileUrl={fileUrl || dataempresa?.logo || '-'} />
+          <form className="receipt-content" onSubmit={handleSubmit(mutate as never)}>
             <Button bgColor={'#fad43c'} title={'Guardar'} />
             <br></br>
 

@@ -77,7 +77,7 @@ export const useCartVentasStoreTemporal = create<CartVentasStoreTemporal>()(
             })
             return { items: updatedItems, total: calcularTotal(updatedItems) }
           } else {
-            // Si el producto no está en el carrito, agregarlo
+            // Si el producto no está en el carrito, addlo
             return {
               items: [...state.items, p],
               total: calcularTotal([...state.items, p]),

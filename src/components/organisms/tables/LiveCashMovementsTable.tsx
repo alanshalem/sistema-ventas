@@ -15,7 +15,6 @@ import { useState } from 'react'
 import { FaArrowsAltV } from 'react-icons/fa'
 import styled from 'styled-components'
 
-import { v } from '../../../styles/variables'
 import { Pagination } from './Pagination'
 
 interface CashMovement {
@@ -35,9 +34,6 @@ interface LiveCashMovementsTableProps {
 
 export function LiveCashMovementsTable({
   data,
-  setOpenRegister,
-  setSelectedData,
-  setAction,
 }: Readonly<LiveCashMovementsTableProps>) {
   if (data == null) return null
 
@@ -104,7 +100,7 @@ export function LiveCashMovementsTable({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.column.columnDef.header}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
                     <span
                       style={{ cursor: 'pointer' }}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useLocation, useMatch } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { DashboardHeader } from '../components/organisms/DashboardDesign'
@@ -7,14 +7,11 @@ import { SelectList } from '../components/ui/lists/SelectList'
 import { useAlmacenesStore } from '../store/AlmacenesStore'
 import { useSucursalesStore } from '../store/SucursalesStore'
 import { Device } from '../styles/breakpoints'
-import {
-  useMostrarAlmacenesXSucursalQuery,
-  useMostrarAlmacenesXSucursalSelectQuery,
-} from '../tanstack/AlmacenesStack'
+import { useMostrarAlmacenesXSucursalSelectQuery } from '../tanstack/AlmacenesStack'
 import { useMostrarSucursalesQuery } from '../tanstack/SucursalesStack'
 
 export const Reportes = () => {
-  const [reporteSeleccionado, setReporteSeleccionado] = useState(1)
+  const [reporteSeleccionado] = useState(1)
   const { data: dataSucursales } = useMostrarSucursalesQuery()
   const { data: dataAlmacenes } = useMostrarAlmacenesXSucursalSelectQuery()
   const { sucursalesItemSelect, selectSucursal } = useSucursalesStore()

@@ -9,25 +9,30 @@ import {
   SearchBox,
   useClientesProveedoresStore,
 } from '../../index'
+import type { Cliente, Proveedor } from '../../types'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
 import { ClientsSuppliersTable } from '../organisms/tables/ClientsSuppliersTable'
+
+type ClienteOProveedor = Cliente | Proveedor
+
 export function ClientesProveedoresTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
-  const { dataclipro, setBuscador } = useClientesProveedoresStore()
-  const { setTipo } = useClientesProveedoresStore()
+  const { dataclipro, setBuscador, setTipo } = useClientesProveedoresStore()
   const [accion, setAccion] = useState('')
-  const [dataSelect, setdataSelect] = useState([])
+  const [dataSelect, setdataSelect] = useState<ClienteOProveedor | null>(null)
   const [isExploding, setIsExploding] = useState(false)
   const location = useLocation()
+
   function nuevoRegistro() {
     const tipo = location.pathname === '/configuracion/clientes' ? 'cliente' : 'proveedor'
     setTipo(tipo)
     SetopenRegistro(!openRegistro)
     setAccion('Nuevo')
-    setdataSelect([])
+    setdataSelect(null)
     setIsExploding(false)
   }
+
   return (
     <Container>
       {openRegistro && (
@@ -44,13 +49,13 @@ export function ClientesProveedoresTemplate() {
         </PageTitle>
         <Button
           onClick={nuevoRegistro}
-          bgColor={v.colorPrincipal}
+          bgColor={v.primaryColor}
           title="nuevo"
-          icon={<v.iconoagregar />}
+          icon={<v.addIcon />}
         />
       </section>
       <section className="area2">
-        <SearchBox setBuscador={setBuscador} />
+        <SearchBox setSearchTerm={setBuscador} />
       </section>
 
       <section className="main">

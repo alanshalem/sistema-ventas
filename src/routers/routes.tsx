@@ -15,7 +15,7 @@ import {
   Layout,
   Login,
   PageNot,
-  POS,
+  PointOfSale,
   Productos,
   ProtectedRoute,
 } from '../index'
@@ -147,7 +147,7 @@ export function MyRoutes() {
         element={
           <Layout>
             <ProtectedRoute accessBy="authenticated">
-              <POS />
+              <PointOfSale />
             </ProtectedRoute>
           </Layout>
         }

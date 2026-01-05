@@ -48,7 +48,7 @@ export function BranchesList(): ReactElement {
     setAccion('Editar')
   }
 
-  const agregarCaja = (p: SucursalWithCajas) => {
+  const addCaja = (p: SucursalWithCajas) => {
     setAccionCaja('Nuevo')
     setStateCaja(true)
     console.log(p)
@@ -197,8 +197,8 @@ export function BranchesList(): ReactElement {
               })}
             </CajaList>
             <ButtonDashed
-              title={'agregar caja'}
-              funcion={() => agregarCaja(sucursalWithDelete)}
+              title={'add caja'}
+              funcion={() => addCaja(sucursalWithDelete)}
             />
           </Sucursal>
         )

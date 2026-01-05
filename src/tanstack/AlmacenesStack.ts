@@ -5,8 +5,6 @@ import { useCierreCajaStore } from '../store/CierreCajaStore'
 import { useSucursalesStore } from '../store/SucursalesStore'
 
 export const useMostrarAlmacenesXSucursalQuery = () => {
-  const { sucursalesItemSelect } = useSucursalesStore()
-  const { dataSucursales } = useSucursalesStore()
   const { dataCierreCaja } = useCierreCajaStore()
   const { mostrarAlmacenesXSucursal } = useAlmacenesStore()
   return useQuery({

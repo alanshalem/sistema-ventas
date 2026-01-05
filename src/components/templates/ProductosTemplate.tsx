@@ -10,18 +10,21 @@ import {
   SearchBox,
   useProductosStore,
 } from '../../index'
+import type { Producto } from '../../types'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
+
 export function ProductosTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const { dataProductos, setBuscador, generarCodigo } = useProductosStore()
   const [accion, setAccion] = useState('')
-  const [dataSelect, setdataSelect] = useState([])
+  const [dataSelect, setdataSelect] = useState<Producto | null>(null)
   const [isExploding, setIsExploding] = useState(false)
+
   function nuevoRegistro() {
     SetopenRegistro(!openRegistro)
     setAccion('Nuevo')
-    setdataSelect([])
+    setdataSelect(null)
     setIsExploding(false)
     generarCodigo()
   }
@@ -43,13 +46,13 @@ export function ProductosTemplate() {
         <PageTitle>Productos</PageTitle>
         <Button
           onClick={nuevoRegistro}
-          bgColor={v.colorPrincipal}
+          bgColor={v.primaryColor}
           title="nuevo"
-          icon={<v.iconoagregar />}
+          icon={<v.addIcon />}
         />
       </section>
       <section className="area2">
-        <SearchBox setBuscador={setBuscador} />
+        <SearchBox setSearchTerm={setBuscador} />
       </section>
 
       <section className="main">

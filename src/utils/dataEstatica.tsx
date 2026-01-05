@@ -5,17 +5,17 @@ import { v } from '../styles/variables'
 export const DesplegableUser = [
   {
     text: 'Mi perfil',
-    icono: <v.iconoUser />,
+    icono: <v.userIcon />,
     tipo: 'miperfil',
   },
   {
     text: 'Configuracion',
-    icono: <v.iconoSettings />,
+    icono: <v.settingsIcon />,
     tipo: 'configuracion',
   },
   {
     text: 'Cerrar sesión',
-    icono: <v.iconoCerrarSesion />,
+    icono: <v.logoutIcon />,
     tipo: 'cerrarsesion',
   },
 ]

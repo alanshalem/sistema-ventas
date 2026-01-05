@@ -1,22 +1,33 @@
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { useRef, useState } from 'react'
+import type { ChangeEvent } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 
 import { useGlobalStore } from '../store/GlobalStore'
-export const ImageSelector = ({ fileUrl }) => {
-  const fileInputRef = useRef(null)
+
+interface ImageSelectorProps {
+  fileUrl: string
+}
+
+export const ImageSelector = ({ fileUrl }: ImageSelectorProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const { setFile, setFileUrl } = useGlobalStore()
   function openFileSelector() {
-    fileInputRef.current.click()
+    fileInputRef.current?.click()
   }
-  const handleImageChange = (e) => {
-    const selectedFile = e.target.files[0]
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+    const selectedFile = files[0]
     if (!selectedFile) return
     const fileReader = new FileReader()
     fileReader.readAsDataURL(selectedFile)
-    setFile(selectedFile)
+    setFile([selectedFile])
     fileReader.onload = () => {
-      setFileUrl(fileReader.result)
+      const result = fileReader.result
+      if (typeof result === 'string') {
+        setFileUrl(result)
+      }
     }
   }
   return (

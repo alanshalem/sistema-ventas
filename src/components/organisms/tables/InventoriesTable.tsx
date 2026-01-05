@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query'
 import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
 import {
   flexRender,
@@ -11,9 +10,7 @@ import {
 import { useState } from 'react'
 import { FaArrowsAltV } from 'react-icons/fa'
 import styled from 'styled-components'
-import Swal from 'sweetalert2'
 
-import { useUsuariosStore } from '../../../store/UsuariosStore'
 import { v } from '../../../styles/variables'
 import { Pagination } from './Pagination'
 
@@ -37,45 +34,12 @@ interface InventoryMovement {
 
 interface InventoriesTableProps {
   readonly data: InventoryMovement[]
-  readonly setOpenRegister: (open: boolean) => void
-  readonly setSelectedData: (data: InventoryMovement) => void
-  readonly setAction: (action: string) => void
 }
 
-export function InventoriesTable({
-  data,
-  setOpenRegister,
-  setSelectedData,
-  setAction,
-}: Readonly<InventoriesTableProps>) {
+export function InventoriesTable({ data }: Readonly<InventoriesTableProps>) {
   if (data == null) return null
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const queryClient = useQueryClient()
-  const { eliminarUsuarioAsignado } = useUsuariosStore()
-
-  function handleDelete(item: InventoryMovement) {
-    Swal.fire({
-      title: '¿Estás seguro(a)(e)?',
-      text: 'Una vez eliminado, ¡no podrá recuperar este registro!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, eliminar',
-    }).then(async (result) => {
-      if (result.isConfirmed && item.id_usuario) {
-        await eliminarUsuarioAsignado({ id: item.id_usuario })
-        queryClient.invalidateQueries({ queryKey: ['mostrar usuarios asignados'] })
-      }
-    })
-  }
-
-  function handleEdit(item: InventoryMovement) {
-    setOpenRegister(true)
-    setSelectedData(item)
-    setAction('Editar')
-  }
 
   const columns: ColumnDef<InventoryMovement>[] = [
     {
@@ -144,7 +108,7 @@ export function InventoriesTable({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.column.columnDef.header}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
                     <span
                       style={{ cursor: 'pointer' }}

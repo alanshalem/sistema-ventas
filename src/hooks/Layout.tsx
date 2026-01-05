@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -7,78 +8,65 @@ import {
   MobileMenu,
   Sidebar,
   Spinner,
-  useAuthStore,
-  useEmpresaStore,
   UserAuth,
-  useSucursalesStore,
   useUsuariosStore,
 } from '../index'
-import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
-import { usePermisosStore } from '../store/PermisosStore'
 import { Device } from '../styles/breakpoints'
-import { useMostrarSucursalAsignadasQuery } from '../tanstack/AsignacionesSucursalStack'
-export function Layout({ children }) {
+
+interface LayoutProps {
+  children: ReactNode
+}
+
+export function Layout({ children }: Readonly<LayoutProps>) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [stateMenu, setStateMenu] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const { mostrarusuarios } = useUsuariosStore()
-  const { mostrarempresa } = useEmpresaStore()
-  const { user } = UserAuth() // Accedemos al contexto
-  const id_auth = user?.id // Obtenemos el id_auth del usuario autenticado
-  const { mostrarSucursalCajaAsignada } = useAsignacionCajaSucursalStore()
+  const authContext = UserAuth() // Access the context
+  const userId = authContext?.user?.id // Get authenticated user ID
 
+  // #region User Data Query
   const {
-    data: datausuarios,
-    isLoading: isLoadingUsuarios,
-    error: errorUsuarios,
-    refetch: refetchUsuarios,
+    isLoading: isLoadingUsers,
+    error: userError,
   } = useQuery({
-    queryKey: ['mostrar usuarios'],
-    queryFn: () => mostrarusuarios({ id_auth: id_auth }),
+    queryKey: ['show users'],
+    queryFn: () => mostrarusuarios({ id_auth: userId ?? '' }),
     refetchOnWindowFocus: false,
-    enabled: !!id_auth,
+    enabled: !!userId,
   })
 
-  const {
-    data: dataSucursales,
-    isLoading: isLoadingSucursales,
-    error: errorSucursales,
-  } = useMostrarSucursalAsignadasQuery()
+  // Consolidation of loading and error states
+  const isLoading = isLoadingUsers
+  const error = userError
 
-  const {
-    data: dataEmpresa,
-    isLoading: isLoadingEmpresa,
-    error: errorEmpresa,
-  } = useQuery({
-    queryKey: ['mostrar empresa', datausuarios?.id],
-    queryFn: () => mostrarempresa({ _id_usuario: datausuarios?.id }),
-    enabled: !!datausuarios,
-    refetchOnWindowFocus: false,
-  })
-
-  // Consolidación de isLoading y error
-  const isLoading = isLoadingUsuarios || isLoadingSucursales || isLoadingEmpresa
-  const error = errorUsuarios || errorSucursales || errorEmpresa
-
-  //  if (datausuarios == null) {
-  //    refetchUsuarios();
-  //  }
+  // Loading state
   if (isLoading) {
     return <Spinner />
   }
+
+  // Error state
   if (error) {
-    return <span>error layout...{error.message} </span>
+    return <span>Error loading layout: {error.message}</span>
   }
+
   return (
     <Container className={sidebarOpen ? 'active' : ''}>
+      {/* #region Sidebar */}
       <section className="contentSidebar">
-        <Sidebar state={sidebarOpen} setState={() => setSidebarOpen(!sidebarOpen)} />
-      </section>
-      <section className="contentMenuhambur">
-        <HamburgerSwitch isActive={stateMenu} onClick={() => setStateMenu(!stateMenu)} />
-        {stateMenu ? <MobileMenu setState={() => setStateMenu(false)} /> : null}
+        <Sidebar state={sidebarOpen} setState={(state) => setSidebarOpen(state)} />
       </section>
 
+      {/* #region Header with Mobile Menu */}
+      <section className="contentMenuHamburger">
+        <HamburgerSwitch
+          isActive={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        />
+        {mobileMenuOpen && <MobileMenu setState={() => setMobileMenuOpen(false)} />}
+      </section>
+
+      {/* #region Main Content */}
       <Containerbody>{children}</Containerbody>
     </Container>
   )

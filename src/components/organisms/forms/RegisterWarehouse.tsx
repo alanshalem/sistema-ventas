@@ -83,7 +83,7 @@ export function RegisterWarehouse() {
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     defaultValue={accion === 'Editar' ? almacenSelectItem?.nombre : ''}
@@ -98,7 +98,7 @@ export function RegisterWarehouse() {
                 </TextInput>
               </article>
 
-              <Button icon={<v.iconoguardar />} title="Guardar" bgColor="#F9D70B" />
+              <Button icon={<v.saveIcon />} title="Guardar" bgColor="#F9D70B" />
             </section>
           </form>
         </div>

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { useAsignacionCajaSucursalStore } from '../store/AsignacionCajaSucursalStore'
-import { useCajasStore } from '../store/CajasStore'
 import { useUsuariosStore } from '../store/UsuariosStore'
 
 export const useMostrarSucursalAsignadasQuery = () => {

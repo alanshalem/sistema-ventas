@@ -91,7 +91,7 @@ export function RegisterBranch() {
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     defaultValue={sucursalesItemSelect?.nombre}
@@ -106,7 +106,7 @@ export function RegisterBranch() {
                 </TextInput>
               </article>
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     defaultValue={
@@ -120,7 +120,7 @@ export function RegisterBranch() {
                 </TextInput>
               </article>
 
-              <Button icon={<v.iconoguardar />} title="Guardar" bgColor="#F9D70B" />
+              <Button icon={<v.saveIcon />} title="Guardar" bgColor="#F9D70B" />
             </section>
           </form>
         </div>

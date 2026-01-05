@@ -1,8 +1,8 @@
-import { Icon } from "@iconify/react"
-import styled from "styled-components"
+import { Icon } from '@iconify/react'
+import styled from 'styled-components'
 
-import { v } from "../../../styles/variables"
-import { TableActions } from "./TableActions"
+import { v } from '../../../styles/variables'
+import { TableActions } from './TableActions'
 
 interface TableActionsContentProps {
   readonly onEdit?: () => void
@@ -20,7 +20,7 @@ export function TableActionsContent({
           onClick={onEdit}
           fontSize="18px"
           color="#7d7d7d"
-          icon={<v.iconeditarTabla />}
+          icon={<v.nameIcon />}
         />
       )}
       {onDelete && (

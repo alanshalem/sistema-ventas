@@ -49,6 +49,7 @@ interface ProductosActions {
   editarProductos: (params: EditarProductoParams) => Promise<void>
   buscarProductos: (params: BuscarProductoParams) => Promise<ProductoExtendido[]>
   editarPreciosProductos: (params: Partial<Producto> & { id: number }) => Promise<void>
+  generarCodigo: () => void
 }
 
 type ProductosStore = ProductosState & ProductosActions

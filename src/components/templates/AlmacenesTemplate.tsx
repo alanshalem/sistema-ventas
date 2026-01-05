@@ -2,17 +2,13 @@ import { Toaster } from 'sonner'
 import styled from 'styled-components'
 
 import { useAlmacenesStore } from '../../store/AlmacenesStore'
-import { useCajasStore } from '../../store/CajasStore'
 import { useSucursalesStore } from '../../store/SucursalesStore'
-import { BranchesList } from '../organisms/BranchesDesign/BranchesList'
 import { RegisterBranch } from '../organisms/forms/RegisterBranch'
-import { RegisterCashRegister } from '../organisms/forms/RegisterCashRegister'
 import { RegisterWarehouse } from '../organisms/forms/RegisterWarehouse'
 import { WarehousesList } from '../organisms/WarehousesDesign/WarehousesList'
-import { AnimatedGrid } from '../ui/animated/AnimatedGrid'
-import { ButtonDashed } from '../ui/buttons/ButtonDashed'
+
 export const AlmacenesTemplate = () => {
-  const { stateSucursal, setStateSucursal } = useSucursalesStore()
+  const { stateSucursal } = useSucursalesStore()
   const { stateAlmacen } = useAlmacenesStore()
 
   return (

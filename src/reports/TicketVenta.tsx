@@ -1,12 +1,54 @@
 import { numeroALetras, urlToBase64 } from '../utils/Conversiones'
 import createPdf from '../utils/CreatePdf'
-const TicketVenta = async (output, data) => {
-  const fechaCompleta = data.dataventas?.fecha
+
+interface TicketVentaData {
+  dataventas?: {
+    fecha?: string
+    monto_total?: number
+    nro_comprobante?: string
+    sub_total?: number
+    total_impuestos?: number
+  } | null
+  dataempresa?: {
+    simbolo_moneda?: string
+    nombre_moneda?: string
+    logo?: string
+    nombre?: string
+    direccion_fiscal?: string
+    id_fiscal?: string
+    impuesto?: string
+    pie_pagina_ticket?: string
+  } | null
+  productos: Array<{
+    productos?: {
+      codigo_barras?: string
+      nombre?: string
+    }
+    cantidad?: number
+    precio_venta?: number
+    total?: number
+  }>
+  metodosPago?: Array<{
+    tipo?: string
+    monto?: number
+    vuelto?: number
+  }> | null
+  nombreComprobante?: string
+  nombrecajero?: string
+  dataCliente?: {
+    nombres?: string
+    identificador_fiscal?: string
+    direccion?: string
+  } | null
+}
+
+const TicketVenta = async (output: 'open' | 'print' | 'download' | 'b64', data: TicketVentaData) => {
+  const fechaCompleta = data.dataventas?.fecha ?? new Date().toISOString()
   const fechaObj = new Date(fechaCompleta)
   const simboloMoneda = data.dataempresa?.simbolo_moneda
   const textoTotal = numeroALetras(
-    data.dataventas?.monto_total,
-    data.dataempresa?.nombre_moneda
+    data.dataventas?.monto_total ?? 0,
+    data.dataempresa?.nombre_moneda ?? ''
   )
   const fecha = fechaObj.toLocaleDateString('es-PE', {
     day: '2-digit',
@@ -18,11 +60,9 @@ const TicketVenta = async (output, data) => {
     minute: '2-digit',
     second: '2-digit',
   })
-  const logoempresa = await urlToBase64(
-    data.dataempresa?.logo === '-'
-      ? 'https://i.ibb.co/TxhZ45j7/bride.png'
-      : data.dataempresa?.logo
-  )
+  const defaultLogo = 'https://i.ibb.co/TxhZ45j7/bride.png'
+  const logoUrl = data.dataempresa?.logo === '-' ? defaultLogo : (data.dataempresa?.logo ?? defaultLogo)
+  const logoempresa = await urlToBase64(logoUrl)
   const productTableBody = [
     [{ text: 'CÓDIGO - DESCRIPCIÓN', colSpan: 4, style: 'tProductsHeader' }, {}, {}, {}],
     [
@@ -31,28 +71,31 @@ const TicketVenta = async (output, data) => {
       { text: 'PRECIO', style: 'tProductsHeader', alignment: 'right' },
       { text: 'TOTAL', style: 'tProductsHeader', alignment: 'right' },
     ],
-    ...data.productos.flatMap((item) => [
-      [
-        {
-          text: `${item.productos?.codigo_barras} - ${item.productos.nombre}`,
-          style: 'tProductsBody',
-          colSpan: 4,
-        },
-        {},
-        {},
-        {},
-      ],
-      [
-        { text: item.cantidad, style: 'tProductsBody', alignment: 'center' },
-        { text: 'unidad', style: 'tProductsBody', alignment: 'center' },
-        {
-          text: item.precio_venta,
-          style: 'tProductsBody',
-          alignment: 'right',
-        },
-        { text: item.total, style: 'tProductsBody', alignment: 'right' },
-      ],
-    ]),
+    ...data.productos.flatMap((item) => {
+      const producto = item.productos ?? { codigo_barras: '', nombre: '' }
+      return [
+        [
+          {
+            text: `${producto.codigo_barras ?? ''} - ${producto.nombre ?? ''}`,
+            style: 'tProductsBody',
+            colSpan: 4,
+          },
+          {},
+          {},
+          {},
+        ],
+        [
+          { text: item.cantidad, style: 'tProductsBody', alignment: 'center' },
+          { text: 'unidad', style: 'tProductsBody', alignment: 'center' },
+          {
+            text: item.precio_venta,
+            style: 'tProductsBody',
+            alignment: 'right',
+          },
+          { text: item.total, style: 'tProductsBody', alignment: 'right' },
+        ],
+      ]
+    }),
   ]
   const formasPagoTableBody = [
     [
@@ -67,8 +110,9 @@ const TicketVenta = async (output, data) => {
       {},
       {},
     ],
-    ...data.metodosPago?.flatMap((item) =>
-      item.tipo === 'Efectivo'
+    ...(data.metodosPago ?? []).flatMap((item) => {
+      const isEfectivo = item.tipo === 'Efectivo'
+      const rows: unknown[][] = isEfectivo
         ? [
             [
               {
@@ -111,7 +155,8 @@ const TicketVenta = async (output, data) => {
               {},
             ],
           ]
-    ),
+      return rows
+    }),
   ]
 
   const content = [
@@ -219,10 +264,10 @@ const TicketVenta = async (output, data) => {
         body: productTableBody,
       },
       layout: {
-        hLineWidth: function (i, node) {
+        hLineWidth: function (i: number) {
           return i == 2 ? 0.5 : 0
         },
-        vLineWidth: function (i, node) {
+        vLineWidth: function () {
           return 0
         },
         hLineColor: function () {
@@ -264,7 +309,7 @@ const TicketVenta = async (output, data) => {
           [
             { text: `TOTAL: ${simboloMoneda}`, style: 'tTotals', colSpan: 2 },
             {},
-            { text: data.dataventas.monto_total, style: 'tTotals', colSpan: 2 },
+            { text: data.dataventas?.monto_total, style: 'tTotals', colSpan: 2 },
             {},
           ],
           //TOTAL IMPORTE EN LETRAS
@@ -307,7 +352,7 @@ const TicketVenta = async (output, data) => {
     {
       stack: [
         {
-          qr: `${data.dataempresa?.id_fiscal}|${data.dataventas?.nro_comprobante}|${data.dataventas.monto_total}|${data.dataventas?.sub_total}|${data.dataventas?.total_impuestos}|${fecha}${hora}|`,
+          qr: `${data.dataempresa?.id_fiscal ?? ''}|${data.dataventas?.nro_comprobante ?? ''}|${data.dataventas?.monto_total ?? 0}|${data.dataventas?.sub_total ?? 0}|${data.dataventas?.total_impuestos ?? 0}|${fecha}${hora}|`,
           fit: 115,
           alignment: 'center',
           eccLevel: 'Q',

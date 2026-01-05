@@ -1,4 +1,4 @@
-import type { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState } from '@tanstack/react-table'
 import {
   flexRender,
   getCoreRowModel,
@@ -7,7 +7,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import type { MouseEvent } from 'react'
 import { useState } from 'react'
 import { FaArrowsAltV } from 'react-icons/fa'
 import styled from 'styled-components'
@@ -93,9 +92,9 @@ export function CategoriesTable({
       cell: (info) => (
         <td data-title="Color" className="ContentCell">
           {info.getValue() !== '-' ? (
-            <ImageContent imagen={info.getValue() as string} />
+            <ImageContent image={info.getValue() as string} />
           ) : (
-            <Icon>{<v.iconoimagenvacia />}</Icon>
+            <Icon>{<v.emptyImageIcon />}</Icon>
           )}
         </td>
       ),
@@ -156,7 +155,7 @@ export function CategoriesTable({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  {header.column.columnDef.header}
+                  {flexRender(header.column.columnDef.header, header.getContext())}
                   {header.column.getCanSort() && (
                     <span
                       style={{ cursor: 'pointer' }}

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Toaster } from 'sonner'
 import styled from 'styled-components'

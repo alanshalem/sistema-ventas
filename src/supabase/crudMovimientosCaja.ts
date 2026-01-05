@@ -34,7 +34,7 @@ export async function MostrarVentasMetodoPagoMovCaja(
 }
 
 interface MostrarMovimientosCajaLiveParams {
-  _id_cierre_caja: number
+  _id_cierre_caja?: number
 }
 
 export async function Mostrarmovimientoscajalive(

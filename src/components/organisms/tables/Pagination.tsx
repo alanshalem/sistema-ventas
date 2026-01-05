@@ -1,8 +1,8 @@
-import type { Table } from "@tanstack/react-table"
-import styled from "styled-components"
+import type { Table } from '@tanstack/react-table'
+import styled from 'styled-components'
 
-import { v } from "../../../styles/variables"
-import { Button } from "../../molecules/Button"
+import { v } from '../../../styles/variables'
+import { Button } from '../../molecules/Button'
 
 interface PaginationProps<TData> {
   readonly table: Table<TData>
@@ -15,14 +15,14 @@ export function Pagination<TData>({ table }: Readonly<PaginationProps<TData>>) {
         disabled={!table.getCanPreviousPage()}
         onClick={() => table.setPageIndex(0)}
         bgColor="#F3D20C"
-        icon={<v.iconotodos />}
+        icon={<v.allIcon />}
       />
 
       <Button
         disabled={!table.getCanPreviousPage()}
         onClick={() => table.previousPage()}
         bgColor="#F3D20C"
-        icon={<v.iconoflechaizquierda />}
+        icon={<v.leftArrowIcon />}
       />
 
       <span>{table.getState().pagination.pageIndex + 1}</span>
@@ -32,7 +32,7 @@ export function Pagination<TData>({ table }: Readonly<PaginationProps<TData>>) {
         disabled={!table.getCanNextPage()}
         onClick={() => table.nextPage()}
         bgColor="#F3D20C"
-        icon={<v.iconoflechaderecha />}
+        icon={<v.rightArrowIcon />}
       />
     </Container>
   )

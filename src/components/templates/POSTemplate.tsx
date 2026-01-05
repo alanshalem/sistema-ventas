@@ -25,13 +25,10 @@ export function POSTemplate() {
   const { stateIngresoSalida, stateCierreCaja } = useCierreCajaStore()
   const { stateModal } = useStockStore()
   useBuscarProductosQuery()
-  const { isLoading: isLoadingAlmacenXSucursal } = useMostrarAlmacenesXSucursalQuery()
-  const { isLoading: isLoadingStockPorProductoYAlmacen } =
-    useMostrarStockXAlmacenesYProductoQuery()
-
-  const { isLoading: isLoadingSerializacionesVentas } =
-    useMostrarSerializacionesVentasQuery()
-  const { isLoading: isLoadingImpresoras } = useMostrasrImpresorasPorCajaQuery()
+  useMostrarAlmacenesXSucursalQuery()
+  useMostrarStockXAlmacenesYProductoQuery()
+  useMostrarSerializacionesVentasQuery()
+  useMostrasrImpresorasPorCajaQuery()
   return (
     <Container>
       {stateModal && <SelectWarehouseModal />}

@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
+import { useEmpresaStore } from '../../store/EmpresaStore'
 import { useReportesStore } from '../../store/ReportesStore'
+import { UserAuth } from '../../context/AuthContent'
 import { Device } from '../../styles/breakpoints'
 import {
   DashboardHeader,
@@ -11,8 +14,17 @@ import {
   TotalsCard,
 } from '../organisms/DashboardDesign'
 export const DashboardTemplate = () => {
+  const authContext = UserAuth()
+  const user = authContext?.user
+  const { mostrarempresa } = useEmpresaStore()
   const { totalventas, porcentajeCambio, totalCantidadDetalleVentas, totalGanancias } =
     useReportesStore()
+
+  useEffect(() => {
+    if (user?.id) {
+      mostrarempresa({ id_auth: user.id })
+    }
+  }, [user?.id, mostrarempresa])
   return (
     <Container>
       <DashboardHeader />

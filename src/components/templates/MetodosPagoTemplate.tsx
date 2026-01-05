@@ -5,22 +5,26 @@ import styled from 'styled-components'
 
 import { Button } from '../../index'
 import { useMetodosPagoStore } from '../../store/MetodosPagoStore'
+import type { MetodoPago } from '../../types'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
 import { RegisterPaymentMethods } from '../organisms/forms/RegisterPaymentMethods'
 import { PaymentMethodsTable } from '../organisms/tables/PaymentMethodsTable'
+
 export function MetodosPagoTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const { dataMetodosPago } = useMetodosPagoStore()
   const [accion, setAccion] = useState('')
-  const [dataSelect, setdataSelect] = useState([])
+  const [dataSelect, setdataSelect] = useState<MetodoPago | null>(null)
   const [isExploding, setIsExploding] = useState(false)
+
   function nuevoRegistro() {
     SetopenRegistro(!openRegistro)
     setAccion('Nuevo')
-    setdataSelect([])
+    setdataSelect(null)
     setIsExploding(false)
   }
+
   return (
     <Container>
       <Toaster richColors position="top-right" />
@@ -36,9 +40,9 @@ export function MetodosPagoTemplate() {
         <PageTitle>Métodos de pago</PageTitle>
         <Button
           onClick={nuevoRegistro}
-          bgColor={v.colorPrincipal}
+          bgColor={v.primaryColor}
           title="nuevo"
-          icon={<v.iconoagregar />}
+          icon={<v.addIcon />}
         />
       </section>
 
@@ -48,7 +52,7 @@ export function MetodosPagoTemplate() {
           setdataSelect={setdataSelect}
           setAccion={setAccion}
           SetopenRegistro={SetopenRegistro}
-          data={dataMetodosPago}
+          data={dataMetodosPago ?? []}
         />
       </section>
     </Container>

@@ -329,7 +329,7 @@ export function RegisterProducts({
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="seccion1">
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     defaultValue={dataSelect.nombre}
@@ -344,7 +344,7 @@ export function RegisterProducts({
                 </TextInput>
               </article>
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     step="0.01"
                     className="form__field"
@@ -357,7 +357,7 @@ export function RegisterProducts({
                 </TextInput>
               </article>
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     step="0.01"
                     className="form__field"
@@ -370,7 +370,7 @@ export function RegisterProducts({
                 </TextInput>
               </article>
               <article className="contentPadregenerar">
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     value={randomCodebarras}
@@ -385,7 +385,7 @@ export function RegisterProducts({
                 </ContainerBtngenerar>
               </article>
               <article className="contentPadregenerar">
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     value={randomCodeinterno}
@@ -456,7 +456,7 @@ export function RegisterProducts({
                   )}
 
                   <article>
-                    <TextInput icono={<v.iconoflechaderecha />}>
+                    <TextInput icono={<v.rightArrowIcon />}>
                       <input
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
@@ -475,7 +475,7 @@ export function RegisterProducts({
                     </TextInput>
                   </article>
                   <article>
-                    <TextInput icono={<v.iconoflechaderecha />}>
+                    <TextInput icono={<v.rightArrowIcon />}>
                       <input
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
@@ -490,7 +490,7 @@ export function RegisterProducts({
                     </TextInput>
                   </article>
                   <article>
-                    <TextInput icono={<v.iconoflechaderecha />}>
+                    <TextInput icono={<v.rightArrowIcon />}>
                       <input
                         disabled={!!dataStockXAlmacenYProducto}
                         className="form__field"
@@ -507,7 +507,7 @@ export function RegisterProducts({
               )}
             </section>
 
-            <Button icon={<v.iconoguardar />} title="Guardar" bgColor="#F9D70B" />
+            <Button icon={<v.saveIcon />} title="Guardar" bgColor="#F9D70B" />
           </form>
         </div>
       )}

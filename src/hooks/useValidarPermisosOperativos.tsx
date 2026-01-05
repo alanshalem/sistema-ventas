@@ -4,7 +4,7 @@ import { usePermisosStore } from '../store/PermisosStore'
 
 export const useValidarPermisosOperativos = () => {
   const { dataPermisosGlobales } = usePermisosStore()
-  const validarPermiso = (p) => {
+  const validarPermiso = (p: string) => {
     const hasPermission = dataPermisosGlobales?.some((item) => item.modulos?.nombre === p)
     if (!hasPermission) {
       toast.warning('No tienes permisos para realizar esta acción')

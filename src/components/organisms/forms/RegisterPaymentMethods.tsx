@@ -133,7 +133,7 @@ export function RegisterPaymentMethods({
                 <img src={fileurl} alt="metodo pago" />
               </div>
             ) : (
-              <Icon>{<v.iconoimagenvacia />}</Icon>
+              <Icon>{<v.emptyImageIcon />}</Icon>
             )}
 
             <Button
@@ -141,14 +141,14 @@ export function RegisterPaymentMethods({
               title="+imagen"
               color="#5f5f5f"
               bgColor="rgb(183, 183, 182)"
-              icon={<v.iconosupabase />}
+              icon={<v.supabaseIcon />}
             />
             <input type="file" ref={ref} onChange={(e) => prepararImagen(e)} />
           </PictureContainer>
           <form className="formulario" onSubmit={handleSubmit(handlesub)}>
             <section className="form-subcontainer">
               <article>
-                <TextInput icono={<v.iconoflechaderecha />}>
+                <TextInput icono={<v.rightArrowIcon />}>
                   <input
                     className="form__field"
                     defaultValue={dataSelect.nombre}
@@ -163,7 +163,7 @@ export function RegisterPaymentMethods({
                 </TextInput>
               </article>
 
-              <Button icon={<v.iconoguardar />} title="Guardar" bgColor="#F9D70B" />
+              <Button icon={<v.saveIcon />} title="Guardar" bgColor="#F9D70B" />
             </section>
           </form>
         </div>

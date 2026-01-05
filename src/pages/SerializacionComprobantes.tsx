@@ -2,11 +2,11 @@ import { Spinner } from '../components/molecules/Spinner'
 import { RegisterSerialization } from '../components/organisms/forms/RegisterSerialization'
 import { SerializationsTable } from '../components/organisms/tables/SerializationsTable'
 import { CrudTemplate } from '../components/templates/CrudTemplate'
-import { useGlobalStore } from '../store/GlobalStore'
 import {
   useEditarSerializacionDefaultMutation,
   useMostrarSerializacionesQuery,
 } from '../tanstack/SerializacionStack'
+
 export const SerializacionComprobantes = () => {
   const { data, isLoading, error } = useMostrarSerializacionesQuery()
   const { mutate, isPending } = useEditarSerializacionDefaultMutation()

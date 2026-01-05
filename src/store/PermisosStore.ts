@@ -61,7 +61,7 @@ export const usePermisosStore = create<PermisosStore>((set, get) => ({
       updatedModules = selectedModules.filter((id) => id !== moduleId)
       updatedPermisos = datapermisos.filter((p) => p.idmodulo !== moduleId)
     } else {
-      // Marcar: agregar a ambos
+      // Marcar: add a ambos
       updatedModules = [...selectedModules, moduleId]
       updatedPermisos = [...datapermisos, { idmodulo: moduleId } as any]
     }

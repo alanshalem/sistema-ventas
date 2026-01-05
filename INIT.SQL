@@ -1,30 +1,30 @@
+-- =====================================================
 -- SISTEMA DE VENTAS - POS & INVENTORY MANAGEMENT
 -- Complete Database Schema for Supabase
 -- =====================================================
 -- Created: 2025-12-30
--- Purpose: Point-of-Sale and Inventory Management System
--- Features: Multi-tenant, RLS, CRUD Functions, Indexes
+-- Purpose: Comprehensive Point-of-Sale and Inventory Management System
+-- Features: Multi-tenant architecture, Row Level Security (RLS), CRUD functions, Performance indexes
+-- Author: Sistema de Ventas Development Team
+-- Database: PostgreSQL 15+ with Supabase
 -- =====================================================
--- Enable necessary extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pg_trgm";
--- =====================================================
--- ENUMS AND TYPES
--- =====================================================
--- Document types for sales
-CREATE TYPE tipo_comprobante_enum AS ENUM ('boleta', 'factura', 'nota_venta', 'ticket');
--- Movement types for inventory and cash
-CREATE TYPE tipo_movimiento_enum AS ENUM ('entrada', 'salida', 'ajuste');
-CREATE TYPE tipo_movimiento_caja_enum AS ENUM ('ingreso', 'egreso');
--- Status types
-CREATE TYPE estado_general_enum AS ENUM ('activo', 'inactivo', 'pendiente', 'completado');
-CREATE TYPE estado_caja_enum AS ENUM ('abierto', 'cerrado');
--- Theme preferences
-CREATE TYPE tema_enum AS ENUM ('light', 'dark');
 -- =====================================================
 -- CORE CONFIGURATION TABLES
 -- =====================================================
--- Company table - Multi-tenant root
+-- These tables store fundamental system configuration and reference data
+-- that is used across all modules of the application.
+
+-- =====================================================
+-- Table: empresa (Company)
+-- Purpose: Multi-tenant root table - each company has isolated data
+-- Relationships:
+--   - Referenced by: All major tables via id_empresa (multi-tenant isolation)
+--   - References: moneda (for default currency)
+-- Business Rules:
+--   - Each company operates independently
+--   - Company settings define default behavior for POS operations
+--   - Logo and footer text are used for receipt printing
+-- =====================================================
 CREATE TABLE empresa (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -41,50 +41,101 @@ CREATE TABLE empresa (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
--- Currencies
+-- =====================================================
+-- Table: moneda (Currency)
+-- Purpose: Stores available currencies for multi-currency support
+-- Relationships:
+--   - Referenced by: empresa (for default company currency)
+-- Business Rules:
+--   - Exchange rates are relative to base currency (PEN = 1.0000)
+--   - ISO standard currency codes (USD, EUR, PEN, etc.)
+--   - Supports multiple currencies for international operations
+-- =====================================================
 CREATE TABLE moneda (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE,
-    codigo VARCHAR(3) NOT NULL UNIQUE,
-    simbolo VARCHAR(10) NOT NULL,
-    tasa_cambio DECIMAL(10,4) DEFAULT 1.0000,
+    nombre VARCHAR(100) NOT NULL UNIQUE,           -- Currency name (USD, EUR, PEN)
+    codigo VARCHAR(3) NOT NULL UNIQUE,        -- ISO currency code (USD, EUR, PEN)
+    simbolo VARCHAR(10) NOT NULL,             -- Currency symbol ($, €, S/)
+    tasa_cambio DECIMAL(10,4) DEFAULT 1.0000,  -- Exchange rate (base currency reference)
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
--- Document types
+
+-- =====================================================
+-- Table: tipo_documento (Document Type)
+-- Purpose: Catalog of legal document types for identification (DNI, RUC, Passport, etc.)
+-- Relationships:
+--   - Used by: clientes, proveedores (as reference data)
+-- Business Rules:
+--   - Follows SUNAT (Peruvian tax authority) standards
+--   - Used for customer/supplier identification and tax compliance
+-- =====================================================
 CREATE TABLE tipo_documento (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    codigo VARCHAR(10),
-    descripcion TEXT,
+    nombre VARCHAR(100) NOT NULL,             -- Document type name (DNI, RUC, etc.)
+    codigo VARCHAR(10),                        -- Short code for document type
+    descripcion TEXT,                            -- Full description of document type
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 -- =====================================================
 -- USER MANAGEMENT & PERMISSIONS
 -- =====================================================
--- System modules
+-- This section defines the role-based access control (RBAC) system
+-- Structure: modulos → roles → permisos → usuarios
+-- Each user belongs to a role, which has permissions for specific modules
+
+-- =====================================================
+-- Table: modulos (System Modules)
+-- Purpose: Defines application modules/features available for permission control
+-- Relationships:
+--   - Referenced by: permisos (for granting role-based access)
+-- Business Rules:
+--   - Modules represent major system features (Sales, Products, Reports, etc.)
+--   - Used for navigation menu and access control
+--   - Icons and routes support UI rendering
+-- =====================================================
 CREATE TABLE modulos (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL UNIQUE,
-    descripcion TEXT,
-    icono VARCHAR(100),
-    ruta VARCHAR(200),
-    link VARCHAR(200),
+    nombre VARCHAR(100) NOT NULL UNIQUE,           -- Module name (Dashboard, Sales, etc.)
+    descripcion TEXT,                            -- Module description
+    icono VARCHAR(100),                        -- Icon name or path for UI
+    ruta VARCHAR(200),                        -- Route path for navigation
+    link VARCHAR(200),                        -- Link URL for external references
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
--- User roles
+
+-- =====================================================
+-- Table: roles (User Roles)
+-- Purpose: Defines user roles within each company (Administrator, Vendor, Cashier, etc.)
+-- Relationships:
+--   - References: empresa (role belongs to a company)
+--   - Referenced by: usuarios (users are assigned roles), permisos (permissions per role)
+-- Business Rules:
+--   - Roles are company-specific (multi-tenant isolation)
+--   - Each role has granular permissions defined in permisos table
+--   - Examples: Administrador, Vendedor, Supervisor, Cajero
+-- =====================================================
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
+    nombre VARCHAR(100) NOT NULL,               -- Role name (Administrator, Vendor, etc.)
+    descripcion TEXT,                            -- Role description and permissions
     id_empresa INTEGER NOT NULL REFERENCES empresa(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(nombre, id_empresa)
+    UNIQUE(nombre, id_empresa)                    -- Ensure role names are unique per company
 );
--- Permissions
+-- =====================================================
+-- Table: permisos (Permissions)
+-- Purpose: Granular CRUD permissions (View, Create, Edit, Delete) for each role-module combination
+-- Relationships:
+--   - References: roles (permissions belong to a role), modulos (permissions for a module)
+-- Business Rules:
+--   - Each role-module combination has 4 permission flags: ver, crear, editar, eliminar
+--   - Enables fine-grained access control per feature
+--   - Unique constraint ensures one permission record per role-module pair
+-- =====================================================
 CREATE TABLE permisos (
     id SERIAL PRIMARY KEY,
     id_rol INTEGER NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
@@ -97,39 +148,76 @@ CREATE TABLE permisos (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(id_rol, id_modulo)
 );
--- Users
+-- =====================================================
+-- Table: usuarios (Users)
+-- Purpose: System users with authentication and company association
+-- Relationships:
+--   - References: empresa (user belongs to company), roles (user has a role)
+--   - Referenced by: ventas, movimientos_caja, cierres_caja (user activity tracking)
+-- Business Rules:
+--   - Integrated with Supabase Auth via usuario_supabase field
+--   - Email unique per company (multi-tenant isolation)
+--   - Theme preference stored per user (light/dark mode)
+--   - Estado flag for enabling/disabling user access
+-- =====================================================
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
-    nombres VARCHAR(200) NOT NULL,
-    correo VARCHAR(150) NOT NULL,
-    nro_doc VARCHAR(50),
-    id_rol INTEGER REFERENCES roles(id),
-    id_empresa INTEGER NOT NULL REFERENCES empresa(id) ON DELETE CASCADE,
-    estado BOOLEAN DEFAULT true,
-    telefono VARCHAR(50),
-    foto TEXT,
-    usuario_supabase VARCHAR(150) UNIQUE,
-    tema tema_enum DEFAULT 'light',
+    nombres VARCHAR(200) NOT NULL,               -- Full name of the user
+    correo VARCHAR(150) NOT NULL,              -- Email address (unique per company)
+    nro_doc VARCHAR(50),                        -- Document number (DNI, Passport, etc.)
+    id_rol INTEGER REFERENCES roles(id),            -- Foreign key to roles table
+    id_empresa INTEGER NOT NULL REFERENCES empresa(id) ON DELETE CASCADE,  -- Company isolation
+    estado BOOLEAN DEFAULT true,                  -- User status (active/inactive)
+    telefono VARCHAR(50),                       -- Phone number
+    foto TEXT,                                 -- Profile photo URL
+    usuario_supabase VARCHAR(150) UNIQUE,      -- Supabase auth user ID (unique)
+    tema tema_enum DEFAULT 'light',            -- UI theme preference
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(correo, id_empresa)
+    UNIQUE(correo, id_empresa),               -- Email uniqueness per company
+    UNIQUE(usuario_supabase)                   -- Supabase user ID uniqueness
 );
 -- =====================================================
 -- ORGANIZATIONAL STRUCTURE
 -- =====================================================
--- Branches
+-- Multi-tenant architecture: Each company has isolated data
+-- Hierarchical permissions: Users → Roles → Modules → Permissions
+-- Physical locations: Company → Branches → Warehouses → Stock
+-- Cash flow: Company → Branches → Cash Registers → Transactions
+
+-- =====================================================
+-- Table: sucursales (Branches/Stores)
+-- Purpose: Physical branch locations for multi-location businesses
+-- Relationships:
+--   - References: empresa (branch belongs to company)
+--   - Referenced by: almacenes (warehouses per branch), asignacion_caja_sucursal (cash registers per branch)
+-- Business Rules:
+--   - Each company can have multiple branches
+--   - Branch names unique per company
+--   - Estado flag controls branch operational status
+-- =====================================================
 CREATE TABLE sucursales (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(200) NOT NULL,
-    direccion TEXT,
-    telefono VARCHAR(50),
-    id_empresa INTEGER NOT NULL REFERENCES empresa(id) ON DELETE CASCADE,
-    estado BOOLEAN DEFAULT true,
+    nombre VARCHAR(200) NOT NULL,               -- Branch name/identifier
+    direccion TEXT,                             -- Physical address
+    telefono VARCHAR(50),                       -- Contact phone
+    id_empresa INTEGER NOT NULL REFERENCES empresa(id) ON DELETE CASCADE,  -- Company isolation
+    estado BOOLEAN DEFAULT true,                  -- Branch status (active/inactive)
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(nombre, id_empresa)
+    UNIQUE(nombre, id_empresa)                    -- Branch names unique per company
 );
--- Warehouses
+-- =====================================================
+-- Table: almacenes (Warehouses)
+-- Purpose: Storage locations for inventory management
+-- Relationships:
+--   - References: empresa (warehouse belongs to company), sucursales (warehouse assigned to branch)
+--   - Referenced by: stock (inventory levels per warehouse), movimientos_stock (stock movements)
+-- Business Rules:
+--   - Multiple warehouses per company/branch supported
+--   - Stock is tracked separately per warehouse
+--   - Warehouse names unique per company
+-- =====================================================
 CREATE TABLE almacenes (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -142,7 +230,18 @@ CREATE TABLE almacenes (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nombre, id_empresa)
 );
--- Cash registers
+-- =====================================================
+-- Table: cajas (Cash Registers)
+-- Purpose: Point-of-sale cash registers for transaction processing
+-- Relationships:
+--   - References: empresa (cash register belongs to company)
+--   - Referenced by: ventas (sales per register), movimientos_caja (cash movements),
+--                    cierres_caja (daily closings), asignacion_caja_sucursal (branch assignments)
+-- Business Rules:
+--   - Each register has an initial balance (saldo_inicial)
+--   - Assigned to branches via asignacion_caja_sucursal
+--   - Used for tracking cash flow and daily closings
+-- =====================================================
 CREATE TABLE cajas (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -154,7 +253,16 @@ CREATE TABLE cajas (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nombre, id_empresa)
 );
--- Cash register assignments to branches and users
+-- =====================================================
+-- Table: asignacion_caja_sucursal (Cash Register to Branch Assignment)
+-- Purpose: Links cash registers to branches and optionally to specific users
+-- Relationships:
+--   - References: cajas (assigned cash register), sucursales (assigned branch), usuarios (assigned user)
+-- Business Rules:
+--   - One cash register can be assigned to one branch at a time (unique constraint)
+--   - Optional user assignment for dedicated cashier stations
+--   - Estado flag controls active/inactive assignments
+-- =====================================================
 CREATE TABLE asignacion_caja_sucursal (
     id SERIAL PRIMARY KEY,
     id_caja INTEGER NOT NULL REFERENCES cajas(id) ON DELETE CASCADE,
@@ -169,7 +277,20 @@ CREATE TABLE asignacion_caja_sucursal (
 -- =====================================================
 -- INVENTORY MANAGEMENT
 -- =====================================================
--- Product categories
+-- This section handles product catalog, stock tracking, and inventory movements
+-- Flow: categorias → productos → stock (per warehouse) → movimientos_stock
+
+-- =====================================================
+-- Table: categorias (Product Categories)
+-- Purpose: Hierarchical categorization of products for organization and reporting
+-- Relationships:
+--   - References: empresa (category belongs to company)
+--   - Referenced by: productos (products belong to categories)
+-- Business Rules:
+--   - Category names unique per company
+--   - Icon field supports UI customization
+--   - Used for filtering and grouping products
+-- =====================================================
 CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -180,7 +301,20 @@ CREATE TABLE categorias (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nombre, id_empresa)
 );
--- Products
+-- =====================================================
+-- Table: productos (Products)
+-- Purpose: Master product catalog with pricing and basic inventory info
+-- Relationships:
+--   - References: categorias (product category), empresa (product belongs to company)
+--   - Referenced by: stock (detailed warehouse stock), detalle_venta (sale line items),
+--                    movimientos_stock (inventory movements)
+-- Business Rules:
+--   - Unique internal code and barcode per company
+--   - Prices must be non-negative (CHECK constraints)
+--   - Stock tracked both at product level and per warehouse (stock table)
+--   - Stock alerts via stock_minimo threshold
+--   - Estado enum: 'activo' or 'inactivo'
+-- =====================================================
 CREATE TABLE productos (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(300) NOT NULL,
@@ -200,7 +334,17 @@ CREATE TABLE productos (
     UNIQUE(codigo_interno, id_empresa),
     UNIQUE(codigo_barras, id_empresa) WHERE codigo_barras IS NOT NULL
 );
--- Stock by warehouse
+-- =====================================================
+-- Table: stock (Warehouse Stock Levels)
+-- Purpose: Tracks inventory quantities per product per warehouse
+-- Relationships:
+--   - References: productos (stock for product), almacenes (stock in warehouse), empresa
+-- Business Rules:
+--   - One record per product-warehouse combination (unique constraint)
+--   - Separate stock tracking from main productos table allows multi-warehouse support
+--   - Stock and stock_minimo per warehouse for location-specific alerts
+--   - Ubicacion field for physical location within warehouse
+-- =====================================================
 CREATE TABLE stock (
     id SERIAL PRIMARY KEY,
     id_producto INTEGER NOT NULL REFERENCES productos(id) ON DELETE CASCADE,
@@ -214,7 +358,17 @@ CREATE TABLE stock (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(id_producto, id_almacen)
 );
--- Stock movements
+-- =====================================================
+-- Table: movimientos_stock (Stock Movements/Transactions)
+-- Purpose: Audit trail for all inventory changes (entries, exits, adjustments, transfers)
+-- Relationships:
+--   - References: productos (product moved), almacenes (warehouse), usuarios (user who performed movement), empresa
+-- Business Rules:
+--   - tipo enum: 'entrada' (receipt), 'salida' (issue), 'ajuste' (adjustment), 'transferencia' (transfer)
+--   - Immutable audit log for compliance and reporting
+--   - Referencia field for external document reference (PO, invoice, etc.)
+--   - Motivo provides description of movement reason
+-- =====================================================
 CREATE TABLE movimientos_stock (
     id SERIAL PRIMARY KEY,
     tipo tipo_movimiento_enum NOT NULL,
@@ -232,7 +386,20 @@ CREATE TABLE movimientos_stock (
 -- =====================================================
 -- CUSTOMERS & SUPPLIERS
 -- =====================================================
--- Customers
+-- This section manages business relationships with customers and suppliers
+
+-- =====================================================
+-- Table: clientes (Customers)
+-- Purpose: Customer master data for sales transactions
+-- Relationships:
+--   - References: empresa (customer belongs to company)
+--   - Referenced by: ventas (sales to customers)
+-- Business Rules:
+--   - Document number unique per company (for tax compliance)
+--   - Email unique per company
+--   - tipo_documento references tipo_documento catalog (DNI, RUC, etc.)
+--   - Estado enum: 'activo' or 'inactivo'
+-- =====================================================
 CREATE TABLE clientes (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -248,7 +415,17 @@ CREATE TABLE clientes (
     UNIQUE(documento, id_empresa) WHERE documento IS NOT NULL,
     UNIQUE(email, id_empresa) WHERE email IS NOT NULL
 );
--- Suppliers
+-- =====================================================
+-- Table: proveedores (Suppliers)
+-- Purpose: Supplier master data for procurement and purchase tracking
+-- Relationships:
+--   - References: empresa (supplier belongs to company)
+-- Business Rules:
+--   - RUC (tax ID) unique per company
+--   - Email unique per company
+--   - Used for purchase order management and supplier reporting
+--   - Estado enum: 'activo' or 'inactivo'
+-- =====================================================
 CREATE TABLE proveedores (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -266,7 +443,20 @@ CREATE TABLE proveedores (
 -- =====================================================
 -- SALES & PAYMENTS
 -- =====================================================
--- Payment methods
+-- This section handles point-of-sale transactions and payment processing
+-- Flow: metodos_pago → ventas (header) → detalle_venta (line items)
+
+-- =====================================================
+-- Table: metodos_pago (Payment Methods)
+-- Purpose: Catalog of accepted payment methods (cash, card, mobile payments, etc.)
+-- Relationships:
+--   - References: empresa (payment method belongs to company)
+--   - Referenced by: ventas (payment method used in sale)
+-- Business Rules:
+--   - requiere_referencia flag indicates if reference number is needed (e.g., transaction ID for cards)
+--   - Estado flag controls availability of payment method
+--   - Examples: Efectivo, Tarjeta, Yape, Plin, Transferencia
+-- =====================================================
 CREATE TABLE metodos_pago (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -278,7 +468,20 @@ CREATE TABLE metodos_pago (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nombre, id_empresa)
 );
--- Sales (main transaction)
+-- =====================================================
+-- Table: ventas (Sales Transactions)
+-- Purpose: Sales transaction header with totals and payment info
+-- Relationships:
+--   - References: usuarios (cashier/seller), empresa, cajas (cash register), clientes (customer),
+--                 metodos_pago (payment method)
+--   - Referenced by: detalle_venta (line items), movimientos_caja (cash movements)
+-- Business Rules:
+--   - nro_comprobante auto-generated via generar_nro_comprobante() function
+--   - tipo_comprobante enum: 'ticket', 'boleta', 'factura'
+--   - Estado enum: 'completado', 'pendiente', 'anulado', 'cancelado'
+--   - Totals calculated from detalle_venta line items
+--   - Unique receipt number per company
+-- =====================================================
 CREATE TABLE ventas (
     id SERIAL PRIMARY KEY,
     nro_comprobante VARCHAR(50) NOT NULL,
@@ -298,7 +501,17 @@ CREATE TABLE ventas (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nro_comprobante, id_empresa)
 );
--- Sale line items
+-- =====================================================
+-- Table: detalle_venta (Sale Line Items)
+-- Purpose: Individual products sold in each transaction
+-- Relationships:
+--   - References: ventas (parent sale), productos (product sold), empresa
+-- Business Rules:
+--   - Each line represents one product with quantity and pricing
+--   - subtotal = cantidad * precio_unitario - descuento
+--   - Prices captured at transaction time (historical pricing)
+--   - Cascading delete: line items deleted when parent sale is deleted
+-- =====================================================
 CREATE TABLE detalle_venta (
     id SERIAL PRIMARY KEY,
     id_venta INTEGER NOT NULL REFERENCES ventas(id) ON DELETE CASCADE,
@@ -314,7 +527,21 @@ CREATE TABLE detalle_venta (
 -- =====================================================
 -- CASH REGISTER MANAGEMENT
 -- =====================================================
--- Cash movements
+-- This section tracks cash flow and daily cash register operations
+-- Flow: cierres_caja (opening) → movimientos_caja (transactions) → cierres_caja (closing)
+
+-- =====================================================
+-- Table: movimientos_caja (Cash Movements)
+-- Purpose: Records all cash register transactions (sales, deposits, withdrawals)
+-- Relationships:
+--   - References: cajas (cash register), usuarios (user who made transaction), empresa,
+--                 ventas (optional link to sale transaction)
+-- Business Rules:
+--   - tipo enum: 'ingreso' (income/deposit), 'egreso' (withdrawal/expense), 'venta' (sale)
+--   - Links to ventas for sale transactions via id_venta
+--   - Descripcion provides transaction details
+--   - Used for daily cash reconciliation and reporting
+-- =====================================================
 CREATE TABLE movimientos_caja (
     id SERIAL PRIMARY KEY,
     tipo tipo_movimiento_caja_enum NOT NULL,
@@ -328,7 +555,19 @@ CREATE TABLE movimientos_caja (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
--- Cash register closing
+-- =====================================================
+-- Table: cierres_caja (Cash Register Closings)
+-- Purpose: Daily cash register opening and closing records with reconciliation
+-- Relationships:
+--   - References: cajas (cash register), usuarios (cashier), empresa
+-- Business Rules:
+--   - Estado enum: 'abierto' (open) or 'cerrado' (closed)
+--   - fecha_apertura records opening time
+--   - fecha_cierre records closing time (NULL when open)
+--   - saldo_final = saldo_inicial + total_ingresos - total_egresos
+--   - CHECK constraint ensures closed registers have fecha_cierre
+--   - One active (abierto) register session at a time per register
+-- =====================================================
 CREATE TABLE cierres_caja (
     id SERIAL PRIMARY KEY,
     id_caja INTEGER NOT NULL REFERENCES cajas(id),
@@ -349,7 +588,19 @@ CREATE TABLE cierres_caja (
 -- =====================================================
 -- PRINTERS & CONFIGURATION
 -- =====================================================
--- Printers
+-- This section handles hardware configuration and document serialization
+
+-- =====================================================
+-- Table: impresoras (Printers)
+-- Purpose: Configuration for thermal receipt printers and other printing devices
+-- Relationships:
+--   - References: empresa (printer belongs to company), cajas (optional assignment to specific register)
+-- Business Rules:
+--   - Supports network printers via IP and port configuration
+--   - tipo field specifies printer type (Térmica, Láser, etc.)
+--   - Can be assigned to specific cash registers
+--   - Estado flag controls printer availability
+-- =====================================================
 CREATE TABLE impresoras (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
@@ -364,7 +615,18 @@ CREATE TABLE impresoras (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(nombre, id_empresa)
 );
--- Receipt serialization
+-- =====================================================
+-- Table: serializacion_comprobantes (Receipt Number Serialization)
+-- Purpose: Controls automatic receipt numbering with series and sequential correlatives
+-- Relationships:
+--   - References: empresa (serialization per company)
+-- Business Rules:
+--   - tipo_comprobante enum: 'ticket', 'boleta', 'factura'
+--   - serie + correlativo format: "001-00000123"
+--   - Unique series per document type per company
+--   - correlativo auto-increments via generar_nro_comprobante() function
+--   - activo flag allows multiple series with only one active per type
+-- =====================================================
 CREATE TABLE serializacion_comprobantes (
     id SERIAL PRIMARY KEY,
     serie VARCHAR(10) NOT NULL,

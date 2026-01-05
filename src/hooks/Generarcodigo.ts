@@ -1,4 +1,8 @@
-export const Generarcodigo = (data) => {
+interface DataWithId {
+  id: number
+}
+
+export const Generarcodigo = (data: DataWithId): string => {
   const ultimoIdProducto = data.id + 1
   const characters = '0123456789'
   const codeLength = 8

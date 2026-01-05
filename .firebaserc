@@ -1,8 +1,8 @@
 {
   "projects": {
-    "default": "pos-ventas-react",
-    "dist": "pos-ventas-react",
-    "pos-ventas-react": "pos-ventas-react"
+    "default": "sistema-ventas",
+    "dist": "sistema-ventas",
+    "sistema-ventas": "sistema-ventas"
   },
   "targets": {},
   "etags": {}

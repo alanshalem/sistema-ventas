@@ -20,7 +20,7 @@ import { usePermisosStore } from './PermisosStore'
 
 const tabla = 'usuarios'
 
-type UsuarioConRol = Usuario & { roles: Rol | null; tema?: string | null }
+type UsuarioConRol = Usuario & { roles: Rol | null; theme?: string | null }
 
 interface UsuariosState {
   refetchs: unknown | null

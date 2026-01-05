@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 import { useAuthStore } from '../../index'
-import { NieveComponente } from '../organisms/NieveComponente'
+import '../../types/jsx.d'
+
 export function Welcome() {
   const { cerrarSesion } = useAuthStore()
   function cerrar() {

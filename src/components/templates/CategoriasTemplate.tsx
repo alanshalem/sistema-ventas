@@ -3,22 +3,26 @@ import ConfettiExplosion from 'react-confetti-explosion'
 import styled from 'styled-components'
 
 import { Button, SearchBox, useCategoriasStore } from '../../index'
+import type { Categoria } from '../../types'
 import { v } from '../../styles/variables'
 import { PageTitle } from '../atoms/PageTitle'
 import { RegisterCategories } from '../organisms/forms/RegisterCategories'
 import { CategoriesTable } from '../organisms/tables/CategoriesTable'
+
 export function CategoriasTemplate() {
   const [openRegistro, SetopenRegistro] = useState(false)
   const { datacategorias, setBuscador } = useCategoriasStore()
   const [accion, setAccion] = useState('')
-  const [dataSelect, setdataSelect] = useState([])
+  const [dataSelect, setdataSelect] = useState<Categoria | null>(null)
   const [isExploding, setIsExploding] = useState(false)
+
   function nuevoRegistro() {
     SetopenRegistro(!openRegistro)
     setAccion('Nuevo')
-    setdataSelect([])
+    setdataSelect(null)
     setIsExploding(false)
   }
+
   return (
     <Container>
       {openRegistro && (
@@ -33,13 +37,13 @@ export function CategoriasTemplate() {
         <PageTitle>Categorias</PageTitle>
         <Button
           onClick={nuevoRegistro}
-          bgColor={v.colorPrincipal}
+          bgColor={v.primaryColor}
           title="nuevo"
-          icon={<v.iconoagregar />}
+          icon={<v.addIcon />}
         />
       </section>
       <section className="area2">
-        <SearchBox setBuscador={setBuscador} />
+        <SearchBox setSearchTerm={setBuscador} />
       </section>
 
       <section className="main">

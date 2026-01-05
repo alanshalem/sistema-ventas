@@ -1,125 +1,250 @@
-import { AiOutlineCalculator } from 'react-icons/ai'
-import { AiOutlineBarcode } from 'react-icons/ai'
-import { BiUserCircle } from 'react-icons/bi'
-import { BiSave } from 'react-icons/bi'
-import { BiBellMinus } from 'react-icons/bi'
-import { BsEmojiLaughing } from 'react-icons/bs'
-import { BsArrowDown, BsArrowUpShort } from 'react-icons/bs'
-import { BsQuestionCircle } from 'react-icons/bs'
-import { BsBarChartLine } from 'react-icons/bs'
-import { BsCalendarCheck } from 'react-icons/bs'
-import { BsEmojiDizzy } from 'react-icons/bs'
+//#region Imports - Icons
+import type { IconType } from 'react-icons'
+import { AiOutlineCalculator, AiOutlineBarcode } from 'react-icons/ai'
+import { BiUserCircle, BiSave, BiBellMinus } from 'react-icons/bi'
+import {
+  BsEmojiLaughing,
+  BsArrowDown,
+  BsArrowUpShort,
+  BsQuestionCircle,
+  BsBarChartLine,
+  BsCalendarCheck,
+  BsEmojiDizzy,
+} from 'react-icons/bs'
 import { CgMathPlus } from 'react-icons/cg'
-import { CiPalette } from 'react-icons/ci'
-import { CiMoneyBill } from 'react-icons/ci'
+import { CiPalette, CiMoneyBill } from 'react-icons/ci'
 import { DiCodepen } from 'react-icons/di'
-import { FaReact } from 'react-icons/fa'
-import { FaBalanceScale } from 'react-icons/fa'
-import { FaRegMoneyBillAlt } from 'react-icons/fa'
-import { FaBuilding } from 'react-icons/fa'
-import { FaSearch } from 'react-icons/fa'
-import { FcPicture } from 'react-icons/fc'
-import { FcGoogle } from 'react-icons/fc'
-import { FcImageFile } from 'react-icons/fc'
-import { GrCaretNext,GrFormPrevious } from 'react-icons/gr'
-import { GrAdd } from 'react-icons/gr'
+import {
+  FaReact,
+  FaBalanceScale,
+  FaRegMoneyBillAlt,
+  FaBuilding,
+  FaSearch,
+} from 'react-icons/fa'
+import { FcPicture, FcGoogle, FcImageFile } from 'react-icons/fc'
+import { GrCaretNext, GrFormPrevious, GrAdd } from 'react-icons/gr'
 import { HiOutlineChartPie } from 'react-icons/hi'
-import { IoIosArrowDown } from 'react-icons/io'
-import { IoIosArrowForward } from 'react-icons/io'
-import { IoIosArrowBack } from 'react-icons/io'
-import { MdExitToApp } from 'react-icons/md'
-import { MdOutlineBorderAll } from 'react-icons/md'
-import { MdAlternateEmail } from 'react-icons/md'
-import { MdDriveFileRenameOutline } from 'react-icons/md'
-import { MdOutlineCategory } from 'react-icons/md'
-import { RiDeleteBin2Line, RiEditLine } from 'react-icons/ri'
-import { RiVipCrownFill } from 'react-icons/ri'
-import { RiSettings3Line } from 'react-icons/ri'
-import { RiCloseLine } from 'react-icons/ri'
-import { RiLockPasswordLine } from 'react-icons/ri'
-import { RiStockLine } from 'react-icons/ri'
+import {
+  IoIosArrowDown,
+  IoIosArrowForward,
+  IoIosArrowBack,
+} from 'react-icons/io'
+import {
+  MdExitToApp,
+  MdOutlineBorderAll,
+  MdAlternateEmail,
+  MdDriveFileRenameOutline,
+  MdOutlineCategory,
+} from 'react-icons/md'
+import {
+  RiDeleteBin2Line,
+  RiEditLine,
+  RiVipCrownFill,
+  RiSettings3Line,
+  RiCloseLine,
+  RiLockPasswordLine,
+  RiStockLine,
+} from 'react-icons/ri'
 import { SlGraph } from 'react-icons/sl'
-import { TbBrandSupabase } from 'react-icons/tb'
-import { TbBrandBitbucket } from 'react-icons/tb'
-import { TbReportAnalytics } from 'react-icons/tb'
+import {
+  TbBrandSupabase,
+  TbBrandBitbucket,
+  TbReportAnalytics,
+} from 'react-icons/tb'
+//#endregion
 
+//#region Assets
 import logo from '../assets/logo.png'
-export const v = {
-  iconobuscar: FaSearch,
-  colorPrincipal: `#F3D20C`,
-  colorSecundario: `#DAC1FF`,
-  iconoagregar: GrAdd,
-  iconoimagenvacia: FcImageFile,
-  iconoemijivacio: BsEmojiDizzy,
-  iconoreportes: TbReportAnalytics,
-  iconoempresa: FaBuilding,
-  iconocategorias: MdOutlineCategory,
-  iconomarca: TbBrandBitbucket,
-  iconoprecioventa: FaRegMoneyBillAlt,
-  iconopreciocompra: CiMoneyBill,
-  iconocodigointerno: DiCodepen,
-  iconocodigobarras: AiOutlineBarcode,
-  iconostockminimo: BiBellMinus,
-  iconostock: RiStockLine,
-  icononombre: MdDriveFileRenameOutline,
-  iconoemail: MdAlternateEmail,
-  iconopass: RiLockPasswordLine,
-  sidebarWidth: `300px`,
-  sidebarWidthInitial: `10vw`,
-  smSpacing: `8px`,
-  mdSpacing: `16px`,
-  lgSpacing: `24px`,
-  xlSpacing: `32px`,
-  xxlSpacing: `48px`,
-  borderRadius: `6px`,
+//#endregion
 
-  paletacolores: CiPalette,
-  emoji: BsEmojiLaughing,
-  iconeditarTabla: RiEditLine,
-  iconeliminarTabla: RiDeleteBin2Line,
-  colorIngresos: `#53B257`,
-  colorbgingresos: `#e6ffe7`,
-  colorGastos: `#fe6156`,
-  colorbgGastos: `#fbcbc9`,
-  colorError: `#F54E41`,
-  colorExito: `#9046FF`,
-  bpmaggie: `15em`,
-  bplisa: `30em`,
-  bpbart: `48em`,
-  bpmarge: `62em`,
-  bphomer: `75em`,
+//#region Types
+export type UIVariables = {
+  primaryColor: string
+  secondaryColor: string
+  selectorColor: string
+  backgroundRgba: string
 
-  boxshadowGray: `0px 10px 15px -3px rgba(0,0,0,0.1)`,
-  iconoFlechabajo: IoIosArrowDown,
-  iconocorona: RiVipCrownFill,
-  iconoUser: BiUserCircle,
-  iconoSettings: RiSettings3Line,
-  iconoCerrarSesion: MdExitToApp,
-  iconofotovacia: FcPicture,
-  verde: `#53B257`,
-  rojo: `#F54E41`,
-  agregar: CgMathPlus,
-  iconosupabase: TbBrandSupabase,
-  iconoreact: FaReact,
-  flechaabajolarga: BsArrowDown,
-  flechaarribalarga: BsArrowUpShort,
-  balance: FaBalanceScale,
-  logo: logo,
-  iconogoogle: FcGoogle,
-  iconocerrar: RiCloseLine,
-  iconoguardar: BiSave,
-  iconoayuda: BsQuestionCircle,
-  iconopie: HiOutlineChartPie,
-  iconolineal: SlGraph,
-  iconobars: BsBarChartLine,
-  iconocalculadora: AiOutlineCalculator,
-  iconocheck: BsCalendarCheck,
+  incomeColor: string
+  incomeBgColor: string
+  expensesColor: string
+  expensesBgColor: string
+  errorColor: string
+  successColor: string
 
-  iconoflechaderecha: IoIosArrowForward,
-  iconoflechaizquierda: IoIosArrowBack,
-  colorselector: '#BF94FF',
-  rgbafondos: 'rgba(210, 110, 249, 0.1)',
-  iconoprev: GrFormPrevious,
-  icononext: GrCaretNext,
-  iconotodos: MdOutlineBorderAll,
+  green: string
+  red: string
+
+  sidebarWidth: string
+  sidebarWidthInitial: string
+
+  smSpacing: string
+  mdSpacing: string
+  lgSpacing: string
+  xlSpacing: string
+  xxlSpacing: string
+
+  bpmaggie: string
+  bplisa: string
+  bpbart: string
+  bpmarge: string
+  bphomer: string
+
+  borderRadius: string
+  grayBoxShadow: string
+
+  searchIcon: IconType
+  addIcon: IconType
+  closeIcon: IconType
+  saveIcon: IconType
+  helpIcon: IconType
+  crownIcon: IconType
+
+  arrowDownIcon: IconType
+  longArrowDown: IconType
+  longArrowUp: IconType
+  rightArrowIcon: IconType
+  leftArrowIcon: IconType
+  prevIcon: IconType
+  nextIcon: IconType
+
+  userIcon: IconType
+  settingsIcon: IconType
+  logoutIcon: IconType
+  allIcon: IconType
+
+  nameIcon: IconType
+  emailIcon: IconType
+  passwordIcon: IconType
+  calculatorIcon: IconType
+
+  tableEditIcon: IconType
+  tableDeleteIcon: IconType
+  add: IconType
+
+  companyIcon: IconType
+  categoriesIcon: IconType
+  brandIcon: IconType
+  internalCodeIcon: IconType
+  barcodeIcon: IconType
+  minStockIcon: IconType
+  stockIcon: IconType
+
+  salePriceIcon: IconType
+  purchasePriceIcon: IconType
+  balanceIcon: IconType
+
+  reportsIcon: IconType
+  pieChartIcon: IconType
+  lineChartIcon: IconType
+  barChartIcon: IconType
+  checkIcon: IconType
+
+  emptyImageIcon: IconType
+  emptyPhotoIcon: IconType
+  emptyEmojiIcon: IconType
+  emojiIcon: IconType
+  colorPaletteIcon: IconType
+
+  supabaseIcon: IconType
+  reactIcon: IconType
+  googleIcon: IconType
+
+  logo: string
 }
+//#endregion
+
+//#region Variables
+export const v = Object.freeze({
+  primaryColor: '#F3D20C',
+  secondaryColor: '#DAC1FF',
+  selectorColor: '#BF94FF',
+  backgroundRgba: 'rgba(210, 110, 249, 0.1)',
+
+  incomeColor: '#53B257',
+  incomeBgColor: '#e6ffe7',
+  expensesColor: '#fe6156',
+  expensesBgColor: '#fbcbc9',
+  errorColor: '#F54E41',
+  successColor: '#9046FF',
+
+  green: '#53B257',
+  red: '#F54E41',
+
+  sidebarWidth: '300px',
+  sidebarWidthInitial: '10vw',
+
+  smSpacing: '8px',
+  mdSpacing: '16px',
+  lgSpacing: '24px',
+  xlSpacing: '32px',
+  xxlSpacing: '48px',
+
+  bpmaggie: '15em',
+  bplisa: '30em',
+  bpbart: '48em',
+  bpmarge: '62em',
+  bphomer: '75em',
+
+  borderRadius: '6px',
+  grayBoxShadow: '0px 10px 15px -3px rgba(0,0,0,0.1)',
+
+  searchIcon: FaSearch,
+  addIcon: GrAdd,
+  closeIcon: RiCloseLine,
+  saveIcon: BiSave,
+  helpIcon: BsQuestionCircle,
+  crownIcon: RiVipCrownFill,
+
+  arrowDownIcon: IoIosArrowDown,
+  longArrowDown: BsArrowDown,
+  longArrowUp: BsArrowUpShort,
+  rightArrowIcon: IoIosArrowForward,
+  leftArrowIcon: IoIosArrowBack,
+  prevIcon: GrFormPrevious,
+  nextIcon: GrCaretNext,
+
+  userIcon: BiUserCircle,
+  settingsIcon: RiSettings3Line,
+  logoutIcon: MdExitToApp,
+  allIcon: MdOutlineBorderAll,
+
+  nameIcon: MdDriveFileRenameOutline,
+  emailIcon: MdAlternateEmail,
+  passwordIcon: RiLockPasswordLine,
+  calculatorIcon: AiOutlineCalculator,
+
+  tableEditIcon: RiEditLine,
+  tableDeleteIcon: RiDeleteBin2Line,
+  add: CgMathPlus,
+
+  companyIcon: FaBuilding,
+  categoriesIcon: MdOutlineCategory,
+  brandIcon: TbBrandBitbucket,
+  internalCodeIcon: DiCodepen,
+  barcodeIcon: AiOutlineBarcode,
+  minStockIcon: BiBellMinus,
+  stockIcon: RiStockLine,
+
+  salePriceIcon: FaRegMoneyBillAlt,
+  purchasePriceIcon: CiMoneyBill,
+  balanceIcon: FaBalanceScale,
+
+  reportsIcon: TbReportAnalytics,
+  pieChartIcon: HiOutlineChartPie,
+  lineChartIcon: SlGraph,
+  barChartIcon: BsBarChartLine,
+  checkIcon: BsCalendarCheck,
+
+  emptyImageIcon: FcImageFile,
+  emptyPhotoIcon: FcPicture,
+  emptyEmojiIcon: BsEmojiDizzy,
+  emojiIcon: BsEmojiLaughing,
+  colorPaletteIcon: CiPalette,
+
+  supabaseIcon: TbBrandSupabase,
+  reactIcon: FaReact,
+  googleIcon: FcGoogle,
+
+  logo,
+} satisfies UIVariables)
+//#endregion
